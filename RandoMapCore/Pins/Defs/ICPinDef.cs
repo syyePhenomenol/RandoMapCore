@@ -125,7 +125,7 @@ internal abstract class ICPinDef : PinDef
                 ActiveItems.AddRange(Placement.GetPreviewableItems());
                 break;
             case PlacementState.NotCleared:
-                if (RandoMapCoreMod.LS.SpoilerOn)
+                if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
                 {
                     ActiveItems.AddRange(Placement.GetNeverObtainedItems());
                 }
@@ -152,17 +152,12 @@ internal abstract class ICPinDef : PinDef
 
     internal override bool ActiveBySettings()
     {
-        if (RandoMapCoreMod.LS.GroupBy is GroupBySetting.Item)
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.GroupBy is GroupBySetting.Item)
         {
             return ItemPoolGroups.Any(p => RandoMapCoreMod.LS.IsActivePoolGroup(p, PoolsCollection));
         }
 
-        if (RandoMapCoreMod.LS.GroupBy is GroupBySetting.Location)
-        {
-            return LocationPoolGroups.Any(p => RandoMapCoreMod.LS.IsActivePoolGroup(p, PoolsCollection));
-        }
-
-        return true;
+        return LocationPoolGroups.Any(p => RandoMapCoreMod.LS.IsActivePoolGroup(p, PoolsCollection));
     }
 
     internal override bool ActiveByProgress()
@@ -274,7 +269,8 @@ internal abstract class ICPinDef : PinDef
     private protected virtual string GetUnobtainedText()
     {
         if (
-            RandoMapCoreMod.LS.SpoilerOn
+            RandoMapCoreMod.Data.EnableSpoilerToggle
+            && RandoMapCoreMod.LS.SpoilerOn
             && Placement.GetNeverObtainedUnpreviewableItems() is var unobtainedItems
             && unobtainedItems.Any()
         )

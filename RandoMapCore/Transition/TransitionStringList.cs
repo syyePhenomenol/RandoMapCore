@@ -60,7 +60,7 @@ internal class UncheckedTransitionStringList(string scene) : TransitionStringLis
             ? "*"
             : string.Empty;
 
-        if (RandoMapCoreMod.LS.SpoilerOn)
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
         {
             return prefix + GetOutPlacementLine(source, target);
         }

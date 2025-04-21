@@ -10,6 +10,11 @@ internal class ToggleSpoilersInput : PinHotkeyInput
 
     internal static ToggleSpoilersInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableSpoilerToggle;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.LS.ToggleSpoilers();

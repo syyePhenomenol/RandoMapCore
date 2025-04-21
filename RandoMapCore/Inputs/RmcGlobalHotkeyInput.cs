@@ -12,7 +12,7 @@ internal abstract class RmcGlobalHotkeyInput(string name, string category, KeyCo
 {
     public override bool UseCondition()
     {
-        return RandoMapCoreMod.Data is not null && RandoMapCoreMod.Data.IsCorrectSaveType;
+        return RandoMapCoreMod.Data is not null;
     }
 
     public override bool ActiveCondition()

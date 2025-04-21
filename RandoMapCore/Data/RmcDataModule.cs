@@ -15,6 +15,13 @@ public abstract class RmcDataModule : HookModule
     /// </summary>
     public abstract bool IsCorrectSaveType { get; }
 
+    /// <summary>
+    /// Whether or not it is posisble to turn spoiler mode on.
+    /// Disables spoiler behaviour even if the "Spoiler" setting is on.
+    /// Also disables the "Group By" toggle for pools.
+    /// </summary>
+    public abstract bool EnableSpoilerToggle { get; }
+
     public abstract IReadOnlyDictionary<string, RmcTransitionDef> RandomizedTransitions { get; }
     public abstract IReadOnlyDictionary<string, RmcTransitionDef> VanillaTransitions { get; }
     public abstract IReadOnlyDictionary<RmcTransitionDef, RmcTransitionDef> RandomizedTransitionPlacements { get; }

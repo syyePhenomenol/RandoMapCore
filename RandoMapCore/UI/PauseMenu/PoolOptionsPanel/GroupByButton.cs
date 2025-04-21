@@ -14,11 +14,23 @@ internal class GroupByButton() : BorderlessExtraButton(nameof(GroupByButton))
     protected override void OnHover()
     {
         RmcTitle.Instance.HoveredText = "Group pools by either location (normal) or by item (spoilers).".L();
+
+        if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
+        {
+            RmcTitle.Instance.HoveredText += $" {"Toggle disabled".L()}";
+        }
     }
 
     public override void Update()
     {
         var text = $"{"Group by".L()}:\n";
+
+        if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
+        {
+            Button.Content = text + "Location".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
 
         switch (RandoMapCoreMod.LS.GroupBy)
         {

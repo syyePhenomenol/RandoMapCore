@@ -150,7 +150,7 @@ public class LocalSettings
 
     internal bool IsRandomizedCustom()
     {
-        if (GroupBy == GroupBySetting.Item)
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle && GroupBy == GroupBySetting.Item)
         {
             if (!RandoItemPoolGroups.Any())
             {
@@ -174,7 +174,7 @@ public class LocalSettings
 
     internal bool IsVanillaCustom()
     {
-        if (GroupBy == GroupBySetting.Item)
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle && GroupBy == GroupBySetting.Item)
         {
             if (!VanillaItemPoolGroups.Any())
             {
@@ -248,7 +248,7 @@ public class LocalSettings
             bool isRando;
             bool isVanilla;
 
-            if (GroupBy == GroupBySetting.Item)
+            if (RandoMapCoreMod.Data.EnableSpoilerToggle && GroupBy == GroupBySetting.Item)
             {
                 isRando = RandoItemPoolGroups.Contains(poolGroup);
                 isVanilla = VanillaItemPoolGroups.Contains(poolGroup);

@@ -9,7 +9,10 @@ namespace RandoMapCore.UI;
 internal sealed class RmcBottomRowText : BottomRowText
 {
     protected override float MinSpacing => 250f;
-    protected override string[] TextNames => ["Spoilers", "Randomized", "Vanilla", "Shape", "Size"];
+    protected override string[] TextNames =>
+        RandoMapCoreMod.Data.EnableSpoilerToggle
+            ? ["Spoilers", "Randomized", "Vanilla", "Shape", "Size"]
+            : ["Randomized", "Vanilla", "Shape", "Size"];
 
     protected override bool Condition()
     {
