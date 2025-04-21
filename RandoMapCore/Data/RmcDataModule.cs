@@ -16,8 +16,8 @@ public abstract class RmcDataModule : HookModule
     public abstract bool IsCorrectSaveType { get; }
 
     /// <summary>
-    /// Whether or not it is posisble to turn spoiler mode on.
-    /// Disables spoiler behaviour even if the "Spoiler" setting is on.
+    /// Whether or not it is possible to toggle spoiler mode.
+    /// If false, disables spoiler behaviour even if the "Spoiler" setting is on.
     /// Also disables the "Group By" toggle for pools.
     /// </summary>
     public abstract bool EnableSpoilerToggle { get; }
