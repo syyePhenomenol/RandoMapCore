@@ -130,13 +130,13 @@ internal class QuickMapTransitions : MapUILayer
         private static readonly Vector2 _correction = new(15.5f, 8.7f);
         private readonly TransitionCompassPosition _tcp;
 
-        private readonly Vector2 _playerPosition;
+        private readonly Vector2 _cameraPosition;
 
         public QuickMapCompass(LayoutRoot onLayout, string transition, TransitionCompassPosition tcp)
             : base(onLayout, $"Quick Map Compass {transition}")
         {
             _tcp = tcp;
-            _playerPosition = (Vector2)HeroController.instance?.gameObject?.transform?.position;
+            _cameraPosition = (Vector2)GameCameras.instance?.tk2dCam?.transform?.position;
 
             GameObject = new(Name, typeof(SpriteRenderer));
 
@@ -153,7 +153,7 @@ internal class QuickMapTransitions : MapUILayer
 
         protected override void ArrangeOverride(Vector2 alignedTopLeftCorner)
         {
-            var dir = (Vector2)_tcp.Value - _playerPosition;
+            var dir = (Vector2)_tcp.Value - _cameraPosition;
             var angle = (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f;
 
             var screenPos = alignedTopLeftCorner + new Vector2(15f, 15f);
