@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using MapChanger;
-using MapChanger.Defs;
 using Modding;
 using RandoMapCore.Data;
 using RandoMapCore.Input;
@@ -56,7 +55,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.0";
+        return "1.0.1";
     }
 
     public override int LoadPriority()
