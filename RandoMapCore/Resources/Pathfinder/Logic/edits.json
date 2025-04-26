@@ -41,5 +41,9 @@
   {
     "name": "GG_Atrium",
     "logic": "ORIG | GG_Atrium[top1] | GG_Atrium[top2] | (Bench-Godhome_Atrium ? NONE)"
+  },
+  {
+    "name": "Can_Stag",
+    "logic": "ORIG | (Room_Town_Stag_Station[door_stagExit] | Crossroads_47[door_stagExit] | Fungus1_16_alt[door_stagExit] | Fungus2_02[door_stagExit] | Deepnest_09[door_stagExit] | Abyss_22[door_stagExit] | Ruins1_29[door_stagExit] | Ruins2_08[door_stagExit] | RestingGrounds_09[door_stagExit] | Fungus3_40[door_stagExit]) + $STAGSTATEMODIFIER"
   }
 ]
