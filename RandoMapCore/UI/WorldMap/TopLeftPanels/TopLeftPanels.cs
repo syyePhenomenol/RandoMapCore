@@ -14,7 +14,7 @@ internal class TopLeftPanels : WorldMapStack
     {
         Instance = this;
         _mapKeyPanel = new(Root, Stack);
-        _progressHintPanel = new(Root, Stack);
+        _progressHintPanel = RandoMapCoreMod.Data.EnableProgressionHints ? new(Root, Stack) : null;
     }
 
     protected override bool Condition()
@@ -25,6 +25,6 @@ internal class TopLeftPanels : WorldMapStack
     public override void Update()
     {
         _mapKeyPanel.Update();
-        _progressHintPanel.Update();
+        _progressHintPanel?.Update();
     }
 }

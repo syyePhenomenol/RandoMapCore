@@ -10,6 +10,11 @@ internal class ProgressHintPanelInput : MapUIKeyInput
 
     internal static ProgressHintPanelInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableProgressionHints;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.ToggleProgressHint();

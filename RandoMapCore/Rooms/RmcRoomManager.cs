@@ -70,11 +70,14 @@ internal class RmcRoomManager : HookModule
         List<ISelectable> rooms = [.. BuiltInObjects.SelectableRooms.Values.Cast<ISelectable>()];
         rooms.AddRange(RoomTexts.Values.Cast<ISelectable>());
 
-        // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
-        var transitionRoomSelector = Utils.MakeMonoBehaviour<TransitionRoomSelector>(
-            null,
-            "RandoMapCore Transition Room Selector"
-        );
-        transitionRoomSelector.Initialize(rooms);
+        if (RandoMapCoreMod.Data.EnableRoomSelection)
+        {
+            // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
+            var transitionRoomSelector = Utils.MakeMonoBehaviour<TransitionRoomSelector>(
+                null,
+                "RandoMapCore Transition Room Selector"
+            );
+            transitionRoomSelector.Initialize(rooms);
+        }
     }
 }

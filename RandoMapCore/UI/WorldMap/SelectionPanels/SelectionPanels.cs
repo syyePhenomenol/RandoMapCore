@@ -21,13 +21,13 @@ internal class SelectionPanels : WorldMapStack
     protected override void BuildStack()
     {
         Instance = this;
-        _pinSelectionPanel = new(Root, Stack);
-        _roomSelectionPanel = new(Root, Stack);
+        _pinSelectionPanel = RandoMapCoreMod.Data.EnablePinSelection ? new(Root, Stack) : null;
+        _roomSelectionPanel = RandoMapCoreMod.Data.EnableRoomSelection ? new(Root, Stack) : null;
     }
 
     public override void Update()
     {
-        _pinSelectionPanel.Update();
-        _roomSelectionPanel.Update();
+        _pinSelectionPanel?.Update();
+        _roomSelectionPanel?.Update();
     }
 }

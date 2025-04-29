@@ -29,17 +29,6 @@ internal class RmcUIBuilder
         new MiscOptionsPanel(),
     ];
 
-    private readonly MapUILayer[] _mapUILayers =
-    [
-        new ControlPanel(),
-        new TopLeftPanels(),
-        new SelectionPanels(),
-        new RmcBottomRowText(),
-        new RouteSummaryText(),
-        new RouteText(),
-        new QuickMapTransitions(),
-    ];
-
     internal void Build()
     {
         // Construct pause menu
@@ -56,7 +45,25 @@ internal class RmcUIBuilder
         }
 
         // Construct map UI
-        foreach (var uiLayer in _mapUILayers)
+        List<MapUILayer> mapUILayers =
+        [
+            new ControlPanel(),
+            new TopLeftPanels(),
+            new RmcBottomRowText(),
+            new QuickMapTransitions(),
+        ];
+
+        if (RandoMapCoreMod.Data.EnablePinSelection || RandoMapCoreMod.Data.EnableRoomSelection)
+        {
+            mapUILayers.Add(new SelectionPanels());
+        }
+
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            mapUILayers.AddRange([new RouteSummaryText(), new RouteText()]);
+        }
+
+        foreach (var uiLayer in mapUILayers)
         {
             MapUILayerUpdater.Add(uiLayer);
         }

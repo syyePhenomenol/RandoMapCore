@@ -15,6 +15,11 @@ internal class SelectRoomRouteInput : RmcWorldMapInput
 
     internal static SelectRoomRouteInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder;
+    }
+
     public override bool ActiveCondition()
     {
         return base.ActiveCondition() && RandoMapCoreMod.GS.RoomSelectionOn;

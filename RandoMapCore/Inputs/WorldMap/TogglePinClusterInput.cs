@@ -13,6 +13,11 @@ internal class TogglePinClusterInput : RmcWorldMapInput
 
     internal static TogglePinClusterInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnablePinSelection;
+    }
+
     public override bool ActiveCondition()
     {
         return base.ActiveCondition() && RandoMapCoreMod.GS.PinSelectionOn;
@@ -20,7 +25,7 @@ internal class TogglePinClusterInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        if (PinSelector.Instance.SelectedObject is PinCluster pinCluster)
+        if (PinSelector.Instance?.SelectedObject is PinCluster pinCluster)
         {
             pinCluster.ToggleSelectedPin();
             PinSelectionPanel.Instance.HideHint();

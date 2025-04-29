@@ -10,6 +10,12 @@ internal class SelectionReticleInput : MapUIKeyInput
 
     internal static SelectionReticleInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition()
+            && (RandoMapCoreMod.Data.EnablePinSelection || RandoMapCoreMod.Data.EnableRoomSelection);
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.ToggleShowReticle();

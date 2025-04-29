@@ -13,6 +13,11 @@ internal class LockGridPinInput : RmcWorldMapInput
 
     internal static LockGridPinInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnablePinSelection;
+    }
+
     public override bool ActiveCondition()
     {
         return base.ActiveCondition() && RandoMapCoreMod.GS.PinSelectionOn;

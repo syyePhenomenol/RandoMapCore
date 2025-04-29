@@ -43,7 +43,10 @@ internal abstract class LogicICPinDef : ICPinDef, ILogicPinDef
         if (SM.Of(placement).Get(InteropProperties.LocationHints) is RawLogicDef[] hints)
         {
             Hint = new(hints, pm);
-            TextBuilders.Add(Hint.GetHintText);
+            if (RandoMapCoreMod.Data.EnableLocationHints)
+            {
+                TextBuilders.Add(Hint.GetHintText);
+            }
         }
     }
 

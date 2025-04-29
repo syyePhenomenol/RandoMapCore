@@ -153,14 +153,14 @@ internal class RmcColors : HookModule
 
     internal static Vector4 GetColor(RmcColorSetting rmcColor)
     {
-        if (_customColors is not null && _customColors.ContainsKey(rmcColor))
+        if (_customColors.TryGetValue(rmcColor, out var customColor))
         {
-            return _customColors[rmcColor];
+            return customColor;
         }
 
-        if (_defaultColors.ContainsKey(rmcColor))
+        if (_defaultColors.TryGetValue(rmcColor, out var defaultColor))
         {
-            return _defaultColors[rmcColor];
+            return defaultColor;
         }
 
         if (Enum.TryParse(rmcColor.ToString(), out ColorSetting mcColor))

@@ -1,6 +1,7 @@
 ﻿using MagicUI.Elements;
 using RandoMapCore.Localization;
 using RandoMapCore.Settings;
+using UnityEngine.UI;
 
 namespace RandoMapCore.UI;
 
@@ -8,13 +9,22 @@ internal class ItemCompassModeButton() : BorderlessExtraButton(nameof(ItemCompas
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.ToggleItemCompassMode();
-        ItemCompass.Info.UpdateCompassTargets();
-        OnHover();
+        if (RandoMapCoreMod.Data.EnableItemCompass)
+        {
+            RandoMapCoreMod.GS.ToggleItemCompassMode();
+            ItemCompass.Info.UpdateCompassTargets();
+            OnHover();
+        }
     }
 
     protected override void OnHover()
     {
+        if (!RandoMapCoreMod.Data.EnableItemCompass)
+        {
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
+        }
+
         RmcTitle.Instance.HoveredText =
             "Item compass will point to: ".L()
             + RandoMapCoreMod.GS.ItemCompassMode switch
@@ -28,8 +38,17 @@ internal class ItemCompassModeButton() : BorderlessExtraButton(nameof(ItemCompas
 
     public override void Update()
     {
+        var text = $"{"Item compass\nmode".L()}: ";
+
+        if (!RandoMapCoreMod.Data.EnableItemCompass)
+        {
+            Button.Content = text + "Disabled".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
+
         Button.Content =
-            $"{"Item compass\nmode".L()}: "
+            text
             + RandoMapCoreMod.GS.ItemCompassMode switch
             {
                 ItemCompassMode.Reachable => "Reachable".L(),

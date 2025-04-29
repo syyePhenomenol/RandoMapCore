@@ -16,28 +16,41 @@ internal class BenchwarpInput : RmcWorldMapInput
 
     public override bool UseCondition()
     {
-        return base.UseCondition() && Interop.HasBenchwarp;
+        return base.UseCondition()
+            && (RandoMapCoreMod.Data.EnablePinSelection || RandoMapCoreMod.Data.EnableRoomSelection)
+            && RandoMapCoreMod.Data.EnableMapBenchwarp
+            && Interop.HasBenchwarp;
     }
 
     public override bool ActiveCondition()
     {
-        return base.ActiveCondition() && (RandoMapCoreMod.GS.PinSelectionOn || RandoMapCoreMod.GS.RoomSelectionOn);
+        return base.ActiveCondition()
+            && (
+                (RandoMapCoreMod.Data.EnablePinSelection && RandoMapCoreMod.GS.PinSelectionOn)
+                || (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.GS.RoomSelectionOn)
+            );
     }
 
     public override void DoAction()
     {
-        if (PinSelector.Instance.SelectedObject is RmcPin pin && BenchwarpInterop.IsVisitedBench(pin.Name))
+        if (RandoMapCoreMod.Data.EnablePinSelection)
         {
-            _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(pin.Name));
+            if (PinSelector.Instance?.SelectedObject is RmcPin pin && BenchwarpInterop.IsVisitedBench(pin.Name))
+            {
+                _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(pin.Name));
+                return;
+            }
+            else if (
+                PinSelector.Instance?.SelectedObject is PinCluster pinCluster
+                && BenchwarpInterop.IsVisitedBench(pinCluster.SelectedPin.Name)
+            )
+            {
+                _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(pinCluster.SelectedPin.Name));
+                return;
+            }
         }
-        else if (
-            PinSelector.Instance.SelectedObject is PinCluster pinCluster
-            && BenchwarpInterop.IsVisitedBench(pinCluster.SelectedPin.Name)
-        )
-        {
-            _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(pinCluster.SelectedPin.Name));
-        }
-        else if (TryGetBenchwarpFromRoute(out var benchKey))
+
+        if (RandoMapCoreMod.Data.EnableRoomSelection && TryGetBenchwarpFromRoute(out var benchKey))
         {
             _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(benchKey));
         }

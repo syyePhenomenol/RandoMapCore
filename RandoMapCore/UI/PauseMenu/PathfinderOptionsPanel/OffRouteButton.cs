@@ -8,18 +8,34 @@ internal class OffRouteButton() : BorderlessExtraButton(nameof(OffRouteButton))
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.ToggleWhenOffRoute();
-        MapUILayerUpdater.Update();
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            RandoMapCoreMod.GS.ToggleWhenOffRoute();
+            MapUILayerUpdater.Update();
+        }
     }
 
     protected override void OnHover()
     {
+        if (!RandoMapCoreMod.Data.EnableRoomSelection || !RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
+        }
+
         RmcTitle.Instance.HoveredText = "When going off route, how the pathfinder route is updated.".L();
     }
 
     public override void Update()
     {
         var text = $"{"Off route".L()}:\n";
+
+        if (!RandoMapCoreMod.Data.EnableRoomSelection || !RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            Button.Content = text + "Disabled".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
 
         switch (RandoMapCoreMod.GS.WhenOffRoute)
         {

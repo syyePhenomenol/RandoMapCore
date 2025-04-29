@@ -166,7 +166,9 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
     // Pin updating
     internal void UpdatePinSize()
     {
-        var size = _pinSizes[RandoMapCoreMod.GS.PinSize];
+        var size = RandoMapCoreMod.Data.EnableVisualCustomization
+            ? _pinSizes[RandoMapCoreMod.GS.PinSize]
+            : MEDIUM_SCALE;
 
         if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.No_Border)
         {
@@ -199,6 +201,14 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
 
     private void UpdateBorderBackgroundSprite()
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            var mixedShape = Def.GetMixedPinShape();
+            BorderSprite = RmcPinManager.Psm.GetSprite($"Border{mixedShape}").Value;
+            BackgroundSprite = RmcPinManager.Psm.GetSprite($"Background{mixedShape}").Value;
+            return;
+        }
+
         if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.No_Border)
         {
             BorderSprite = null;

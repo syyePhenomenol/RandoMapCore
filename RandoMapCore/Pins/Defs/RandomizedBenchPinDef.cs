@@ -16,7 +16,10 @@ internal sealed class RandomizedBenchPinDef : RandomizedPinDef
     {
         Bench = new(placement.Name);
 
-        TextBuilders.Add(Bench.GetBenchwarpText);
+        if (RandoMapCoreMod.Data.EnableMapBenchwarp)
+        {
+            TextBuilders.Add(Bench.GetBenchwarpText);
+        }
     }
 
     internal BenchInfo Bench { get; }

@@ -10,6 +10,11 @@ internal class ToggleShapeInput : PinHotkeyInput
 
     internal static ToggleShapeInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableVisualCustomization;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.TogglePinShape();

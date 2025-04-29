@@ -9,11 +9,20 @@ internal class PinSizeButton() : MainButton(nameof(PinSizeButton), RandoMapCoreM
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.TogglePinSize();
+        if (RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RandoMapCoreMod.GS.TogglePinSize();
+        }
     }
 
     protected override void OnHover()
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
+        }
+
         RmcTitle.Instance.HoveredText = "Toggle overall size of pins.".L();
     }
 
@@ -29,6 +38,13 @@ internal class PinSizeButton() : MainButton(nameof(PinSizeButton), RandoMapCoreM
         Button.BorderColor = RmcColors.GetColor(RmcColorSetting.UI_Borders);
 
         var text = $"{"Pin Size".L()}:\n";
+
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            Button.Content = text + "medium".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
 
         switch (RandoMapCoreMod.GS.PinSize)
         {

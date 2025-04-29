@@ -68,8 +68,7 @@ internal class PinSelector : Selector
     protected override void OnSelectionChanged()
     {
         PinSelectionPanel.Instance.HideHint();
-        PinSelectionPanel.Instance.Update();
-        RoomSelectionPanel.Instance.Update();
+        SelectionPanels.Instance?.Update();
     }
 
     private bool ActiveByCurrentMode()

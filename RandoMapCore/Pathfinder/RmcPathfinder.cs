@@ -13,14 +13,19 @@ public class RmcPathfinder : HookModule
     public override void OnEnterGame()
     {
         SD = new(RandoMapCoreMod.Data.PM);
-        Dgt = new(SD);
-        RM = new(SD);
-        Slt = new(SD);
 
-        On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += Dgt.TrackDreamgateSet;
-        ItemChanger.Events.OnBeginSceneTransition += Dgt.LinkDreamgateToPosition;
-        ItemChanger.Events.OnBeginSceneTransition += RM.CheckRoute;
-        MapChanger.Settings.OnSettingChanged += RM.ResetRoute;
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            Dgt = new(SD);
+            RM = new(SD);
+
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += Dgt.TrackDreamgateSet;
+            ItemChanger.Events.OnBeginSceneTransition += Dgt.LinkDreamgateToPosition;
+            ItemChanger.Events.OnBeginSceneTransition += RM.CheckRoute;
+            MapChanger.Settings.OnSettingChanged += RM.ResetRoute;
+        }
+
+        Slt = new(SD);
         Events.OnWorldMap += Slt.Events_OnWorldMap;
         Events.OnQuickMap += Slt.Events_OnQuickMap;
 
@@ -32,10 +37,14 @@ public class RmcPathfinder : HookModule
 
     public override void OnQuitToMenu()
     {
-        On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= Dgt.TrackDreamgateSet;
-        ItemChanger.Events.OnBeginSceneTransition -= Dgt.LinkDreamgateToPosition;
-        ItemChanger.Events.OnBeginSceneTransition -= RM.CheckRoute;
-        MapChanger.Settings.OnSettingChanged -= RM.ResetRoute;
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= Dgt.TrackDreamgateSet;
+            ItemChanger.Events.OnBeginSceneTransition -= Dgt.LinkDreamgateToPosition;
+            ItemChanger.Events.OnBeginSceneTransition -= RM.CheckRoute;
+            MapChanger.Settings.OnSettingChanged -= RM.ResetRoute;
+        }
+
         Events.OnWorldMap -= Slt.Events_OnWorldMap;
         Events.OnQuickMap -= Slt.Events_OnQuickMap;
 

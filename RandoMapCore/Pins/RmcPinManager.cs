@@ -152,11 +152,14 @@ internal class RmcPinManager : HookModule
         UpdateLogic();
         MainUpdate();
 
-        // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
-        var pinSelector = Utils.MakeMonoBehaviour<PinSelector>(null, "RandoMapCore Pin Selector");
-        pinSelector.Initialize(
-            _normalPins.Values.Cast<IPinSelectable>().Concat(_pinClusters.Values).Concat(_gridPins.Values)
-        );
+        if (RandoMapCoreMod.Data.EnablePinSelection)
+        {
+            // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
+            var pinSelector = Utils.MakeMonoBehaviour<PinSelector>(null, "RandoMapCore Pin Selector");
+            pinSelector.Initialize(
+                _normalPins.Values.Cast<IPinSelectable>().Concat(_pinClusters.Values).Concat(_gridPins.Values)
+            );
+        }
 
         _tempPinGroups = null;
         _tempPinNames = null;

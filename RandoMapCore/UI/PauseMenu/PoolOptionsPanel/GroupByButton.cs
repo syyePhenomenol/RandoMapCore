@@ -8,17 +8,21 @@ internal class GroupByButton() : BorderlessExtraButton(nameof(GroupByButton))
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.LS.ToggleGroupBy();
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle)
+        {
+            RandoMapCoreMod.LS.ToggleGroupBy();
+        }
     }
 
     protected override void OnHover()
     {
-        RmcTitle.Instance.HoveredText = "Group pools by either location (normal) or by item (spoilers).".L();
-
         if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
         {
-            RmcTitle.Instance.HoveredText += $" {"Toggle disabled".L()}";
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
         }
+
+        RmcTitle.Instance.HoveredText = "Group pools by either location (normal) or by item (spoilers).".L();
     }
 
     public override void Update()

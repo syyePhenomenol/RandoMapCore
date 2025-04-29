@@ -45,7 +45,10 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
         if (RmcPinManager.Dpm.GetDefaultLocationHints(Name) is RawLogicDef[] hints)
         {
             Hint = new(hints, pm);
-            TextBuilders.Add(Hint.GetHintText);
+            if (RandoMapCoreMod.Data.EnableLocationHints)
+            {
+                TextBuilders.Add(Hint.GetHintText);
+            }
         }
 
         Persistent =

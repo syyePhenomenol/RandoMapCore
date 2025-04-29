@@ -8,18 +8,34 @@ internal class QMarkSettingButton() : BorderlessExtraButton(nameof(QMarkSettingB
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.ToggleQMarkSetting();
-        ItemCompass.Info.UpdateCurrentCompassTargets();
+        if (RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RandoMapCoreMod.GS.ToggleQMarkSetting();
+            ItemCompass.Info.UpdateCurrentCompassTargets();
+        }
     }
 
     protected override void OnHover()
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
+        }
+
         RmcTitle.Instance.HoveredText = "Toggle question mark sprites on/off.".L();
     }
 
     public override void Update()
     {
         var text = $"{"Question\nmarks".L()}: ";
+
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            Button.Content = text + "off".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
 
         switch (RandoMapCoreMod.GS.QMarks)
         {

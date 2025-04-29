@@ -10,6 +10,11 @@ internal class ToggleItemCompassInput : MapUIKeyInput
 
     internal static ToggleItemCompassInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableItemCompass;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.ToggleItemCompass();

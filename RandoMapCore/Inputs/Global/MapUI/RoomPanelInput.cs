@@ -10,6 +10,11 @@ internal class RoomPanelInput : MapUIKeyInput
 
     internal static RoomPanelInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnableRoomSelection;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.ToggleRoomSelection();

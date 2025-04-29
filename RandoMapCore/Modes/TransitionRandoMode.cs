@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RandoMapCore.Modes;
 
-internal abstract class TransitionRandoMode : RmcMapMode
+public abstract class TransitionRandoMode : RmcMapMode
 {
     public override bool DisableAreaNames => true;
 
@@ -37,17 +37,17 @@ internal abstract class TransitionRandoMode : RmcMapMode
     }
 }
 
-internal class TransitionNormalMode : TransitionRandoMode
+public class TransitionNormalMode : TransitionRandoMode
 {
     public override string ModeName => Settings.RmcMode.Transition_Normal.ToString().ToCleanName();
 }
 
-internal class TransitionVisitedOnlyMode : TransitionRandoMode
+public class TransitionVisitedOnlyMode : TransitionRandoMode
 {
     public override string ModeName => Settings.RmcMode.Transition_Visited_Only.ToString().ToCleanName();
 }
 
-internal class TransitionAllRoomsMode : TransitionRandoMode
+public class TransitionAllRoomsMode : TransitionRandoMode
 {
     public override string ModeName => Settings.RmcMode.Transition_All_Rooms.ToString().ToCleanName();
 }

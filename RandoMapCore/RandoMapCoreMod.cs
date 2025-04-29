@@ -27,16 +27,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
         new TransitionAllRoomsMode(),
     ];
 
-    private static readonly IEnumerable<HookModule> _hookModules =
-    [
-        new RmcColors(),
-        new RmcRoomManager(),
-        new TransitionData(),
-        new RmcPathfinder(),
-        new RmcPinManager(),
-        new ItemCompass(),
-        new RouteCompass(),
-    ];
+    private static readonly List<HookModule> _hookModules = [];
 
     private static readonly List<RmcDataModule> _dataModules = [];
 
@@ -55,7 +46,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.1";
+        return "1.0.2";
     }
 
     public override int LoadPriority()
@@ -148,12 +139,37 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
             return;
         }
 
-        MapChanger.Settings.AddModes(_modes);
+        if (Data.ForceMapMode is string mapMode && _modes.FirstOrDefault(m => m.ModeName == mapMode) is RmcMapMode mode)
+        {
+            MapChanger.Settings.AddModes([mode]);
+        }
+        else
+        {
+            MapChanger.Settings.AddModes(_modes);
+        }
+
         Events.OnSetGameMap += OnSetGameMap;
 
         if (Interop.HasBenchwarp)
         {
-            BenchwarpInterop.Load();
+            _hookModules.Add(new BenchwarpInterop());
+        }
+
+        if (Data.EnableVisualCustomization)
+        {
+            _hookModules.Add(new RmcColors());
+        }
+
+        _hookModules.AddRange([new RmcRoomManager(), new TransitionData(), new RmcPathfinder(), new RmcPinManager()]);
+
+        if (Data.EnableItemCompass)
+        {
+            _hookModules.Add(new ItemCompass());
+        }
+
+        if (Data.EnableRoomSelection && Data.EnablePathfinder)
+        {
+            _hookModules.Add(new RouteCompass());
         }
 
         foreach (var hookModule in _hookModules)
@@ -171,15 +187,12 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
         Events.OnSetGameMap -= OnSetGameMap;
 
-        if (Interop.HasBenchwarp)
-        {
-            BenchwarpInterop.Unload();
-        }
-
         foreach (var hookModule in _hookModules)
         {
             hookModule.OnQuitToMenu();
         }
+
+        _hookModules.Clear();
 
         Data.OnQuitToMenu();
         Data = null;

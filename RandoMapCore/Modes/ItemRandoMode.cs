@@ -6,14 +6,15 @@ using UnityEngine;
 
 namespace RandoMapCore.Modes;
 
-internal class ItemRandoMode : RmcMapMode
+public class ItemRandoMode : RmcMapMode
 {
     public override Vector4? RoomColorOverride(RoomSprite roomSprite)
     {
         return GetCustomColor(roomSprite.Rsd.ColorSetting);
     }
 
-    public override bool DisableAreaNames => !RandoMapCoreMod.GS.ShowAreaNames;
+    public override bool DisableAreaNames =>
+        RandoMapCoreMod.Data.EnableVisualCustomization && !RandoMapCoreMod.GS.ShowAreaNames;
 
     public override Vector4? AreaNameColorOverride(AreaName areaName)
     {
@@ -22,6 +23,11 @@ internal class ItemRandoMode : RmcMapMode
 
     public override bool? NextAreaNameActiveOverride(NextAreaName nextAreaName)
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            return null;
+        }
+
         return RandoMapCoreMod.GS.ShowNextAreas switch
         {
             NextAreaSetting.Off or NextAreaSetting.Arrows => false,
@@ -31,6 +37,11 @@ internal class ItemRandoMode : RmcMapMode
 
     public override bool? NextAreaArrowActiveOverride(NextAreaArrow nextAreaArrow)
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            return null;
+        }
+
         return RandoMapCoreMod.GS.ShowNextAreas switch
         {
             NextAreaSetting.Off => false,
@@ -74,6 +85,11 @@ internal class FullMapMode : ItemRandoMode
 
     public override bool? NextAreaNameActiveOverride(NextAreaName nextAreaName)
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            return true;
+        }
+
         return RandoMapCoreMod.GS.ShowNextAreas switch
         {
             NextAreaSetting.Off or NextAreaSetting.Arrows => false,
@@ -83,6 +99,11 @@ internal class FullMapMode : ItemRandoMode
 
     public override bool? NextAreaArrowActiveOverride(NextAreaArrow nextAreaArrow)
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            return true;
+        }
+
         return RandoMapCoreMod.GS.ShowNextAreas switch
         {
             NextAreaSetting.Off => false,

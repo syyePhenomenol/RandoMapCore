@@ -24,8 +24,17 @@ internal abstract class RmcGlobalHotkeyInput(string name, string category, KeyCo
     {
         PauseMenu.Update();
         RmcPinManager.MainUpdate();
-        PinSelector.Instance.MainUpdate();
-        TransitionRoomSelector.Instance.MainUpdate();
+
+        if (RandoMapCoreMod.Data.EnablePinSelection)
+        {
+            PinSelector.Instance.MainUpdate();
+        }
+
+        if (RandoMapCoreMod.Data.EnableRoomSelection)
+        {
+            TransitionRoomSelector.Instance.MainUpdate();
+        }
+
         MapUILayerUpdater.Update();
     }
 }

@@ -9,22 +9,7 @@ namespace RandoMapCore.UI;
 
 internal class ControlPanel : WorldMapStack
 {
-    private static readonly ControlPanelText[] _texts =
-    [
-        new ShowHotkeysText(),
-        new ModEnabledText(),
-        new ModeText(),
-        new ShiftPanText(),
-        new MapKeyText(),
-        new ProgressHintText(),
-        new ItemCompassText(),
-        new PinSelectionText(),
-        new BenchwarpPinsText(),
-        new RoomSelectionText(),
-        new ShowReticleText(),
-        new PathfinderBenchwarpText(),
-    ];
-
+    private static readonly List<ControlPanelText> _texts = [];
     private static Panel _panel;
     private static StackLayout _panelStack;
 
@@ -58,6 +43,46 @@ internal class ControlPanel : WorldMapStack
         };
 
         _panel.Child = _panelStack;
+
+        _texts.Clear();
+        _texts.AddRange(
+            [new ShowHotkeysText(), new ModEnabledText(), new ModeText(), new ShiftPanText(), new MapKeyText()]
+        );
+
+        if (RandoMapCoreMod.Data.EnableProgressionHints)
+        {
+            _texts.Add(new ProgressHintText());
+        }
+
+        if (RandoMapCoreMod.Data.EnableItemCompass)
+        {
+            _texts.Add(new ItemCompassText());
+        }
+
+        if (RandoMapCoreMod.Data.EnablePinSelection)
+        {
+            _texts.Add(new PinSelectionText());
+        }
+
+        if (Interop.HasBenchwarp)
+        {
+            _texts.Add(new BenchwarpPinsText());
+        }
+
+        if (RandoMapCoreMod.Data.EnableRoomSelection)
+        {
+            _texts.Add(new RoomSelectionText());
+        }
+
+        if (RandoMapCoreMod.Data.EnablePinSelection || RandoMapCoreMod.Data.EnableRoomSelection)
+        {
+            _texts.Add(new ShowReticleText());
+        }
+
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder && Interop.HasBenchwarp)
+        {
+            _texts.Add(new PathfinderBenchwarpText());
+        }
 
         foreach (var cpt in _texts)
         {

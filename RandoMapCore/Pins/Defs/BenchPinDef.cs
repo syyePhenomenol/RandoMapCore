@@ -23,7 +23,10 @@ internal class BenchPinDef : PinDef
 
         Bench = new(name);
 
-        TextBuilders.Add(Bench.GetBenchwarpText);
+        if (RandoMapCoreMod.Data.EnableMapBenchwarp)
+        {
+            TextBuilders.Add(Bench.GetBenchwarpText);
+        }
     }
 
     private protected virtual MapRoomPosition GetBenchMapPosition()

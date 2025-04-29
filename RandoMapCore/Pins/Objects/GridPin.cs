@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using MapChanger;
 using MapChanger.Defs;
+using MapChanger.Map;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Input;
 using RandoMapCore.Localization;
@@ -32,29 +33,23 @@ internal class GridPin : RmcPin
         GridIndex = icpd.GridIndex;
         HighlightScenes = icpd.HighlightScenes;
 
-        if (HighlightScenes is null)
+        if (RandoMapCoreMod.Data.EnablePinSelection && HighlightScenes is not null)
         {
-            return;
-        }
-
-        List<ColoredMapObject> highlightRooms = [];
-        foreach (var scene in HighlightScenes)
-        {
-            if (TransitionRoomSelector.Instance.Objects.TryGetValue(scene, out var room))
+            List<ColoredMapObject> highlightRooms = [];
+            foreach (var scene in HighlightScenes)
             {
-                if (room is SelectableGroup<RoomSprite> roomSprites)
+                if (BuiltInObjects.SelectableRooms.TryGetValue(scene, out var room))
                 {
-                    highlightRooms.AddRange(roomSprites.Selectables);
+                    highlightRooms.AddRange(room.Selectables);
                 }
-
-                if (room is RoomText roomText)
+                else if (RmcRoomManager.RoomTexts.TryGetValue(scene, out var roomText))
                 {
                     highlightRooms.Add(roomText);
                 }
             }
-        }
 
-        HighlightRooms = new(highlightRooms);
+            HighlightRooms = new(highlightRooms);
+        }
     }
 
     internal void AddWorldMapPosition(IMapPosition position)

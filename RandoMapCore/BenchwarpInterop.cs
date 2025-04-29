@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Benchwarp;
 using InControl;
+using MapChanger;
 using Modding;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace RandoMapCore;
 
 public record struct RmcBenchKey(string SceneName, string RespawnMarkerName);
 
-internal class BenchwarpInterop
+internal class BenchwarpInterop : HookModule
 {
     internal const string BENCH_WARP_START = "Start_Warp";
 
@@ -17,7 +18,7 @@ internal class BenchwarpInterop
     internal static ReadOnlyDictionary<string, RmcBenchKey> BenchKeys { get; private set; }
     internal static RmcBenchKey StartKey { get; private set; }
 
-    internal static void Load()
+    public override void OnEnterGame()
     {
         Dictionary<RmcBenchKey, string> benchNames = [];
 
@@ -48,7 +49,7 @@ internal class BenchwarpInterop
         BenchKeys = new(benchNames.ToDictionary(t => t.Value, t => t.Key));
     }
 
-    internal static void Unload()
+    public override void OnQuitToMenu()
     {
         BenchNames = null;
         BenchKeys = null;
@@ -96,7 +97,7 @@ internal class BenchwarpInterop
             }
             else
             {
-                Events.SetToStart();
+                Benchwarp.Events.SetToStart();
             }
 
             ChangeScene.WarpToRespawn();

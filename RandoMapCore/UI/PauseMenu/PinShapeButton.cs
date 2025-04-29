@@ -9,11 +9,20 @@ internal class PinShapeButton() : MainButton(nameof(PinShapeButton), RandoMapCor
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.TogglePinShape();
+        if (RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RandoMapCoreMod.GS.TogglePinShape();
+        }
     }
 
     protected override void OnHover()
     {
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
+        }
+
         RmcTitle.Instance.HoveredText = "Toggle the shape of the pins.".L();
     }
 
@@ -29,6 +38,13 @@ internal class PinShapeButton() : MainButton(nameof(PinShapeButton), RandoMapCor
         Button.BorderColor = RmcColors.GetColor(RmcColorSetting.UI_Borders);
 
         var text = $"{"Pin Shape".L()}:\n";
+
+        if (!RandoMapCoreMod.Data.EnableVisualCustomization)
+        {
+            Button.Content = text + "mixed".L();
+            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
+        }
 
         switch (RandoMapCoreMod.GS.PinShapes)
         {

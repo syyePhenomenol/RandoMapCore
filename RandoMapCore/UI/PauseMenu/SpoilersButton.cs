@@ -8,17 +8,21 @@ internal class SpoilersButton() : MainButton(nameof(SpoilersButton), RandoMapCor
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.LS.ToggleSpoilers();
+        if (RandoMapCoreMod.Data.EnableSpoilerToggle)
+        {
+            RandoMapCoreMod.LS.ToggleSpoilers();
+        }
     }
 
     protected override void OnHover()
     {
-        RmcTitle.Instance.HoveredText = "Reveals the items at each location.".L();
-
         if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
         {
-            RmcTitle.Instance.HoveredText += $" {"Toggle disabled".L()}";
+            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
+            return;
         }
+
+        RmcTitle.Instance.HoveredText = "Reveals the items at each location.".L();
     }
 
     protected override void OnUnhover()
@@ -32,14 +36,15 @@ internal class SpoilersButton() : MainButton(nameof(SpoilersButton), RandoMapCor
 
         Button.BorderColor = RmcColors.GetColor(RmcColorSetting.UI_Borders);
 
+        var text = $"{"Spoilers".L()}:\n";
+
         if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
         {
-            Button.Content = $"{"Spoilers".L()}:\nDisabled".L();
+            Button.Content = text + "Off".L();
             Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
+            return;
         }
-        else
-        {
-            this.SetButtonBoolToggle($"{"Spoilers".L()}:\n", RandoMapCoreMod.LS.SpoilerOn);
-        }
+
+        this.SetButtonBoolToggle(text, RandoMapCoreMod.LS.SpoilerOn);
     }
 }

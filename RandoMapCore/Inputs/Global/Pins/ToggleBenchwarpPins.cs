@@ -10,6 +10,11 @@ internal class ToggleBenchwarpPinsInput : MapUIKeyInput
 
     internal static ToggleBenchwarpPinsInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && Interop.HasBenchwarp;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.ToggleBenchwarpPins();

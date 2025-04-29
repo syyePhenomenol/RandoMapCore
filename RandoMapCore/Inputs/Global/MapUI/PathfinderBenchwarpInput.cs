@@ -14,7 +14,10 @@ internal class PathfinderBenchwarpInput : MapUIKeyInput
 
     public override bool UseCondition()
     {
-        return base.UseCondition() && Interop.HasBenchwarp;
+        return base.UseCondition()
+            && RandoMapCoreMod.Data.EnableRoomSelection
+            && RandoMapCoreMod.Data.EnablePathfinder
+            && Interop.HasBenchwarp;
     }
 
     public override void DoAction()

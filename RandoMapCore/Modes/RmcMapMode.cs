@@ -2,7 +2,7 @@
 
 namespace RandoMapCore.Modes;
 
-internal class RmcMapMode : MapMode
+public class RmcMapMode : MapMode
 {
     public override string Mod => RandoMapCoreMod.Data.ModName;
     public override float Priority => 0f;
@@ -15,6 +15,11 @@ internal class RmcMapMode : MapMode
 
     public override bool InitializeToThis()
     {
+        if (ModeName == RandoMapCoreMod.Data.ForceMapMode)
+        {
+            return true;
+        }
+
         if (RandoMapCoreMod.Data.RandomizedTransitions.Any())
         {
             return ModeName == RandoMapCoreMod.GS.DefaultTransitionRandoMode.ToString().ToCleanName();

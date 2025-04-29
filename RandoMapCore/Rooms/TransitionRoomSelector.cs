@@ -61,22 +61,29 @@ internal class TransitionRoomSelector : RoomSelector
             text += $" {"You are here".L()}.";
         }
 
-        var selectBindingText = SelectRoomRouteInput.Instance.GetBindingsText();
-        text += $"\n\n{"Press".L()} {selectBindingText}";
+        if (RandoMapCoreMod.Data.EnablePathfinder)
+        {
+            var selectBindingText = SelectRoomRouteInput.Instance.GetBindingsText();
+            text += $"\n\n{"Press".L()} {selectBindingText}";
 
-        if (RmcPathfinder.RM.CanCycleRoute(selectedScene))
-        {
-            text += $" {"to change starting / final transitions of current route".L()}.";
-        }
-        else
-        {
-            text += $" {"to find a new route".L()}.";
-        }
+            if (RmcPathfinder.RM.CanCycleRoute(selectedScene))
+            {
+                text += $" {"to change starting / final transitions of current route".L()}.";
+            }
+            else
+            {
+                text += $" {"to find a new route".L()}.";
+            }
 
-        var benchBindingText = BenchwarpInput.Instance.GetBindingsText();
-        if (PinSelector.Instance.VisitedBenchNotSelected() && BenchwarpInput.TryGetBenchwarpFromRoute(out var _))
-        {
-            text += $" {"Hold".L()} {benchBindingText} {"to benchwarp".L()}.";
+            if (
+                RandoMapCoreMod.Data.EnableMapBenchwarp
+                && (!RandoMapCoreMod.Data.EnablePinSelection || PinSelector.Instance.VisitedBenchNotSelected())
+                && BenchwarpInput.TryGetBenchwarpFromRoute(out var _)
+            )
+            {
+                var benchBindingText = BenchwarpInput.Instance.GetBindingsText();
+                text += $" {"Hold".L()} {benchBindingText} {"to benchwarp".L()}.";
+            }
         }
 
         return text;

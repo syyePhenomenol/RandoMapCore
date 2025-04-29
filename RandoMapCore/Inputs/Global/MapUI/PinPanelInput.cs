@@ -10,6 +10,11 @@ internal class PinPanelInput : MapUIKeyInput
 
     internal static PinPanelInput Instance { get; private set; }
 
+    public override bool UseCondition()
+    {
+        return base.UseCondition() && RandoMapCoreMod.Data.EnablePinSelection;
+    }
+
     public override void DoAction()
     {
         RandoMapCoreMod.GS.TogglePinSelection();

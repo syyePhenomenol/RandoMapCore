@@ -17,25 +17,28 @@ internal class PinSpriteManager
             return GetLocationSprite(otherKey);
         }
 
-        if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Red)
+        if (RandoMapCoreMod.Data.EnableVisualCustomization)
         {
-            key = key switch
+            if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Red)
             {
-                "Shop" => "Shop",
-                _ => "Unknown",
-            };
-        }
-        else if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Mix)
-        {
-            key = key switch
+                key = key switch
+                {
+                    "Shop" => "Shop",
+                    _ => "Unknown",
+                };
+            }
+            else if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Mix)
             {
-                "Grub" => "UnknownGrub",
-                "Cocoon" => "UnknownLifeblood",
-                "Rock" => "UnknownGeoRock",
-                "Totem" => "UnknownTotem",
-                "Shop" => "Shop",
-                _ => "Unknown",
-            };
+                key = key switch
+                {
+                    "Grub" => "UnknownGrub",
+                    "Cocoon" => "UnknownLifeblood",
+                    "Rock" => "UnknownGeoRock",
+                    "Totem" => "UnknownTotem",
+                    "Shop" => "Shop",
+                    _ => "Unknown",
+                };
+            }
         }
 
         return GetSpriteInternal(key);
@@ -67,7 +70,7 @@ internal class PinSpriteManager
 
     internal ScaledPinSprite GetLocationSprite(AbstractPlacement placement)
     {
-        if (RandoMapCoreMod.GS.QMarks is not QMarkSetting.Off)
+        if (RandoMapCoreMod.Data.EnableVisualCustomization && RandoMapCoreMod.GS.QMarks is not QMarkSetting.Off)
         {
             return GetLocationSprite(SD.Of(placement).Get(InjectedProps.LocationPoolGroup));
         }
