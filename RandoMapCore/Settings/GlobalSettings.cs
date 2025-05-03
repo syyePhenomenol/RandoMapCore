@@ -56,7 +56,7 @@ public class GlobalSettings
     public ClearedPinsSetting ShowClearedPins { get; private set; } = ClearedPinsSetting.Persistent;
 
     [JsonProperty]
-    public bool ReachablePins { get; private set; } = true;
+    public ReachablePinsSetting ShowReachablePins { get; private set; } = ReachablePinsSetting.ExpandReachable;
 
     [JsonProperty]
     public bool ShowBenchwarpPins { get; private set; } = true;
@@ -174,9 +174,11 @@ public class GlobalSettings
         );
     }
 
-    internal void ToggleReachablePins()
+    internal void ToggleShowReachablePins()
     {
-        ReachablePins = !ReachablePins;
+        ShowReachablePins = (ReachablePinsSetting)(
+            ((int)ShowReachablePins + 1) % Enum.GetNames(typeof(ReachablePinsSetting)).Length
+        );
     }
 
     internal void ToggleQMarkSetting()

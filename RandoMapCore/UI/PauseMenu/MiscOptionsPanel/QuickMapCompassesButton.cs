@@ -13,7 +13,7 @@ internal class QuickMapCompassesButton() : BorderlessExtraButton(nameof(QuickMap
 
     protected override void OnHover()
     {
-        RmcTitle.Instance.HoveredText = "Show compasses pointing to transitions in room".L();
+        RmcTitle.Instance.HoveredText = "Show compasses pointing to transitions in room.".L();
     }
 
     public override void Update()

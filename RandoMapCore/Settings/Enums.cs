@@ -36,6 +36,13 @@ public enum ClearedPinsSetting
     All,
 }
 
+public enum ReachablePinsSetting
+{
+    HideUnreachable,
+    ExpandReachable,
+    ExpandAll,
+}
+
 public enum QMarkSetting
 {
     Off,

@@ -6,7 +6,12 @@ internal class ReachablePinsButton() : BorderlessExtraButton(nameof(ReachablePin
 {
     protected override void OnClick()
     {
-        RandoMapCoreMod.GS.ToggleReachablePins();
+        RandoMapCoreMod.GS.ToggleShowReachablePins();
+    }
+
+    protected override void OnHover()
+    {
+        RmcTitle.Instance.HoveredText = "Toggle how reachable locations are displayed.".L();
     }
 
     protected override void OnUnhover()
@@ -16,6 +21,17 @@ internal class ReachablePinsButton() : BorderlessExtraButton(nameof(ReachablePin
 
     public override void Update()
     {
-        this.SetButtonBoolToggle($"{"Indicate\nreachable".L()}: ", RandoMapCoreMod.GS.ReachablePins);
+        var text =
+            $"{"Reachable pins".L()}:\n"
+            + RandoMapCoreMod.GS.ShowReachablePins switch
+            {
+                Settings.ReachablePinsSetting.HideUnreachable => "hide unreachable".L(),
+                Settings.ReachablePinsSetting.ExpandReachable => "expand reachable".L(),
+                Settings.ReachablePinsSetting.ExpandAll => "expand all".L(),
+                _ => "",
+            };
+
+        Button.Content = text;
+        Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Neutral);
     }
 }

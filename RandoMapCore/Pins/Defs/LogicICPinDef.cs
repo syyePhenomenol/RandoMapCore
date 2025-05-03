@@ -53,6 +53,15 @@ internal abstract class LogicICPinDef : ICPinDef, ILogicPinDef
     public LogicInfo Logic { get; init; }
     public HintInfo Hint { get; init; }
 
+    internal override bool ActiveBySettings()
+    {
+        return base.ActiveBySettings()
+            && (
+                Logic?.State is LogicState.Reachable or LogicState.ReachableSequenceBreak
+                || RandoMapCoreMod.GS.ShowReachablePins is not ReachablePinsSetting.HideUnreachable
+            );
+    }
+
     internal override bool ShrinkPin()
     {
         return Logic?.IndicateUnreachable() ?? false;

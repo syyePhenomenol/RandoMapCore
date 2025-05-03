@@ -36,7 +36,8 @@ public class LogicInfo
 
     internal bool IndicateUnreachable()
     {
-        return RandoMapCoreMod.GS.ReachablePins && State is LogicState.Unreachable;
+        return RandoMapCoreMod.GS.ShowReachablePins is not Settings.ReachablePinsSetting.ExpandAll
+            && State is LogicState.Unreachable;
     }
 
     internal string GetStatusTextFragment()

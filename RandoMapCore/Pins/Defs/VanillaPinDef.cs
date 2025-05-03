@@ -68,7 +68,11 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
 
     internal override bool ActiveBySettings()
     {
-        return !Tracker.HasClearedLocation(Name) || RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.All;
+        return (!Tracker.HasClearedLocation(Name) || RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.All)
+            && (
+                Logic?.State is LogicState.Reachable or LogicState.ReachableSequenceBreak
+                || RandoMapCoreMod.GS.ShowReachablePins is not ReachablePinsSetting.HideUnreachable
+            );
     }
 
     internal override IEnumerable<ScaledPinSprite> GetPinSprites()
