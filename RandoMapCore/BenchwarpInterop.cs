@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Benchwarp;
 using InControl;
+using ItemChanger;
 using MapChanger;
 using Modding;
 using UnityEngine;
@@ -42,7 +43,14 @@ internal class BenchwarpInterop : HookModule
             }
         }
 
-        StartKey = new(ItemChanger.Internal.Ref.Settings.Start.SceneName, "ITEMCHANGER_RESPAWN_MARKER");
+        if (ItemChanger.Internal.Ref.Settings.Start != null)
+        {
+            StartKey = new(ItemChanger.Internal.Ref.Settings.Start.SceneName, "ITEMCHANGER_RESPAWN_MARKER");
+        }
+        else
+        {
+            StartKey = new(SceneNames.Tutorial_01, "Death Respawn Marker");
+        }
         benchNames.Add(StartKey, BENCH_WARP_START);
 
         BenchNames = new(benchNames);

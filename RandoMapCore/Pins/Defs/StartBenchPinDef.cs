@@ -1,3 +1,4 @@
+using ItemChanger;
 using MapChanger.Defs;
 
 namespace RandoMapCore.Pins;
@@ -5,7 +6,7 @@ namespace RandoMapCore.Pins;
 internal sealed class StartBenchPinDef : BenchPinDef
 {
     internal StartBenchPinDef()
-        : base(BenchwarpInterop.BENCH_WARP_START, ItemChanger.Internal.Ref.Settings.Start.SceneName) { }
+        : base(BenchwarpInterop.BENCH_WARP_START, ItemChanger.Internal.Ref.Settings.Start?.SceneName ?? SceneNames.Tutorial_01) { }
 
     private protected override MapRoomPosition GetBenchMapPosition()
     {
@@ -13,7 +14,7 @@ internal sealed class StartBenchPinDef : BenchPinDef
 
         if (MapChanger.Finder.IsMappedScene(SceneName))
         {
-            return new WorldMapPosition((SceneName, start.X, start.Y));
+            return new WorldMapPosition((SceneName, start?.X ?? 0, start?.Y ?? 0));
         }
         else
         {
