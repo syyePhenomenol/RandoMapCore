@@ -56,10 +56,10 @@ internal static class InteropProperties
         new("MakeVanillaPin", (placement) => false);
 
     /// <summary>
-    /// Overrides IC-defined behaviour for previewing specific items.
+    /// Forces previewing of specific items, regardless if the player has visited the placement.
     /// </summary>
-    internal static readonly MetadataProperty<AbstractItem, bool> DisablePreview =
-        new("DisablePreview", (item) => false);
+    internal static readonly MetadataProperty<AbstractItem, bool> ForceEnablePreview =
+        new("ForceEnablePreview", (item) => false);
 
     /// <summary>
     /// A key to access a built in sprite, for a placement's location.

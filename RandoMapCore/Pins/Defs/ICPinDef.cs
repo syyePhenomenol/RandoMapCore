@@ -191,9 +191,17 @@ internal abstract class ICPinDef : PinDef
 
     private protected virtual string GetPreviewText()
     {
-        if (Placement.GetPreviewText() is var previewTexts && previewTexts.Any())
+        var text = $"{"Previewed item(s)".L()}: ";
+
+        if (Placement.GetTagPreviewText() is var previewTexts && previewTexts.Any())
         {
-            return $"{"Previewed item(s)".L()}: {string.Join(", ", previewTexts)}";
+            return text + string.Join(", ", previewTexts);
+        }
+
+        // Default handler if tag isn't found
+        if (ICPlacementTracker.NeverObtainedPreviewableItems.Any())
+        {
+            return text + string.Join(", ", ToStringList(ICPlacementTracker.NeverObtainedPreviewableItems));
         }
 
         return null;

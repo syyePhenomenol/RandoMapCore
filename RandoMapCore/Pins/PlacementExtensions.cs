@@ -28,7 +28,7 @@ internal static class PlacementExtensions
         return !taggable.HasTag<ItemChanger.Tags.DisableItemPreviewTag>();
     }
 
-    internal static string[] GetPreviewText(this AbstractPlacement placement)
+    internal static string[] GetTagPreviewText(this AbstractPlacement placement)
     {
         List<string> texts = [];
 

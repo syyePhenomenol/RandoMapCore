@@ -48,13 +48,13 @@ internal class ICPlacementTracker(AbstractPlacement placement)
         _everObtainedPersistentItems.Clear();
         _everObtainedNonPersistentItems.Clear();
 
-        var placementPreviewable = placement.CanPreview() && placement.CheckVisitedAny(VisitState.Previewed);
+        var placementPreviewed = placement.CanPreview() && placement.CheckVisitedAny(VisitState.Previewed);
 
         foreach (var i in placement.Items)
         {
             if (!i.WasEverObtained())
             {
-                if (placementPreviewable && i.CanPreview() && !SM.Of(i).Get(InteropProperties.DisablePreview))
+                if ((placementPreviewed && i.CanPreview()) || SM.Of(i).Get(InteropProperties.ForceEnablePreview))
                 {
                     _neverObtainedPreviewableItems.Add(i);
                 }
