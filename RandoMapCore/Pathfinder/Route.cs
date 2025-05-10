@@ -14,7 +14,7 @@ internal class Route
     internal Route(Node node, IEnumerable<RouteHint> routeHints)
     {
         Node = node;
-        _instructions = [.. node.Actions.Where(a => a is IInstruction).Select(a => (IInstruction)a)];
+        _instructions = [.. node.Actions.Where(a => a is IInstruction).Cast<IInstruction>()];
         _hints = [.. routeHints];
     }
 

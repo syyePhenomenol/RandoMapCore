@@ -51,6 +51,7 @@ internal enum RmcColorSetting
     Room_Normal,
     Room_Current,
     Room_Adjacent,
+    Room_Sequence_break,
     Room_Out_of_logic,
     Room_Selected,
     Room_Debug,
@@ -72,6 +73,7 @@ internal class RmcColors : HookModule
         RmcColorSetting.Room_Normal,
         RmcColorSetting.Room_Current,
         RmcColorSetting.Room_Adjacent,
+        RmcColorSetting.Room_Sequence_break,
         RmcColorSetting.Room_Out_of_logic,
         RmcColorSetting.Room_Selected,
     ];
@@ -89,6 +91,7 @@ internal class RmcColors : HookModule
             { RmcColorSetting.Room_Normal, new(1f, 1f, 1f, 0.3f) }, // white
             { RmcColorSetting.Room_Current, new(0, 1f, 0, 0.4f) }, // green
             { RmcColorSetting.Room_Adjacent, new(0, 1f, 1f, 0.4f) }, // cyan
+            { RmcColorSetting.Room_Sequence_break, new(1f, 0.5f, 0f, 0.3f) }, // orange
             { RmcColorSetting.Room_Out_of_logic, new(1f, 0, 0, 0.3f) }, // red
             { RmcColorSetting.Room_Selected, new(1f, 1f, 0, 0.7f) }, // yellow
             { RmcColorSetting.Room_Debug, new(0, 0, 1f, 0.5f) }, // blue

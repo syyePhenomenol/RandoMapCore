@@ -5,28 +5,14 @@ using RCPathfinder.Actions;
 
 namespace RandoMapCore.Pathfinder.Actions;
 
-internal class DreamgateAction() : StartJumpAction, IInstruction
+internal class DreamgateAction() : JumpAction, IInstruction
 {
-    internal DreamgateTracker Dgt => RmcPathfinder.Dgt;
-
     // Used for figuring out where Dreamgate goes to during the pathfinder search
-    public override Term Target => Dgt?.DreamgateLinkedPosition;
+    public override Term Target => RmcPathfinder.IT?.DreamgateLinkedAction?.Target;
     public override float Cost => 1f;
-
-    // Used for checking the route
-    private Term _lastSearchTarget;
 
     public override bool TryDo(Node node, ProgressionManager pm, out StateUnion satisfiableStates)
     {
-        if (Dgt.DreamgateLinkedPosition is null)
-        {
-            satisfiableStates = null;
-            return false;
-        }
-
-        // Lock dreamgate destination to current one
-        _lastSearchTarget = Dgt.DreamgateLinkedPosition;
-
         List<State> states = [];
         foreach (var sb in node.Current.States.Select(s => new StateBuilder(s)))
         {
@@ -38,17 +24,15 @@ internal class DreamgateAction() : StartJumpAction, IInstruction
         return true;
     }
 
-    string IInstruction.SourceText => "Dreamgate";
-    string IInstruction.TargetText => null;
+    public string SourceText => "Dreamgate";
+    public string TargetText => null;
 
-    bool IInstruction.IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(ItemChanger.Transition lastTransition)
     {
-        return lastTransition.GateName is "dreamGate"
-            && Dgt.DreamgateLinkedPosition is not null
-            && Dgt.DreamgateLinkedPosition == _lastSearchTarget;
+        return lastTransition.GateName is "dreamGate";
     }
 
-    string IInstruction.GetCompassObjectPath(string scene)
+    public string GetCompassObjectPath(string scene)
     {
         return null;
     }

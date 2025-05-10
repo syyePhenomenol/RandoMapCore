@@ -5,10 +5,8 @@ using RCPathfinder.Actions;
 
 namespace RandoMapCore.Pathfinder.Actions;
 
-internal class BenchwarpAction(Term term, RmcBenchKey benchKey) : StartJumpAction, IInstruction
+internal class BenchwarpAction(Term term, RmcBenchKey benchKey) : JumpAction, IInstruction
 {
-    private readonly string _benchText = term.Name;
-
     public override Term Target => term;
     public override float Cost => 1f;
 
@@ -16,12 +14,6 @@ internal class BenchwarpAction(Term term, RmcBenchKey benchKey) : StartJumpActio
 
     public override bool TryDo(Node node, ProgressionManager pm, out StateUnion satisfiableStates)
     {
-        if (!RandoMapCoreMod.GS.PathfinderBenchwarp || !BenchwarpInterop.GetVisitedBenchKeys().Contains(BenchKey))
-        {
-            satisfiableStates = null;
-            return false;
-        }
-
         List<State> states = [];
         if (RandoMapCoreMod.Data.WarpToBenchReset is StateModifier benchVariable)
         {
@@ -35,16 +27,16 @@ internal class BenchwarpAction(Term term, RmcBenchKey benchKey) : StartJumpActio
         return true;
     }
 
-    string IInstruction.SourceText => _benchText;
-    string IInstruction.TargetText => null;
+    public string SourceText { get; } = term.Name;
+    public string TargetText => null;
 
-    bool IInstruction.IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(ItemChanger.Transition lastTransition)
     {
         return lastTransition.ToString() == $"{BenchKey.SceneName}[]"
             && PlayerData.instance.GetString("respawnMarkerName") == BenchKey.RespawnMarkerName;
     }
 
-    string IInstruction.GetCompassObjectPath(string scene)
+    public string GetCompassObjectPath(string scene)
     {
         return null;
     }

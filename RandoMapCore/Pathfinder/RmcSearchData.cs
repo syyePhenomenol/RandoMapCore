@@ -79,9 +79,12 @@ internal class RmcSearchData : SearchData
         "Crossroads_19[top1]",
     ];
 
-    internal RmcSearchData(ProgressionManager reference)
-        : base(reference)
+    internal RmcSearchData(LogicManager localLM)
+        : base(localLM)
     {
+        BenchwarpActions = new([.. MakeBenchwarpActions().OrderBy(a => a.Target?.Id)]);
+        DreamgateAction = new();
+
         Dictionary<string, HashSet<Term>> positionsByScene = [];
         foreach (var term in GetAllStateTerms())
         {
@@ -97,7 +100,7 @@ internal class RmcSearchData : SearchData
             }
         }
 
-        PositionsByScene = new(
+        StateTermsByScene = new(
             positionsByScene.ToDictionary(kvp => kvp.Key, kvp => new ReadOnlyCollection<Term>([.. kvp.Value]))
         );
 
@@ -107,104 +110,16 @@ internal class RmcSearchData : SearchData
                 .Where(a => a is TransitionAction)
                 .ToDictionary(ta => ta.Source.Name, ta => (TransitionAction)ta)
         );
-
-        Updater = new(this);
-        Updater.Update();
     }
 
-    internal SearchDataUpdater Updater { get; }
+    internal ReadOnlyCollection<BenchwarpAction> BenchwarpActions { get; }
+    internal DreamgateAction DreamgateAction { get; }
 
     // Only for terms with a single defined scene. Should not be using these to look up terms like
     // Can_Stag or Lower_Tram
-    internal ReadOnlyDictionary<string, ReadOnlyCollection<Term>> PositionsByScene { get; }
+    internal ReadOnlyDictionary<string, ReadOnlyCollection<Term>> StateTermsByScene { get; }
 
     internal ReadOnlyDictionary<string, TransitionAction> TransitionActions { get; }
-
-    public override void UpdateProgression()
-    {
-        base.UpdateProgression();
-        Updater.Update();
-    }
-
-    protected override LogicManagerBuilder MakeLocalLM(LogicManagerBuilder lmb)
-    {
-        lmb = base.MakeLocalLM(lmb);
-
-        // Inject new terms and custom logic
-        foreach (
-            var rld in JU.DeserializeFromEmbeddedResource<RawLogicDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.transitions.json"
-            )
-        )
-        {
-            if (!lmb.Transitions.Contains(rld.name))
-            {
-                lmb.AddTransition(rld);
-            }
-        }
-
-        foreach (
-            var rwd in JU.DeserializeFromEmbeddedResource<RawWaypointDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.waypoints.json"
-            )
-        )
-        {
-            if (!lmb.Waypoints.Contains(rwd.name))
-            {
-                lmb.AddWaypoint(rwd);
-            }
-        }
-
-        foreach (
-            var rld in JU.DeserializeFromEmbeddedResource<RawLogicDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.edits.json"
-            )
-        )
-        {
-            if (lmb.LogicLookup.ContainsKey(rld.name))
-            {
-                lmb.DoLogicEdit(rld);
-            }
-        }
-
-        foreach (
-            var rsd in JU.DeserializeFromEmbeddedResource<RawSubstDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.substitutions.json"
-            )
-        )
-        {
-            if (lmb.LogicLookup.ContainsKey(rsd.name))
-            {
-                lmb.DoSubst(rsd);
-            }
-        }
-
-        var startTerm = RandoMapCoreMod.Data.StartTerm;
-
-        // Remove Start_State from existing logic
-        foreach (var term in lmb.Terms)
-        {
-            if (lmb.LogicLookup.ContainsKey(term.Name))
-            {
-                lmb.DoSubst(new(term.Name, startTerm.Name, "NONE"));
-            }
-        }
-
-        // Link Start_State with start terms
-        foreach (var term in RandoMapCoreMod.Data.StartStateLinkedTerms)
-        {
-            if (lmb.LogicLookup.ContainsKey(term.Name))
-            {
-                lmb.DoLogicEdit(new(term.Name, $"ORIG | {startTerm.Name}"));
-            }
-        }
-
-        return lmb;
-    }
 
     protected override Dictionary<Term, List<StandardAction>> MakeStandardActions()
     {
@@ -223,7 +138,7 @@ internal class RmcSearchData : SearchData
         // Logic-defined actions (both in-scene and waypoint jumps)
         foreach (var destination in GetAllStateTerms())
         {
-            var logic = (DNFLogicDef)LocalPM.lm.GetLogicDefStrict(destination.Name);
+            var logic = (DNFLogicDef)LM.GetLogicDefStrict(destination.Name);
 
             foreach (var start in logic.GetTerms().Where(t => t.Type is TermType.State))
             {
@@ -236,11 +151,6 @@ internal class RmcSearchData : SearchData
 
                 AddAction(new InSceneAction(start, destination, logic));
             }
-        }
-
-        if (LocalPM.ctx is null)
-        {
-            return actions;
         }
 
         var vanillaInfectionTransitions = _infectionTransitions.All(TransitionData.IsVanillaTransition);
@@ -271,7 +181,7 @@ internal class RmcSearchData : SearchData
 
             if (_topFallTransitions.Contains(ta.Source.Name))
             {
-                ta = new TopFallTransitionAction(ta, LocalPM.lm.GetLogicDefStrict(ta.Source.Name));
+                ta = new TopFallTransitionAction(ta, LM.GetLogicDefStrict(ta.Source.Name));
             }
 
             if (vanillaInfectionTransitions && _infectionTransitions.Contains(ta.Source.Name))
@@ -296,9 +206,67 @@ internal class RmcSearchData : SearchData
         }
     }
 
-    protected override IEnumerable<StartJumpAction> MakeStartJumpActions()
+    protected override IEnumerable<AbstractAction> GetAdditionalActions(Node node)
     {
-        List<StartJumpAction> actions = [];
+        List<AbstractAction> actions = [];
+
+        if (node.Current is ArbitraryPosition)
+        {
+            if (RandoMapCoreMod.GS.PathfinderBenchwarp)
+            {
+                actions.AddRange(
+                    BenchwarpActions.Where(ba => BenchwarpInterop.GetVisitedBenchKeys().Contains(ba.BenchKey))
+                );
+            }
+
+            if (DreamgateAction.Target is not null)
+            {
+                actions.Add(DreamgateAction);
+            }
+        }
+
+        if (
+            RandoMapCoreMod.GS.PathfinderOutOfLogic
+            && RandoMapCoreMod.LS.SequenceBreakActions.TryGetValue(node.Current.Term.Name, out var source)
+        )
+        {
+            actions.AddRange(
+                source
+                    .Select(s => StateTermLookup[s])
+                    .Select(s => new OutOfLogicTransitionAction(
+                        node.Current.Term,
+                        (TransitionAction)StandardActionLookup[s].First(a => a is TransitionAction)
+                    ))
+            );
+        }
+
+        // foreach (var a in actions)
+        // {
+        //     RandoMapCoreMod.Instance.LogFine($"Adding action to node {node.Current.Term.Name}: {a.DebugString}");
+        // }
+
+        return actions;
+    }
+
+    internal bool TryGetSequenceBreakAction(string source, out StandardAction result)
+    {
+        if (
+            StateTermLookup.TryGetValue(source, out var sourceTerm)
+            && StandardActionLookup.TryGetValue(sourceTerm, out var actions)
+            && actions.FirstOrDefault(a => a is IInstruction) is StandardAction action
+        )
+        {
+            result = action;
+            return true;
+        }
+
+        result = null;
+        return false;
+    }
+
+    private IEnumerable<BenchwarpAction> MakeBenchwarpActions()
+    {
+        List<BenchwarpAction> actions = [];
 
         if (Interop.HasBenchwarp)
         {
@@ -313,78 +281,6 @@ internal class RmcSearchData : SearchData
             }
         }
 
-        actions.Add(new DreamgateAction());
-
         return actions;
-    }
-
-    internal IEnumerable<Term> GetPrunedPositionsFromScene(string scene)
-    {
-        if (!TryGetInLogicPositionsFromScene(scene, out var inLogicPositions) || !inLogicPositions.Any())
-        {
-            return [];
-        }
-
-        // Prune positions that are reachable from another in the same scene (two-way).
-        SearchParams sp =
-            new()
-            {
-                StartPositions = inLogicPositions.Select(GetNormalStartPosition),
-                Destinations = inLogicPositions,
-                MaxCost = 0f,
-                MaxDepth = 10,
-                MaxTime = 1000f,
-                DisallowBacktracking = false,
-            };
-
-        SearchState ss = new(sp);
-        _ = Algorithms.DijkstraSearch(this, sp, ss);
-        var resultNodes = ss.ResultNodes.Where(n => n.Depth > 0 && n.Start.Term != n.Current.Term);
-
-        List<Term> newPositions = new(inLogicPositions);
-
-        foreach (var node in resultNodes)
-        {
-            if (!newPositions.Contains(node.Start.Term) || !newPositions.Contains(node.Current.Term))
-            {
-                continue;
-            }
-
-            if (
-                resultNodes.Any(n =>
-                    node.Start.Term == n.Current.Term
-                    && node.Current.Term == n.Start.Term
-                    && StateUnion.IsProgressivelyLE(node.Start.States, node.Current.States)
-                    && StateUnion.IsProgressivelyLE(n.Start.States, n.Current.States)
-                )
-            )
-            {
-                RandoMapCoreMod.Instance.LogFine(
-                    $"Pruning {node.Current.Term} which is equivalent to {node.Start.Term}"
-                );
-                _ = newPositions.Remove(node.Current.Term);
-            }
-        }
-
-        RandoMapCoreMod.Instance.LogFine($"Remaining: {string.Join(", ", newPositions.Select(p => p.Name))}");
-
-        return newPositions;
-    }
-
-    internal bool TryGetInLogicPositionsFromScene(string scene, out IEnumerable<Term> inLogicPositions)
-    {
-        if (PositionsByScene.TryGetValue(scene, out var positions))
-        {
-            inLogicPositions = positions.Where(p => LocalPM.Has(p));
-            return true;
-        }
-
-        inLogicPositions = default;
-        return false;
-    }
-
-    internal Position GetNormalStartPosition(Term term)
-    {
-        return new Position(term, Updater.CurrentState, 0f);
     }
 }

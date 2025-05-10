@@ -42,6 +42,10 @@ public class LocalSettings
     [JsonProperty]
     public GroupBySetting GroupBy { get; private set; } = GroupBySetting.Location;
 
+    // Key is logically linked term, values are source terms of the actions
+    [JsonProperty]
+    public Dictionary<string, HashSet<string>> SequenceBreakActions { get; private set; } = [];
+
     internal void Initialize()
     {
         if (InitializedPreviously)

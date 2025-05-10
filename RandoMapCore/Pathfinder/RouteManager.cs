@@ -9,7 +9,6 @@ namespace RandoMapCore.Pathfinder;
 
 internal class RouteManager
 {
-    private readonly RmcSearchData _sd;
     private readonly Dictionary<(string, string), RouteHint> _routeHints;
 
     private SearchParams _sp;
@@ -19,9 +18,8 @@ internal class RouteManager
     private string _finalScene;
     private bool _reevaluated;
 
-    internal RouteManager(RmcSearchData sd)
+    internal RouteManager()
     {
-        _sd = sd;
         _routeHints = JU.DeserializeFromEmbeddedResource<RouteHint[]>(
                 RandoMapCoreMod.Assembly,
                 "RandoMapCore.Resources.Pathfinder.Data.routeHints.json"
@@ -42,8 +40,6 @@ internal class RouteManager
 
     internal bool TryGetNextRouteTo(string scene)
     {
-        _sd.UpdateProgression();
-
         // Reset
         if (!CanCycleRoute(scene))
         {
@@ -52,11 +48,8 @@ internal class RouteManager
 
             _sp = new()
             {
-                // Give start jump actions higher priority
-                StartPositions = _sd.GetPrunedPositionsFromScene(_startScene)
-                    .Select(_sd.GetNormalStartPosition)
-                    .Concat([new ArbitraryPosition(_sd.Updater.CurrentState, -0.5f)]),
-                Destinations = _sd.GetPrunedPositionsFromScene(_finalScene),
+                StartPositions = PositionHelper.GetStartPositions(_startScene, true),
+                Destinations = PositionHelper.GetDestinations(_finalScene),
                 MaxCost = 100f,
                 MaxTime = 1000f,
                 TerminationCondition = TerminationConditionType.Any,
@@ -76,7 +69,7 @@ internal class RouteManager
 
         _reevaluated = false;
 
-        while (Algorithms.DijkstraSearch(_sd, _sp, _ss))
+        while (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
         {
             var route = GetRoute(_ss.NewResultNodes.First());
 
@@ -109,9 +102,9 @@ internal class RouteManager
     {
         RandoMapCoreMod.Instance.LogFine($"Last transition: {lastTransition}");
 
-        if (!_sd.LocalPM.lm.Terms.IsTerm(lastTransition.ToString()))
+        if (!RmcPathfinder.LE.LocalLM.Terms.IsTerm(lastTransition.ToString()))
         {
-            RandoMapCoreMod.Instance.LogFine("Transition not in PM");
+            RandoMapCoreMod.Instance.LogFine("Transition not in LM");
         }
 
         if (CurrentRoute is null)
@@ -149,27 +142,12 @@ internal class RouteManager
 
     private void ReevaluateRoute(ItemChanger.Transition transition)
     {
-        _sd.UpdateProgression();
-
         _startScene = transition.SceneName;
-        var destination = CurrentRoute.Node.Current.Term;
-
-        IEnumerable<Position> startPositions;
-
-        if (TryGetStartPosition(transition, out var start))
-        {
-            startPositions = [start];
-        }
-        else
-        {
-            startPositions = _sd.GetPrunedPositionsFromScene(Utils.CurrentScene()).Select(_sd.GetNormalStartPosition);
-        }
 
         _sp = new()
         {
-            // Give start jump actions lower priority
-            StartPositions = startPositions.Concat([new ArbitraryPosition(_sd.Updater.CurrentState, 0.5f)]),
-            Destinations = [destination],
+            StartPositions = PositionHelper.GetStartPositionsFromLastTransition(),
+            Destinations = [CurrentRoute.Node.Current.Term],
             MaxCost = 100f,
             MaxTime = 1000f,
             TerminationCondition = TerminationConditionType.Any,
@@ -184,7 +162,7 @@ internal class RouteManager
 
         _ss = new(_sp);
 
-        if (Algorithms.DijkstraSearch(_sd, _sp, _ss))
+        if (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
         {
             var route = GetRoute(_ss.NewResultNodes.First());
 
@@ -225,35 +203,6 @@ internal class RouteManager
         RouteText.Instance?.Update();
         RouteSummaryText.Instance?.Update();
         RoomSelectionPanel.Instance?.Update();
-    }
-
-    private bool TryGetStartPosition(ItemChanger.Transition transition, out Position start)
-    {
-        if (
-            _sd.StateTermLookup.TryGetValue(transition.ToString(), out var position)
-            // Try get last benchwarp
-            || (
-                Interop.HasBenchwarp
-                && transition.GateName is ""
-                && BenchwarpInterop.TryGetLastWarp(out var benchName, out var _)
-                && _sd.StateTermLookup.TryGetValue(benchName, out position)
-            )
-        )
-        {
-            if (_sd.LocalPM.Has(position))
-            {
-                start = _sd.GetNormalStartPosition(position);
-                return true;
-            }
-
-            RandoMapCoreMod.Instance.LogFine($"Exited out of transition {transition} that is not in logic");
-            start = null;
-            return false;
-        }
-
-        RandoMapCoreMod.Instance.LogFine($"Exited out of unrecognized transition {transition}");
-        start = null;
-        return false;
     }
 
     private Route GetRoute(Node node)

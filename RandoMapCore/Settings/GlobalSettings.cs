@@ -35,6 +35,9 @@ public class GlobalSettings
     public bool PathfinderBenchwarp { get; private set; } = true;
 
     [JsonProperty]
+    public bool PathfinderOutOfLogic { get; private set; } = true;
+
+    [JsonProperty]
     public bool ShowRouteCompass { get; private set; } = true;
 
     [JsonProperty]
@@ -74,7 +77,7 @@ public class GlobalSettings
     public bool AlwaysHaveQuill { get; private set; } = true;
 
     /// <summary>
-    /// By default, the mode is set to Full Map in item rando, and Transition in a transition rando (at
+    /// By default, the mode is set to Full Map in item rando, and Transition Normal in a transition rando (at
     /// least one randomized transition). Use the below settings to override them.
     /// </summary>
     [JsonProperty]
@@ -140,6 +143,11 @@ public class GlobalSettings
     internal void ToggleAllowBenchWarpSearch()
     {
         PathfinderBenchwarp = !PathfinderBenchwarp;
+    }
+
+    internal void TogglePathfinderOutOfLogic()
+    {
+        PathfinderOutOfLogic = !PathfinderOutOfLogic;
     }
 
     internal void ToggleRouteTextInGame()

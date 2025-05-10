@@ -10,12 +10,6 @@ internal class StartWarpAction(Term term) : BenchwarpAction(term, BenchwarpInter
 
     public override bool TryDo(Node node, ProgressionManager pm, out StateUnion satisfiableStates)
     {
-        if (!RandoMapCoreMod.GS.PathfinderBenchwarp)
-        {
-            satisfiableStates = null;
-            return false;
-        }
-
         List<State> states = [];
 
         if (RandoMapCoreMod.Data.WarpToStartReset is StateModifier startVariable)

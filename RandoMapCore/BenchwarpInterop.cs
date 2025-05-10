@@ -104,46 +104,30 @@ internal class BenchwarpInterop : HookModule
         }
     }
 
-    internal static bool TryGetLastWarp(out string benchName, out RmcBenchKey benchKey)
-    {
-        benchKey = new(PlayerData.instance.respawnScene, PlayerData.instance.respawnMarkerName);
-
-        if (BenchNames.TryGetValue(benchKey, out benchName))
-        {
-            return true;
-        }
-
-        benchName = default;
-        return false;
-    }
-
     internal static bool IsVisitedBench(string benchName)
     {
         return benchName is not null
-            && (
-                benchName is BENCH_WARP_START
-                || (BenchKeys.TryGetValue(benchName, out var key) && GetVisitedBenchKeys().Contains(key))
-            );
+            && BenchKeys.TryGetValue(benchName, out var key)
+            && GetVisitedBenchKeys().Contains(key);
     }
 
     /// <summary>
     /// Gets the BenchKeys from Benchwarp's visited benches and converts them to RmcBenchKeys.
     /// </summary>
-    internal static HashSet<RmcBenchKey> GetVisitedBenchKeys()
+    internal static IEnumerable<RmcBenchKey> GetVisitedBenchKeys()
     {
-        return new(
-            Benchwarp.Benchwarp.LS.visitedBenchScenes.Select(bwKey => new RmcBenchKey(
+        return
+        [
+            .. Benchwarp.Benchwarp.LS.visitedBenchScenes.Select(bwKey => new RmcBenchKey(
                 bwKey.SceneName,
                 bwKey.RespawnMarkerName
-            ))
-        );
+            )),
+            StartKey,
+        ];
     }
 
     internal static IEnumerable<string> GetVisitedBenchNames()
     {
-        return GetVisitedBenchKeys()
-            .Where(BenchNames.ContainsKey)
-            .Select(b => BenchNames[b])
-            .Concat([BENCH_WARP_START]);
+        return GetVisitedBenchKeys().Where(BenchNames.ContainsKey).Select(b => BenchNames[b]);
     }
 }

@@ -1,56 +1,107 @@
 ﻿using MapChanger;
-using RandoMapCore.Pathfinder.Actions;
+using RandomizerCore.Logic;
+using RCPathfinder;
 
 namespace RandoMapCore.Pathfinder;
 
 public class RmcPathfinder : HookModule
 {
+    internal static RmcLogicExtender LE { get; private set; }
     internal static RmcSearchData SD { get; private set; }
-    internal static DreamgateTracker Dgt { get; private set; }
+    internal static RmcProgressionSynchronizer PS { get; private set; }
+    internal static RmcProgressionSynchronizer PSNoSequenceBreak { get; private set; }
+    internal static StateSynchronizer StateSync { get; private set; }
     internal static RouteManager RM { get; private set; }
+    internal static InstructionTracker IT { get; private set; }
     internal static SceneLogicTracker Slt { get; private set; }
 
     public override void OnEnterGame()
     {
-        SD = new(RandoMapCoreMod.Data.PM);
+        LE = new(RandoMapCoreMod.Data.PM.lm);
+        SD = new(LE.LocalLM);
+
+        PS = new(RandoMapCoreMod.Data.PM, LE);
+        PSNoSequenceBreak = new(RandoMapCoreMod.Data.PMNoSequenceBreak, LE);
+        StateSync = new(LE.LocalLM.StateManager);
 
         if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
-            Dgt = new(SD);
-            RM = new(SD);
+            RM = new();
+            IT = new(SD, RM);
 
-            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += Dgt.TrackDreamgateSet;
-            ItemChanger.Events.OnBeginSceneTransition += Dgt.LinkDreamgateToPosition;
-            ItemChanger.Events.OnBeginSceneTransition += RM.CheckRoute;
+            ItemChanger.Events.OnBeginSceneTransition += OnBeginSceneTransition;
             MapChanger.Settings.OnSettingChanged += RM.ResetRoute;
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += IT.TrackDreamgateSet;
+            Data.PlacementTracker.Update += OnPlacementTrackerUpdate;
         }
 
-        Slt = new(SD);
-        Events.OnWorldMap += Slt.Events_OnWorldMap;
-        Events.OnQuickMap += Slt.Events_OnQuickMap;
+        Slt = new();
 
-        // Testing.LogProgressionData(SD);
-        // Testing.DebugActions(SD);
-        // Testing.SingleStartDestinationTest(SD);
-        // Testing.SceneToSceneTest(SD, Slt);
+        Events.OnWorldMap += OnWorldMap;
+        Events.OnQuickMap += OnQuickMap;
+
+        // Testing.LogProgressionData();
+        // Testing.DebugActions();
+        // Testing.SingleStartDestinationTest();
+        // Testing.SceneToSceneTest();
     }
 
     public override void OnQuitToMenu()
     {
         if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
-            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= Dgt.TrackDreamgateSet;
-            ItemChanger.Events.OnBeginSceneTransition -= Dgt.LinkDreamgateToPosition;
-            ItemChanger.Events.OnBeginSceneTransition -= RM.CheckRoute;
+            ItemChanger.Events.OnBeginSceneTransition -= OnBeginSceneTransition;
             MapChanger.Settings.OnSettingChanged -= RM.ResetRoute;
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= IT.TrackDreamgateSet;
+            Data.PlacementTracker.Update -= OnPlacementTrackerUpdate;
         }
 
-        Events.OnWorldMap -= Slt.Events_OnWorldMap;
-        Events.OnQuickMap -= Slt.Events_OnQuickMap;
+        Events.OnWorldMap -= OnWorldMap;
+        Events.OnQuickMap -= OnQuickMap;
 
+        LE = null;
         SD = null;
-        Dgt = null;
+        PS = null;
+        PSNoSequenceBreak = null;
+        StateSync = null;
         RM = null;
+        IT = null;
         Slt = null;
+    }
+
+    internal static ProgressionManager GetLocalPM()
+    {
+        return RandoMapCoreMod.GS.PathfinderOutOfLogic ? PS.LocalPM : PSNoSequenceBreak.LocalPM;
+    }
+
+    private static void OnPlacementTrackerUpdate()
+    {
+        PSNoSequenceBreak.Update();
+        IT.UpdateSequenceBreakActions();
+    }
+
+    private static void OnBeginSceneTransition(ItemChanger.Transition transition)
+    {
+        Update();
+        IT.TrackAction(transition);
+        RM.CheckRoute(transition);
+    }
+
+    private static void OnWorldMap(GameMap _)
+    {
+        Update();
+    }
+
+    private static void OnQuickMap(GameMap _0, GlobalEnums.MapZone _1)
+    {
+        Update();
+    }
+
+    internal static void Update()
+    {
+        PS.Update();
+        PSNoSequenceBreak.Update();
+        StateSync.Update();
+        Slt.Update();
     }
 }

@@ -3,58 +3,72 @@ using MapChanger;
 using RandoMapCore.Data;
 using RandoMapCore.Modes;
 using RandoMapCore.Transition;
-using RCPathfinder;
-using RCPathfinder.Actions;
 using UnityEngine;
 
 namespace RandoMapCore.Pathfinder;
 
 internal class SceneLogicTracker
 {
-    private readonly RmcSearchData _sd;
+    private readonly HashSet<string> _inLogicScenes = [];
+    private readonly HashSet<string> _sequenceBreakScenes = [];
+    private readonly HashSet<string> _adjacentScenes = [];
+    private readonly HashSet<string> _uncheckedReachableScenes = [];
 
-    private HashSet<string> _inLogicScenes;
-    private HashSet<string> _inLogicAdjacentScenes;
-    private HashSet<string> _uncheckedReachableScenes;
+    internal ReadOnlyCollection<string> InLogicScenes => new([.. _inLogicScenes, .. _sequenceBreakScenes]);
 
-    internal SceneLogicTracker(RmcSearchData sd)
+    internal void Update()
     {
-        _sd = sd;
-        Update();
-    }
+        _inLogicScenes.Clear();
+        _sequenceBreakScenes.Clear();
+        _adjacentScenes.Clear();
+        _uncheckedReachableScenes.Clear();
 
-    internal ReadOnlyCollection<string> InLogicScenes => new([.. _inLogicScenes]);
-
-    internal void Events_OnQuickMap(GameMap _0, GlobalEnums.MapZone _1)
-    {
-        Update();
-    }
-
-    internal void Events_OnWorldMap(GameMap _)
-    {
-        Update();
-    }
-
-    private void Update()
-    {
-        _inLogicScenes = [];
-        _inLogicAdjacentScenes = [];
-        _uncheckedReachableScenes = [];
-
-        _sd.UpdateProgression();
+        var sd = RmcPathfinder.SD;
+        var pm = RmcPathfinder.PS.LocalPM;
+        var pmNoSequenceBreak = RmcPathfinder.PSNoSequenceBreak.LocalPM;
 
         // Get in-logic scenes from in-logic terms in SearchData
-        foreach (var position in _sd.GetAllStateTerms().Where(p => _sd.LocalPM.Has(p)))
+        foreach (var position in sd.GetAllStateTerms())
         {
-            if (TransitionData.TryGetScene(position.Name, out var scene))
+            if (pmNoSequenceBreak.Has(position))
             {
-                _ = _inLogicScenes.Add(scene);
+                if (TransitionData.TryGetScene(position.Name, out var scene))
+                {
+                    _inLogicScenes.Add(scene);
+                }
+            }
+            else if (pm.Has(position))
+            {
+                if (TransitionData.TryGetScene(position.Name, out var scene))
+                {
+                    _sequenceBreakScenes.Add(scene);
+                }
+            }
+        }
+
+        // Get more sequence break scenes from OOL transition actions
+        foreach (var source in RandoMapCoreMod.LS.SequenceBreakActions.Values.SelectMany(t => t))
+        {
+            if (RmcPathfinder.SD.TryGetSequenceBreakAction(source, out var action))
+            {
+                if (TransitionData.TryGetScene(source, out var scene) && !_inLogicScenes.Contains(scene))
+                {
+                    _sequenceBreakScenes.Add(scene);
+                }
+
+                if (
+                    TransitionData.TryGetScene(action.Target.Name, out var targetScene)
+                    && !_inLogicScenes.Contains(targetScene)
+                )
+                {
+                    _sequenceBreakScenes.Add(targetScene);
+                }
             }
         }
 
         // Get in-logic adjacent scenes from transitions in SearchData connected by 1-cost actions
         // to current scene
-        _inLogicAdjacentScenes = [.. GetVisitedAdjacentScenes(Utils.CurrentScene())];
+        _adjacentScenes.UnionWith(PositionHelper.GetVisitedAdjacentScenes());
 
         // Get scenes where there are unchecked reachable transitions
         foreach (var transition in RandoMapCoreMod.Data.UncheckedReachableTransitions)
@@ -70,7 +84,9 @@ internal class SceneLogicTracker
     {
         if (MapChanger.Settings.CurrentMode() is TransitionNormalMode)
         {
-            return Tracker.HasVisitedScene(scene) || _inLogicScenes.Contains(scene);
+            return Tracker.HasVisitedScene(scene)
+                || _inLogicScenes.Contains(scene)
+                || _sequenceBreakScenes.Contains(scene);
         }
 
         if (MapChanger.Settings.CurrentMode() is TransitionVisitedOnlyMode)
@@ -85,19 +101,21 @@ internal class SceneLogicTracker
     {
         var color = RmcColors.GetColor(RmcColorSetting.Room_Out_of_logic);
 
-        if (_inLogicScenes.Contains(scene))
-        {
-            color = RmcColors.GetColor(RmcColorSetting.Room_Normal);
-        }
-
-        if (_inLogicAdjacentScenes.Contains(scene))
-        {
-            color = RmcColors.GetColor(RmcColorSetting.Room_Adjacent);
-        }
-
         if (scene == Utils.CurrentScene())
         {
             color = RmcColors.GetColor(RmcColorSetting.Room_Current);
+        }
+        else if (_adjacentScenes.Contains(scene))
+        {
+            color = RmcColors.GetColor(RmcColorSetting.Room_Adjacent);
+        }
+        else if (_inLogicScenes.Contains(scene))
+        {
+            color = RmcColors.GetColor(RmcColorSetting.Room_Normal);
+        }
+        else if (_sequenceBreakScenes.Contains(scene))
+        {
+            color = RmcColors.GetColor(RmcColorSetting.Room_Sequence_break);
         }
 
         if (_uncheckedReachableScenes.Contains(scene))
@@ -106,46 +124,5 @@ internal class SceneLogicTracker
         }
 
         return color;
-    }
-
-    internal bool IsInLogicScene(string scene)
-    {
-        return _inLogicScenes.Contains(scene);
-    }
-
-    private IEnumerable<string> GetVisitedAdjacentScenes(string scene)
-    {
-        if (!_sd.TryGetInLogicPositionsFromScene(scene, out var inLogicPositions) || !inLogicPositions.Any())
-        {
-            return [];
-        }
-
-        SearchParams sp =
-            new()
-            {
-                StartPositions = inLogicPositions.Select(_sd.GetNormalStartPosition),
-                Destinations = [],
-                MaxCost = 1f,
-                MaxTime = 1000f,
-                DisallowBacktracking = true,
-            };
-
-        SearchState ss = new(sp);
-        _ = Algorithms.DijkstraSearch(_sd, sp, ss);
-
-        HashSet<string> adjacentScenes = [];
-
-        foreach (var node in ss.QueueNodes.Select(qn => qn.node).Concat(ss.TerminalNodes))
-        {
-            if (
-                node.Actions.FirstOrDefault(a => a.Cost == 1f) is StandardAction action
-                && TransitionData.TryGetScene(action.Target.Name, out var adjacentScene)
-            )
-            {
-                _ = adjacentScenes.Add(adjacentScene);
-            }
-        }
-
-        return adjacentScenes;
     }
 }

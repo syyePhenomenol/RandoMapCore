@@ -161,7 +161,7 @@ internal record ItemPlacementHint(RandoPlacement RandoPlacement, AbstractPlaceme
             is string[] highlightScenes
         )
         {
-            var inLogicHighlightScenes = highlightScenes.Where(RmcPathfinder.Slt.IsInLogicScene);
+            var inLogicHighlightScenes = highlightScenes.Where(RmcPathfinder.Slt.InLogicScenes.Contains);
 
             scenes.AddRange(inLogicHighlightScenes);
             mapAreas.AddRange(inLogicHighlightScenes.Select(RandoMapCoreMod.Data.GetMapArea).OfType<string>());

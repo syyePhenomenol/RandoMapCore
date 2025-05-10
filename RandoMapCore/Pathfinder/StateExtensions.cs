@@ -2,7 +2,7 @@ using RandomizerCore.Logic.StateLogic;
 
 namespace RandoMapCore.Pathfinder;
 
-internal static class StateBuilderExtensions
+internal static class StateExtensions
 {
     internal static bool TrySetStateBool(this StateBuilder sb, StateManager sm, string name, bool value)
     {

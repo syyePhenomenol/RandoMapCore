@@ -1,17 +1,13 @@
-using RandoMapCore.Transition;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
+using RCPathfinder.Logic;
 using SN = ItemChanger.SceneNames;
 
 namespace RandoMapCore.Pathfinder;
 
-internal class SearchDataUpdater
+internal class RmcProgressionSynchronizer(ProgressionManager reference, RmcLogicExtender logicExtender)
+    : ProgressionSynchronizer(reference, logicExtender)
 {
-    private readonly RmcSearchData _sd;
-    private readonly ProgressionManager _localPM;
-    private readonly LogicManager _localLM;
-    private readonly MainUpdater _mu;
-
     private static readonly (string term, string pdBool)[] _pdBoolTerms =
     [
         ("RMC_Dung_Defender_Wall", nameof(PlayerData.dungDefenderWallBroken)),
@@ -43,55 +39,24 @@ internal class SearchDataUpdater
         ("RMC_Infected", nameof(PlayerData.crossroadsInfected)),
     ];
 
-    internal SearchDataUpdater(RmcSearchData sd)
-    {
-        _sd = sd;
-        _localPM = sd.LocalPM;
-        _localLM = sd.LocalPM.lm;
-
-        // Do automatic updating on new state-valued waypoints and transitions
-        _mu = new(_localLM, _localPM);
-        _mu.AddWaypoints(
-            _localPM.lm.Waypoints.Where(w =>
-                !_sd.ReferencePM.lm.Terms.Contains(w.term) && w.term.Type is TermType.State
-            )
-        );
-
-        foreach (var lt in _localPM.lm.TransitionLookup.Values.Where(t => !_sd.ReferencePM.lm.Terms.Contains(t.term)))
-        {
-            _mu.AddEntry(new StateUpdateEntry(lt.term, lt.logic));
-
-            // Add update entry for the placement
-            if (
-                TransitionData.TryGetPlacementTarget(lt.Name, out var target)
-                && _localPM.lm.GetTerm(target.Name) is Term targetTerm
-            )
-            {
-                _mu.LinkState(lt.term, targetTerm);
-            }
-        }
-    }
-
-    internal StateUnion CurrentState { get; private set; }
-
-    internal void Update()
+    protected override void ManuallyUpdateTerms()
     {
         // Update stateless waypoint terms
         var pd = PlayerData.instance;
 
         foreach ((var term, var pdBool) in _pdBoolTerms)
         {
-            _localPM.Set(term, pd.GetBool(pdBool) ? 1 : 0);
+            LocalPM.Set(term, pd.GetBool(pdBool) ? 1 : 0);
         }
 
-        if (_localPM.lm.GetTerm("RMC_Not_Infected") is Term notInfected)
+        if (LocalPM.lm.GetTerm("RMC_Not_Infected") is Term notInfected)
         {
-            _localPM.Set(notInfected, !pd.GetBool(nameof(PlayerData.crossroadsInfected)) ? 1 : 0);
+            LocalPM.Set(notInfected, !pd.GetBool(nameof(PlayerData.crossroadsInfected)) ? 1 : 0);
         }
 
-        if (_localPM.lm.GetTerm("RMC_Blue_Room_Door") is Term blueRoomDoor)
+        if (LocalPM.lm.GetTerm("RMC_Blue_Room_Door") is Term blueRoomDoor)
         {
-            _localPM.Set(
+            LocalPM.Set(
                 blueRoomDoor,
                 pd.GetBool(nameof(PlayerData.blueRoomDoorUnlocked))
                 || (BossSequenceBindingsDisplay.CountCompletedBindings() >= 8)
@@ -100,9 +65,9 @@ internal class SearchDataUpdater
             );
         }
 
-        if (_localPM.lm.GetTerm("RMC_Godhome_Roof") is Term godhomeRoof)
+        if (LocalPM.lm.GetTerm("RMC_Godhome_Roof") is Term godhomeRoof)
         {
-            _localPM.Set(
+            LocalPM.Set(
                 godhomeRoof,
                 pd.GetVariable<BossSequenceDoor.Completion>("bossDoorStateTier5").unlocked ? 1 : 0
             );
@@ -115,45 +80,45 @@ internal class SearchDataUpdater
                 case SN.Crossroads_10:
                     if (pbd.id is "Battle Scene")
                     {
-                        _localPM.Set("RMC_False_Knight_Gate", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_False_Knight_Gate", pbd.activated ? 1 : 0);
                     }
 
                     break;
                 case SN.Fungus2_14:
                     if (pbd.id is "Mantis Lever (1)")
                     {
-                        _localPM.Set("RMC_Mantis_Big_Floor", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Mantis_Big_Floor", pbd.activated ? 1 : 0);
                     }
 
                     break;
                 case SN.RestingGrounds_10:
                     if (pbd.id is "Collapser Small (5)")
                     {
-                        _localPM.Set("RMC_Catacombs_Ceiling", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Catacombs_Ceiling", pbd.activated ? 1 : 0);
                     }
 
                     break;
                 case SN.Ruins1_31:
                     if (pbd.id is "Breakable Wall Ruin Lift")
                     {
-                        _localPM.Set("RMC_City_Toll_Wall", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_City_Toll_Wall", pbd.activated ? 1 : 0);
                     }
 
                     if (pbd.id is "Ruins Lever")
                     {
-                        _localPM.Set("RMC_Shade_Soul_Exit", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Shade_Soul_Exit", pbd.activated ? 1 : 0);
                     }
 
                     break;
                 case SN.Waterways_02:
                     if (pbd.id is "Quake Floor")
                     {
-                        _localPM.Set("RMC_Flukemarm_Floor", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Flukemarm_Floor", pbd.activated ? 1 : 0);
                     }
 
                     if (pbd.id is "Quake Floor (1)")
                     {
-                        _localPM.Set("RMC_Waterways_Bench_Floor", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Waterways_Bench_Floor", pbd.activated ? 1 : 0);
                     }
 
                     break;
@@ -170,7 +135,7 @@ internal class SearchDataUpdater
                 case SN.Waterways_05:
                     if (pbd.id is "Quake Floor")
                     {
-                        _localPM.Set("RMC_Dung_Defender_Floor", pbd.activated ? 1 : 0);
+                        LocalPM.Set("RMC_Dung_Defender_Floor", pbd.activated ? 1 : 0);
                     }
 
                     break;
@@ -183,8 +148,8 @@ internal class SearchDataUpdater
         {
             if (pid.sceneName is SN.Ruins1_31 && pid.id is "Ruins Lift")
             {
-                _localPM.Set("RMC_City_Toll_Lift_Up", pid.value % 2 is 1 ? 1 : 0);
-                _localPM.Set("RMC_City_Toll_Lift_Down", pid.value % 2 is 0 ? 1 : 0);
+                LocalPM.Set("RMC_City_Toll_Lift_Up", pid.value % 2 is 1 ? 1 : 0);
+                LocalPM.Set("RMC_City_Toll_Lift_Down", pid.value % 2 is 0 ? 1 : 0);
             }
         }
 
@@ -192,52 +157,11 @@ internal class SearchDataUpdater
         {
             foreach (var bench in BenchwarpInterop.GetVisitedBenchNames())
             {
-                if (_localLM.GetTerm(bench) is Term benchTerm && _localPM.GetState(benchTerm) is null)
+                if (LocalPM.lm.GetTerm(bench) is Term benchTerm && LocalPM.GetState(benchTerm) is null)
                 {
-                    _localPM.SetState(benchTerm, StateUnion.Empty);
+                    LocalPM.SetState(benchTerm, StateUnion.Empty);
                 }
             }
         }
-
-        // Do updates on new state-valued terms
-        _mu.StartUpdating();
-        _mu.StopUpdating();
-
-        // Update current state
-        var sm = _localLM.StateManager;
-        StateBuilder sb = new(sm);
-
-        // USEDSHADE
-        TrySetStateBool("OVERCHARMED", pd.GetBool(nameof(PlayerData.overcharmed)));
-        // CANNOTOVERCHARM
-        // CANNOTREGAINSOUL
-        // TrySetStateBool("SPENTALLSOUL", pd.GetInt(nameof(PlayerData.MPCharge)) is 0 && pd.GetInt(nameof(PlayerData.MPReserve)) is 0);
-        // CANNOTSHADESKIP
-        TrySetStateBool("BROKEHEART", pd.GetBool(nameof(PlayerData.brokenCharm_23)));
-        TrySetStateBool("BROKEGREED", pd.GetBool(nameof(PlayerData.brokenCharm_24)));
-        TrySetStateBool("BROKESTRENGTH", pd.GetBool(nameof(PlayerData.brokenCharm_25)));
-        TrySetStateBool("NOFLOWER", !pd.GetBool(nameof(PlayerData.hasXunFlower)));
-        // NOPASSEDCHARMEQUIP
-        for (var i = 1; i <= 40; i++)
-        {
-            TrySetStateBool($"CHARM{i}", pd.GetBool($"equippedCharm_{i}"));
-            TrySetStateBool($"noCHARM{i}", !pd.GetBool($"gotCharm_{i}"));
-        }
-
-        // SPENTSOUL
-        // SPENTRESERVESOUL
-        // SOULLIMITER
-        // REQUIREDMAXSOUL
-        // SPENTHP
-        // SPENTBLUEHP
-        // LAZYSPENTHP
-        TrySetStateInt("USEDNOTCHES", pd.GetInt(nameof(PlayerData.charmSlotsFilled)));
-        TrySetStateInt("MAXNOTCHCOST", pd.GetInt(nameof(PlayerData.charmSlots)));
-
-        CurrentState = new((State)new(sb));
-
-        void TrySetStateBool(string name, bool value) => _ = sb.TrySetStateBool(sm, name, value);
-
-        void TrySetStateInt(string name, int value) => _ = sb.TrySetStateInt(sm, name, value);
     }
 }

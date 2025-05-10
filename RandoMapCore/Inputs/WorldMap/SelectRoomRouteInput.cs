@@ -29,7 +29,7 @@ internal class SelectRoomRouteInput : RmcWorldMapInput
     {
         if (TransitionRoomSelector.Instance?.SelectedObject is ISelectable obj)
         {
-            _ = RmcPathfinder.RM.TryGetNextRouteTo(obj.Key);
+            RmcPathfinder.RM.TryGetNextRouteTo(obj.Key);
 
             RouteText.Instance.Update();
             RouteSummaryText.Instance.Update();

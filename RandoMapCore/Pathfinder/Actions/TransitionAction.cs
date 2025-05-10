@@ -10,10 +10,10 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
     : PlacementAction(sourceTerm, targetTerm),
         IInstruction
 {
-    internal string CompassObj { get; } = compassObj;
+    public string SourceText => Source.Name;
+    public string TargetText => Target.Name;
 
-    string IInstruction.SourceText => Source.Name;
-    string IInstruction.TargetText => Target.Name;
+    internal string CompassObj { get; } = compassObj;
 
     public override bool TryDo(Node node, ProgressionManager pm, out StateUnion satisfiableStates)
     {
@@ -41,7 +41,7 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
         return !TransitionData.IsVisitedOrVanillaTransition(node.Term.Name);
     }
 
-    string IInstruction.GetCompassObjectPath(string scene)
+    public string GetCompassObjectPath(string scene)
     {
         if (!Source.Name.StartsWith(scene))
         {
@@ -51,7 +51,7 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
         return CompassObj;
     }
 
-    bool IInstruction.IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(ItemChanger.Transition lastTransition)
     {
         // Fix for big mantis village transition
         return lastTransition.ToString() switch

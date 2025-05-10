@@ -14,6 +14,6 @@ internal class PathfinderOptionsPanel : RmcOptionsPanel
 
     private static IEnumerable<ExtraButton> GetButtons()
     {
-        return [new RouteCompassButton(), new RouteTextButton(), new OffRouteButton()];
+        return [new PathfinderOolButton(), new RouteCompassButton(), new RouteTextButton(), new OffRouteButton()];
     }
 }

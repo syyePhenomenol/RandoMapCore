@@ -56,6 +56,7 @@ internal class MapKeyPanel
                 new GridDimension(1, GridUnit.Proportional),
                 new GridDimension(1, GridUnit.Proportional),
                 new GridDimension(1, GridUnit.Proportional),
+                new GridDimension(1, GridUnit.Proportional),
             },
             ColumnDefinitions =
             {
@@ -125,6 +126,7 @@ internal class MapKeyPanel
             VerticalAlignment = VerticalAlignment.Center,
             RowDefinitions =
             {
+                new GridDimension(1, GridUnit.Proportional),
                 new GridDimension(1, GridUnit.Proportional),
                 new GridDimension(1, GridUnit.Proportional),
                 new GridDimension(1, GridUnit.Proportional),
