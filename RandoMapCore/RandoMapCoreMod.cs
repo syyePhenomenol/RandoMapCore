@@ -46,7 +46,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.2";
+        return "1.0.3";
     }
 
     public override int LoadPriority()

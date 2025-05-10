@@ -2,9 +2,9 @@ using MapChanger.Defs;
 
 namespace RandoMapCore.Pins;
 
-internal sealed class StartBenchPinDef : BenchPinDef
+internal sealed class StartPinDef : BenchPinDef
 {
-    internal StartBenchPinDef()
+    internal StartPinDef()
         : base(BenchwarpInterop.BENCH_WARP_START, ItemChanger.Internal.Ref.Settings.Start.SceneName) { }
 
     private protected override MapRoomPosition GetBenchMapPosition()

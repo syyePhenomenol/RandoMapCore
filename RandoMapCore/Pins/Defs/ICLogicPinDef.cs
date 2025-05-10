@@ -6,9 +6,9 @@ using SM = ConnectionMetadataInjector.SupplementalMetadata;
 
 namespace RandoMapCore.Pins;
 
-internal abstract class LogicICPinDef : ICPinDef, ILogicPinDef
+internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
 {
-    internal LogicICPinDef(
+    internal ICLogicPinDef(
         AbstractPlacement placement,
         string poolsCollection,
         ProgressionManager pm,

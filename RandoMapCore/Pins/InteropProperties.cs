@@ -56,6 +56,12 @@ internal static class InteropProperties
         new("MakeVanillaPin", (placement) => false);
 
     /// <summary>
+    /// Overrides IC-defined behaviour for previewing specific items.
+    /// </summary>
+    internal static readonly MetadataProperty<AbstractItem, bool> DisablePreview =
+        new("DisablePreview", (item) => false);
+
+    /// <summary>
     /// A key to access a built in sprite, for a placement's location.
     /// The key can be a pool group, an existing sprite key, or a path to the desired png with
     /// MapChanger.Resources.Sprites.Pins as the root directory.

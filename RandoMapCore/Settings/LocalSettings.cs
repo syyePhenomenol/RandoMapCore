@@ -70,7 +70,7 @@ public class LocalSettings
                     RandoItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
                     break;
                 case VanillaPinDef:
-                case VanillaICPinDef:
+                case ICVanillaPinDef:
                     VanillaLocationPoolGroups.UnionWith(pin.Def.LocationPoolGroups);
                     VanillaItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
                     break;

@@ -68,42 +68,6 @@ internal static class PlacementExtensions
         return item.HasTag<ItemChanger.Tags.PersistentItemTag>();
     }
 
-    internal static IEnumerable<AbstractItem> GetPreviewableItems(this AbstractPlacement placement)
-    {
-        if (placement.CanPreview() && placement.CheckVisitedAny(VisitState.Previewed))
-        {
-            return placement.Items.Where(i => i.CanPreview() && !i.WasEverObtained());
-        }
-
-        return [];
-    }
-
-    internal static IEnumerable<AbstractItem> GetEverObtainedItems(this AbstractPlacement placement)
-    {
-        return placement.Items.Where(i => i.WasEverObtained());
-    }
-
-    internal static IEnumerable<AbstractItem> GetNeverObtainedItems(this AbstractPlacement placement)
-    {
-        return placement.Items.Where(i => !i.WasEverObtained());
-    }
-
-    internal static IEnumerable<AbstractItem> GetNeverObtainedUnpreviewableItems(this AbstractPlacement placement)
-    {
-        // Exclude items that are previewable
-        if (placement.CanPreview() && placement.CheckVisitedAny(VisitState.Previewed))
-        {
-            return placement.Items.Where(i => !i.WasEverObtained() && !i.CanPreview());
-        }
-
-        return placement.Items.Where(i => !i.WasEverObtained());
-    }
-
-    internal static IEnumerable<AbstractItem> GetObtainablePersistentItems(this AbstractPlacement placement)
-    {
-        return placement.Items.Where(i => i.IsPersistent() && !i.IsObtained());
-    }
-
     internal static bool AllEverObtained(this AbstractPlacement placement)
     {
         return placement.Items.All(i => i.WasEverObtained());

@@ -14,7 +14,7 @@ internal abstract class ICPinDef : PinDef
         : base()
     {
         Placement = placement;
-        PlacementStateTracker = new(placement);
+        ICPlacementTracker = new(placement);
 
         Name = placement.Name;
 
@@ -94,60 +94,13 @@ internal abstract class ICPinDef : PinDef
 
     internal string PoolsCollection { get; }
 
-    internal PlacementState State => PlacementStateTracker.State;
-
-    private protected AbstractPlacement Placement { get; }
-    private protected PlacementStateTracker PlacementStateTracker { get; }
-    private protected List<AbstractItem> ActiveItems { get; } = [];
-
-    internal void Hook()
-    {
-        PlacementStateTracker.Hook();
-    }
-
-    internal void Unhook()
-    {
-        PlacementStateTracker.Unhook();
-    }
-
-    internal void UpdatePersistentItems()
-    {
-        PlacementStateTracker.UpdatePersistentItems();
-    }
+    internal AbstractPlacement Placement { get; }
+    internal ICPlacementTracker ICPlacementTracker { get; }
+    internal PlacementState State => ICPlacementTracker.State;
 
     internal override void Update()
     {
-        ActiveItems.Clear();
-
-        switch (State)
-        {
-            case PlacementState.Previewable:
-                ActiveItems.AddRange(Placement.GetPreviewableItems());
-                break;
-            case PlacementState.NotCleared:
-                if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
-                {
-                    ActiveItems.AddRange(Placement.GetNeverObtainedItems());
-                }
-
-                break;
-            case PlacementState.ClearedPersistent:
-                if (RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.Persistent or ClearedPinsSetting.All)
-                {
-                    ActiveItems.AddRange(Placement.GetObtainablePersistentItems());
-                }
-
-                break;
-            case PlacementState.Cleared:
-                if (RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.All)
-                {
-                    ActiveItems.AddRange(Placement.GetEverObtainedItems());
-                }
-
-                break;
-            default:
-                break;
-        }
+        ICPlacementTracker.Update();
     }
 
     internal override bool ActiveBySettings()
@@ -172,9 +125,12 @@ internal abstract class ICPinDef : PinDef
 
     internal override IEnumerable<ScaledPinSprite> GetPinSprites()
     {
-        if (ActiveItems.Any())
+        if (ICPlacementTracker.ActiveItems.Any())
         {
-            return ActiveItems.Select(RmcPinManager.Psm.GetSprite).GroupBy(s => s.Value).Select(g => g.First());
+            return ICPlacementTracker
+                .ActiveItems.Select(RmcPinManager.Psm.GetSprite)
+                .GroupBy(s => s.Value)
+                .Select(g => g.First());
         }
 
         return [RmcPinManager.Psm.GetLocationSprite(Placement)];
@@ -245,7 +201,11 @@ internal abstract class ICPinDef : PinDef
 
     private protected virtual string GetObtainedText()
     {
-        if (Placement.GetEverObtainedItems() is var obtainedItems && obtainedItems.Any())
+        var obtainedItems = ICPlacementTracker.EverObtainedPersistentItems.Concat(
+            ICPlacementTracker.EverObtainedNonPersistentItems
+        );
+
+        if (obtainedItems.Any())
         {
             return $"{"Obtained item(s)".L()}: {ToStringList(obtainedItems)}";
         }
@@ -255,12 +215,9 @@ internal abstract class ICPinDef : PinDef
 
     private protected virtual string GetPersistentText()
     {
-        if (
-            Placement.GetObtainablePersistentItems() is var obtainablePersistentItems
-            && obtainablePersistentItems.Any()
-        )
+        if (ICPlacementTracker.EverObtainedPersistentItems.Any())
         {
-            return $"{"Available persistent item(s)".L()}: {ToStringList(obtainablePersistentItems)}";
+            return $"{"Available persistent item(s)".L()}: {ToStringList(ICPlacementTracker.EverObtainedPersistentItems)}";
         }
 
         return null;
@@ -271,11 +228,10 @@ internal abstract class ICPinDef : PinDef
         if (
             RandoMapCoreMod.Data.EnableSpoilerToggle
             && RandoMapCoreMod.LS.SpoilerOn
-            && Placement.GetNeverObtainedUnpreviewableItems() is var unobtainedItems
-            && unobtainedItems.Any()
+            && ICPlacementTracker.NeverObtainedUnpreviewableItems.Any()
         )
         {
-            return $"{"Spoiler item(s)".L()}: {ToStringList(unobtainedItems)}";
+            return $"{"Spoiler item(s)".L()}: {ToStringList(ICPlacementTracker.NeverObtainedUnpreviewableItems)}";
         }
 
         return null;

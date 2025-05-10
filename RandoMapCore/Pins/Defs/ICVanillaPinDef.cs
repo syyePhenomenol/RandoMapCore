@@ -4,11 +4,11 @@ using RandomizerCore.Logic;
 namespace RandoMapCore.Pins;
 
 // A non-randomized ItemChanger placement pin
-internal sealed class VanillaICPinDef(
+internal sealed class ICVanillaPinDef(
     AbstractPlacement placement,
     ProgressionManager pm,
     ProgressionManager pmNoSequenceBreak
-) : LogicICPinDef(placement, "Vanilla", pm, pmNoSequenceBreak)
+) : ICLogicPinDef(placement, "Vanilla", pm, pmNoSequenceBreak)
 {
     internal override float GetZPriority()
     {

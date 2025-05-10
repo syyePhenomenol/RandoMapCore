@@ -4,7 +4,6 @@ using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Modes;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using SM = ConnectionMetadataInjector.SupplementalMetadata;
 
 namespace RandoMapCore.Pins;
@@ -35,32 +34,20 @@ internal class RmcPinManager : HookModule
         Psm = new();
         PA = new();
 
-        Data.PlacementTracker.Update += UpdateLogic;
+        Data.PlacementTracker.Update += OnTrackerUpdate;
         MapChanger.Events.OnWorldMap += PA.ArrangeWorldMapPinGrid;
         MapChanger.Events.OnQuickMap += PA.ArrangeQuickMapPinGrid;
     }
 
     public override void OnQuitToMenu()
     {
-        Data.PlacementTracker.Update -= UpdateLogic;
+        Data.PlacementTracker.Update -= OnTrackerUpdate;
         MapChanger.Events.OnWorldMap -= PA.ArrangeWorldMapPinGrid;
         MapChanger.Events.OnQuickMap -= PA.ArrangeQuickMapPinGrid;
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= UpdatePersistentItems;
 
         Dpm = null;
         Psm = null;
         PA = null;
-
-        foreach (var def in Pins.Select(p => p.Value.Def))
-        {
-            if (def is not ICPinDef icpd)
-            {
-                continue;
-            }
-
-            icpd.Unhook();
-        }
-
         MoPins = null;
         _normalPins = null;
         _pinClusters = null;
@@ -97,7 +84,6 @@ internal class RmcPinManager : HookModule
 
             if (GetICPinDef(placement) is ICPinDef def)
             {
-                def.Hook();
                 TryAddPin(def);
             }
         }
@@ -118,7 +104,7 @@ internal class RmcPinManager : HookModule
 
         if (Interop.HasBenchwarp)
         {
-            TryAddPin(new StartBenchPinDef());
+            TryAddPin(new StartPinDef());
 
             foreach (
                 var kvp in BenchwarpInterop.BenchKeys.Where(kvp => kvp.Key is not BenchwarpInterop.BENCH_WARP_START)
@@ -149,7 +135,7 @@ internal class RmcPinManager : HookModule
 
         PA.InitializeGridPins(_gridPins.Values);
 
-        UpdateLogic();
+        OnTrackerUpdate();
         MainUpdate();
 
         if (RandoMapCoreMod.Data.EnablePinSelection)
@@ -163,8 +149,6 @@ internal class RmcPinManager : HookModule
 
         _tempPinGroups = null;
         _tempPinNames = null;
-
-        UnityEngine.SceneManagement.SceneManager.activeSceneChanged += UpdatePersistentItems;
     }
 
     private static ICPinDef GetICPinDef(AbstractPlacement placement)
@@ -186,7 +170,7 @@ internal class RmcPinManager : HookModule
         }
         else if (SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
         {
-            return new VanillaICPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
+            return new ICVanillaPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
         }
 
         return null;
@@ -246,23 +230,20 @@ internal class RmcPinManager : HookModule
         }
     }
 
-    private static void UpdateLogic()
+    private static void OnTrackerUpdate()
     {
         foreach (var pin in Pins.Values)
         {
+            if (pin.Def is ICPinDef icpd)
+            {
+                icpd.ICPlacementTracker.EnqueueUpdateItems();
+            }
+
             if (pin.Def is ILogicPinDef ilpd)
             {
                 ilpd.Logic?.Update();
                 ilpd.Hint?.Update();
             }
-        }
-    }
-
-    private static void UpdatePersistentItems(Scene from, Scene to)
-    {
-        foreach (var icPinDef in Pins.Values.Select(p => p.Def).Where(d => d is ICPinDef).Cast<ICPinDef>())
-        {
-            icPinDef.UpdatePersistentItems();
         }
     }
 
