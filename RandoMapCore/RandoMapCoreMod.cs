@@ -114,6 +114,13 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
         Events.OnEnterGame += OnEnterGame;
         Events.OnQuitToMenu += OnQuitToMenu;
 
+        Finder.InjectLocations(
+            JsonUtil.DeserializeFromAssembly<Dictionary<string, MapLocationDef>>(
+                Assembly,
+                "RandoMapCore.Resources.locations.json"
+            )
+        );
+
         LogDebug($"Initialization complete.");
     }
 
