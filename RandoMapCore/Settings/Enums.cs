@@ -21,12 +21,12 @@ public enum PinShape
 public enum PinShapeSetting
 {
     Mixed,
-    All_Circle,
-    All_Diamond,
-    All_Square,
-    All_Pentagon,
-    All_Hexagon,
-    No_Border,
+    Circles,
+    Diamonds,
+    Squares,
+    Pentagons,
+    Hexagons,
+    NoBorders,
 }
 
 public enum ClearedPinsSetting
@@ -47,7 +47,7 @@ public enum QMarkSetting
 {
     Off,
     Red,
-    Mix,
+    Mixed,
 }
 
 public enum ProgressHintSetting
@@ -68,14 +68,14 @@ public enum ItemCompassMode
 public enum RouteTextInGame
 {
     Hide,
-    Show,
-    NextTransitionOnly,
+    AllTransitions,
+    NextTransition,
 }
 
 public enum OffRouteBehaviour
 {
-    Keep,
-    Cancel,
+    KeepRoute,
+    CancelRoute,
     Reevaluate,
 }
 

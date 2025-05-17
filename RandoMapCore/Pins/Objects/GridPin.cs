@@ -89,15 +89,8 @@ internal class GridPin : RmcPin
         return true;
     }
 
-    public override string GetText()
+    public string GetText(bool lockSelection)
     {
-        var bindingsText = LockGridPinInput.Instance.GetBindingsText();
-        var lockSelectionText = (
-            PinSelector.Instance.LockSelection
-                ? "to unlock pin selection"
-                : "to lock pin selection and view highlighted rooms"
-        ).L();
-
-        return $"{base.GetText()}\n\n{"Press".L()} {bindingsText} {lockSelectionText}.";
+        return $"{GetText()}\n\n{"Press".L()} {LockGridPinInput.Instance.GetBindingsText()} {(lockSelection ? "to unlock pin selection" : "to lock pin selection and view highlighted rooms").L()}.";
     }
 }

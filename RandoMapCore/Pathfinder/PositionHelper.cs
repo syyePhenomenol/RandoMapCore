@@ -11,76 +11,112 @@ internal static class PositionHelper
 {
     internal static IEnumerable<Position> GetStartPositions(string scene, bool withArbitraryPosition)
     {
-        if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
+        try
         {
-            return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
+            if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
+            {
+                return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
+                    .Select(GetNormalStartPosition)
+                    .Concat(GetOutOfLogicStarts(scene))
+                    .Distinct()
+                    .Concat(withArbitraryPosition ? [GetArbitraryPosition()] : []);
+            }
+
+            return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene)
                 .Select(GetNormalStartPosition)
-                .Concat(GetOutOfLogicStarts(scene))
-                .Distinct()
                 .Concat(withArbitraryPosition ? [GetArbitraryPosition()] : []);
         }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
+        }
 
-        return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene)
-            .Select(GetNormalStartPosition)
-            .Concat(withArbitraryPosition ? [GetArbitraryPosition()] : []);
+        return [];
     }
 
     internal static IEnumerable<Position> GetStartPositionsFromLastTransition()
     {
-        if (RmcPathfinder.IT.LastAction?.Target is Term targetTerm)
+        try
         {
-            return
-            [
-                GetNormalStartPosition(targetTerm),
-                // Make start jumps lower priority here
-                new ArbitraryPosition(RmcPathfinder.StateSync.CurrentState, 0.5f),
-            ];
+            if (RmcPathfinder.IT.LastAction?.Target is Term targetTerm)
+            {
+                return
+                [
+                    GetNormalStartPosition(targetTerm),
+                    // Make start jumps lower priority here
+                    new ArbitraryPosition(RmcPathfinder.StateSync.CurrentState, 0.5f),
+                ];
+            }
+
+            return GetStartPositions(Utils.CurrentScene(), true);
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
         }
 
-        return GetStartPositions(Utils.CurrentScene(), true);
+        return [];
     }
 
     internal static IEnumerable<Term> GetDestinations(string scene)
     {
-        if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
+        try
         {
-            return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
-                .Concat(GetOutOfLogicDestinations(scene))
-                .Distinct();
+            if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
+            {
+                return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
+                    .Concat(GetOutOfLogicDestinations(scene))
+                    .Distinct();
+            }
+
+            return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene);
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
         }
 
-        return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene);
+        return [];
     }
 
     internal static IEnumerable<string> GetVisitedAdjacentScenes()
     {
-        SearchParams sp =
-            new()
-            {
-                StartPositions = GetStartPositions(Utils.CurrentScene(), false),
-                Destinations = [],
-                MaxCost = 1f,
-                MaxTime = 1000f,
-                DisallowBacktracking = true,
-            };
-
-        SearchState ss = new(sp);
-        _ = Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, sp, ss);
-
-        HashSet<string> adjacentScenes = [];
-
-        foreach (var node in ss.QueueNodes.Select(qn => qn.node).Concat(ss.TerminalNodes))
+        try
         {
-            if (
-                node.Actions.FirstOrDefault(a => a.Cost == 1f) is StandardAction action
-                && TransitionData.TryGetScene(action.Target.Name, out var adjacentScene)
-            )
+            SearchParams sp =
+                new()
+                {
+                    StartPositions = GetStartPositions(Utils.CurrentScene(), false),
+                    Destinations = [],
+                    MaxCost = 1f,
+                    MaxTime = 1000f,
+                    DisallowBacktracking = true,
+                };
+
+            SearchState ss = new(sp);
+            _ = Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, sp, ss);
+
+            HashSet<string> adjacentScenes = [];
+
+            foreach (var node in ss.QueueNodes.Select(qn => qn.node).Concat(ss.TerminalNodes))
             {
-                adjacentScenes.Add(adjacentScene);
+                if (
+                    node.Actions.FirstOrDefault(a => a.Cost == 1f) is StandardAction action
+                    && TransitionData.TryGetScene(action.Target.Name, out var adjacentScene)
+                )
+                {
+                    adjacentScenes.Add(adjacentScene);
+                }
             }
+
+            return adjacentScenes;
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
         }
 
-        return adjacentScenes;
+        return [];
     }
 
     internal static Position GetNormalStartPosition(Term term)

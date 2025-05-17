@@ -30,7 +30,7 @@ public class RmcPathfinder : HookModule
             IT = new(SD, RM);
 
             ItemChanger.Events.OnBeginSceneTransition += OnBeginSceneTransition;
-            MapChanger.Settings.OnSettingChanged += RM.ResetRoute;
+            ModeManager.OnModeChanged += RM.ResetRoute;
             On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += IT.TrackDreamgateSet;
             Data.PlacementTracker.Update += OnPlacementTrackerUpdate;
         }
@@ -51,7 +51,7 @@ public class RmcPathfinder : HookModule
         if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
             ItemChanger.Events.OnBeginSceneTransition -= OnBeginSceneTransition;
-            MapChanger.Settings.OnSettingChanged -= RM.ResetRoute;
+            ModeManager.OnModeChanged -= RM.ResetRoute;
             On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= IT.TrackDreamgateSet;
             Data.PlacementTracker.Update -= OnPlacementTrackerUpdate;
         }
@@ -99,9 +99,16 @@ public class RmcPathfinder : HookModule
 
     internal static void Update()
     {
-        PS.Update();
-        PSNoSequenceBreak.Update();
-        StateSync.Update();
-        Slt.Update();
+        try
+        {
+            PS.Update();
+            PSNoSequenceBreak.Update();
+            StateSync.Update();
+            Slt.Update();
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
+        }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace RandoMapCore.Pins;
 
-internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IPinSelectable
+internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater
 {
     // Constants
     private const float TINY_SCALE = 0.47f;
@@ -170,7 +170,7 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
             ? _pinSizes[RandoMapCoreMod.GS.PinSize]
             : MEDIUM_SCALE;
 
-        if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.No_Border)
+        if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.NoBorders)
         {
             size *= NO_BORDER_MULTIPLIER;
         }
@@ -209,7 +209,7 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
             return;
         }
 
-        if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.No_Border)
+        if (RandoMapCoreMod.GS.PinShapes is PinShapeSetting.NoBorders)
         {
             BorderSprite = null;
             BackgroundSprite = null;
@@ -218,11 +218,11 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
 
         var shape = RandoMapCoreMod.GS.PinShapes switch
         {
-            PinShapeSetting.All_Circle => PinShape.Circle,
-            PinShapeSetting.All_Diamond => PinShape.Diamond,
-            PinShapeSetting.All_Square => PinShape.Square,
-            PinShapeSetting.All_Pentagon => PinShape.Pentagon,
-            PinShapeSetting.All_Hexagon => PinShape.Hexagon,
+            PinShapeSetting.Circles => PinShape.Circle,
+            PinShapeSetting.Diamonds => PinShape.Diamond,
+            PinShapeSetting.Squares => PinShape.Square,
+            PinShapeSetting.Pentagons => PinShape.Pentagon,
+            PinShapeSetting.Hexagons => PinShape.Hexagon,
             _ => Def.GetMixedPinShape(),
         };
 
@@ -248,7 +248,7 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater, IP
         }
     }
 
-    public virtual string GetText()
+    internal string GetText()
     {
         return Def.GetText();
     }

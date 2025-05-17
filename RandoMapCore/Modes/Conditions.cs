@@ -1,19 +1,21 @@
-﻿namespace RandoMapCore.Modes;
+﻿using MapChanger;
+
+namespace RandoMapCore.Modes;
 
 internal static class Conditions
 {
     internal static bool RandoCoreMapModEnabled()
     {
-        return MapChanger.Settings.MapModEnabled() && MapChanger.Settings.CurrentMode() is RmcMapMode;
+        return MapChangerMod.IsEnabled() && ModeManager.CurrentMode() is RmcMapMode;
     }
 
     internal static bool ItemRandoModeEnabled()
     {
-        return MapChanger.Settings.MapModEnabled() && MapChanger.Settings.CurrentMode() is ItemRandoMode;
+        return MapChangerMod.IsEnabled() && ModeManager.CurrentMode() is ItemRandoMode;
     }
 
     internal static bool TransitionRandoModeEnabled()
     {
-        return MapChanger.Settings.MapModEnabled() && MapChanger.Settings.CurrentMode() is TransitionRandoMode;
+        return MapChangerMod.IsEnabled() && ModeManager.CurrentMode() is TransitionRandoMode;
     }
 }

@@ -1,10 +1,9 @@
-﻿using MagicUI.Elements;
-using MapChanger.UI;
+﻿using MapChanger.UI;
 using RandoMapCore.Localization;
 
 namespace RandoMapCore.UI;
 
-internal class SpoilersButton() : MainButton(nameof(SpoilersButton), RandoMapCoreMod.Data.ModName, 0, 3)
+internal class SpoilersButton : RmcMainButton
 {
     protected override void OnClick()
     {
@@ -14,37 +13,22 @@ internal class SpoilersButton() : MainButton(nameof(SpoilersButton), RandoMapCor
         }
     }
 
-    protected override void OnHover()
+    protected override TextFormat GetTextFormat()
     {
-        if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
-        {
-            RmcTitle.Instance.HoveredText = "Toggle disabled".L();
-            return;
-        }
-
-        RmcTitle.Instance.HoveredText = "Reveals the items at each location.".L();
-    }
-
-    protected override void OnUnhover()
-    {
-        RmcTitle.Instance.HoveredText = null;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        Button.BorderColor = RmcColors.GetColor(RmcColorSetting.UI_Borders);
-
         var text = $"{"Spoilers".L()}:\n";
 
         if (!RandoMapCoreMod.Data.EnableSpoilerToggle)
         {
-            Button.Content = text + "Off".L();
-            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Disabled);
-            return;
+            return (text + "Off".L(), RmcColorSetting.UI_Disabled).ToTextFormat();
         }
 
-        this.SetButtonBoolToggle(text, RandoMapCoreMod.LS.SpoilerOn);
+        return UIExtensions.GetBoolTextFormat(text, RandoMapCoreMod.LS.SpoilerOn);
+    }
+
+    protected override TextFormat? GetHoverTextFormat()
+    {
+        return (
+            RandoMapCoreMod.Data.EnableSpoilerToggle ? "Reveals the items at each location.".L() : "Toggle disabled".L()
+        ).ToNeutralTextFormat();
     }
 }

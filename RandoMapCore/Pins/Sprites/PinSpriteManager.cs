@@ -27,7 +27,7 @@ internal class PinSpriteManager
                     _ => "Unknown",
                 };
             }
-            else if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Mix)
+            else if (RandoMapCoreMod.GS.QMarks is QMarkSetting.Mixed)
             {
                 key = key switch
                 {

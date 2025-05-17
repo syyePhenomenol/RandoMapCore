@@ -1,51 +1,42 @@
-﻿using MagicUI.Elements;
-using MapChanger.UI;
+﻿using MapChanger.UI;
 using RandoMapCore.Localization;
 
 namespace RandoMapCore.UI;
 
-internal class VanillaButton() : MainButton(nameof(VanillaButton), RandoMapCoreMod.Data.ModName, 0, 2)
+internal class VanillaButton : RmcMainButton
 {
     protected override void OnClick()
     {
         RandoMapCoreMod.LS.ToggleVanilla();
     }
 
-    protected override void OnHover()
+    protected override TextFormat GetTextFormat()
     {
-        RmcTitle.Instance.HoveredText = "Toggle pins for vanilla locations on/off.".L();
-    }
-
-    protected override void OnUnhover()
-    {
-        RmcTitle.Instance.HoveredText = null;
-    }
-
-    public override void Update()
-    {
-        base.Update();
-
-        Button.BorderColor = RmcColors.GetColor(RmcColorSetting.UI_Borders);
-
         var text = $"{"Vanilla".L()}:\n";
+        RmcColorSetting color;
 
         if (RandoMapCoreMod.LS.VanillaOn)
         {
-            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_On);
             text += "On".L();
+            color = RmcColorSetting.UI_On;
         }
         else
         {
-            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Neutral);
             text += "Off".L();
+            color = RmcColorSetting.UI_Neutral;
         }
 
-        if (RandoMapCoreMod.LS.IsVanillaCustom())
+        if (RandoMapCoreMod.LS.IsRandomizedCustom())
         {
-            Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Custom);
             text += $" ({"Custom".L()})";
+            color = RmcColorSetting.UI_Custom;
         }
 
-        Button.Content = text;
+        return (text, color).ToTextFormat();
+    }
+
+    protected override TextFormat? GetHoverTextFormat()
+    {
+        return "Toggle pins for vanilla locations on/off.".L().ToNeutralTextFormat();
     }
 }

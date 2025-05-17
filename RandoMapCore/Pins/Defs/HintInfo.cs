@@ -43,7 +43,7 @@ public class HintInfo
             return null;
         }
 
-        if (PinSelectionPanel.Instance.ShowHint)
+        if (PinSelectionPanel.Instance?.ShowHint ?? false)
         {
             return _text;
         }

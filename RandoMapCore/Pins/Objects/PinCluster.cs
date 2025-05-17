@@ -3,7 +3,7 @@ using RandoMapCore.Localization;
 
 namespace RandoMapCore.Pins;
 
-internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(selectables), IPinSelectable
+internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(selectables)
 {
     private int _selectionIndex;
     private RmcPin[] _sortedPins;
@@ -41,7 +41,7 @@ internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(se
         }
     }
 
-    public string GetText()
+    internal string GetText()
     {
         if (!_sortedPins.Any())
         {

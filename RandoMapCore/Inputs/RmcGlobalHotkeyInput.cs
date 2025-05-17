@@ -1,8 +1,8 @@
 using MapChanger.Input;
-using MapChanger.UI;
 using RandoMapCore.Modes;
 using RandoMapCore.Pins;
 using RandoMapCore.Rooms;
+using RandoMapCore.UI;
 using UnityEngine;
 
 namespace RandoMapCore.Input;
@@ -22,19 +22,8 @@ internal abstract class RmcGlobalHotkeyInput(string name, string category, KeyCo
 
     public override void DoAction()
     {
-        PauseMenu.Update();
-        RmcPinManager.MainUpdate();
-
-        if (RandoMapCoreMod.Data.EnablePinSelection)
-        {
-            PinSelector.Instance.MainUpdate();
-        }
-
-        if (RandoMapCoreMod.Data.EnableRoomSelection)
-        {
-            TransitionRoomSelector.Instance.MainUpdate();
-        }
-
-        MapUILayerUpdater.Update();
+        RmcPinManager.Update();
+        RmcRoomManager.Update();
+        RmcUIManager.UpdateAll();
     }
 }

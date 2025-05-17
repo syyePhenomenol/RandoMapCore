@@ -26,7 +26,7 @@ internal class LocationHintInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        PinSelectionPanel.Instance.RevealHint();
-        PinSelectionPanel.Instance.Update();
+        PinSelectionPanel.Instance?.RevealHint();
+        PinSelectionPanel.Instance?.Update();
     }
 }

@@ -35,13 +35,13 @@ internal class BenchwarpInput : RmcWorldMapInput
     {
         if (RandoMapCoreMod.Data.EnablePinSelection)
         {
-            if (PinSelector.Instance?.SelectedObject is RmcPin pin && BenchwarpInterop.IsVisitedBench(pin.Name))
+            if (RmcPinManager.Selector?.SelectedObject is RmcPin pin && BenchwarpInterop.IsVisitedBench(pin.Name))
             {
                 _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(pin.Name));
                 return;
             }
             else if (
-                PinSelector.Instance?.SelectedObject is PinCluster pinCluster
+                RmcPinManager.Selector?.SelectedObject is PinCluster pinCluster
                 && BenchwarpInterop.IsVisitedBench(pinCluster.SelectedPin.Name)
             )
             {

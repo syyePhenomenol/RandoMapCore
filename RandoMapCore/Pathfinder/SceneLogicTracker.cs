@@ -82,14 +82,14 @@ internal class SceneLogicTracker
 
     internal bool GetRoomActive(string scene)
     {
-        if (MapChanger.Settings.CurrentMode() is TransitionNormalMode)
+        if (ModeManager.CurrentMode() is TransitionNormalMode)
         {
             return Tracker.HasVisitedScene(scene)
                 || _inLogicScenes.Contains(scene)
                 || _sequenceBreakScenes.Contains(scene);
         }
 
-        if (MapChanger.Settings.CurrentMode() is TransitionVisitedOnlyMode)
+        if (ModeManager.CurrentMode() is TransitionVisitedOnlyMode)
         {
             return Tracker.HasVisitedScene(scene);
         }

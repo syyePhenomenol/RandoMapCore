@@ -1,5 +1,7 @@
 using ItemChanger;
 using MapChanger;
+using MapChanger.UI;
+using RandoMapCore.UI;
 using RandomizerCore;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
@@ -171,4 +173,22 @@ public abstract class RmcDataModule : HookModule
     /// Otherwise, return null.
     /// </summary>
     public abstract IReadOnlyDictionary<RmcBenchKey, string> GetCustomBenches();
+
+    /// <summary>
+    /// Add extra buttons to the main pause menu.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable<RmcMainButton> GetPauseMenuMainButtons()
+    {
+        return [];
+    }
+
+    /// <summary>
+    /// Add extra collapsable button grids to the pause menu.
+    /// </summary>
+    /// <returns></returns>
+    public virtual IEnumerable<ExtraButtonGrid> GetPauseMenuExtraButtonGrids()
+    {
+        return [];
+    }
 }

@@ -7,27 +7,22 @@ namespace RandoMapCore.Pins;
 
 internal class PinSelector : Selector
 {
-    internal static PinSelector Instance { get; private set; }
-
     internal GridPinRoomHighlighter Highlighter { get; private set; }
 
-    internal void Initialize(IEnumerable<IPinSelectable> pins)
+    public override void Initialize(IEnumerable<ISelectable> pins)
     {
         base.Initialize(pins);
-
-        Instance = this;
 
         Highlighter = Utils.MakeMonoBehaviour<GridPinRoomHighlighter>(gameObject, "Highlighter");
         Highlighter.gameObject.SetActive(true);
 
         ActiveModifiers.AddRange([ActiveByCurrentMode, ActiveByToggle]);
+        SpriteObject.SetActive(true);
     }
 
     public override void OnMainUpdate(bool active)
     {
         base.OnMainUpdate(active);
-
-        SpriteObject.SetActive(RandoMapCoreMod.GS.ShowReticle);
 
         if (active)
         {
@@ -67,8 +62,19 @@ internal class PinSelector : Selector
 
     protected override void OnSelectionChanged()
     {
-        PinSelectionPanel.Instance.HideHint();
-        SelectionPanels.Instance?.Update();
+        PinSelectionPanel.Instance?.HideHint();
+        RmcUIManager.WorldMap?.Update();
+    }
+
+    internal string GetSelectionText()
+    {
+        return SelectedObject switch
+        {
+            PinCluster pinCluster => pinCluster.GetText(),
+            GridPin gridPin => gridPin.GetText(LockSelection),
+            RmcPin rmcPin => rmcPin.GetText(),
+            _ => null,
+        };
     }
 
     private bool ActiveByCurrentMode()

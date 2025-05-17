@@ -23,7 +23,7 @@ public abstract class TransitionRandoMode : RmcMapMode
 
     public override Vector4? QuickMapTitleColorOverride(QuickMapTitle qmt)
     {
-        return RmcColors.GetColor(ColorSetting.UI_Neutral);
+        return RmcColors.GetColor(RmcColorSetting.UI_Neutral);
     }
 
     public override bool? NextAreaNameActiveOverride(NextAreaName nextAreaName)

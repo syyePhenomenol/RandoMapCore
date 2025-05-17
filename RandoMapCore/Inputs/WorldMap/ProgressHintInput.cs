@@ -24,6 +24,6 @@ internal class ProgressHintInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        ProgressHintPanel.Instance.UpdateNewHint();
+        ProgressHintPanel.Instance?.UpdateNewHint();
     }
 }

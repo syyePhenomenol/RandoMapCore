@@ -37,10 +37,10 @@ internal abstract class PinDef
     {
         return SceneName is null
             || MapZone is MapZone.NONE
-            || MapChanger.Settings.CurrentMode() is FullMapMode or AllPinsMode
-            || (MapChanger.Settings.CurrentMode() is PinsOverAreaMode && Utils.HasMapSetting(MapZone))
+            || ModeManager.CurrentMode() is FullMapMode or AllPinsMode
+            || (ModeManager.CurrentMode() is PinsOverAreaMode && Utils.HasMapSetting(MapZone))
             || (
-                MapChanger.Settings.CurrentMode() is PinsOverRoomMode
+                ModeManager.CurrentMode() is PinsOverRoomMode
                 && Utils.HasMapSetting(MapZone)
                 && (
                     (

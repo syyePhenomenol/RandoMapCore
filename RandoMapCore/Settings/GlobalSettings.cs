@@ -17,9 +17,6 @@ public class GlobalSettings
     public bool RoomSelectionOn { get; private set; } = true;
 
     [JsonProperty]
-    public bool ShowReticle { get; private set; } = true;
-
-    [JsonProperty]
     public ProgressHintSetting ProgressHint { get; private set; } = ProgressHintSetting.Area;
 
     [JsonProperty]
@@ -41,7 +38,7 @@ public class GlobalSettings
     public bool ShowRouteCompass { get; private set; } = true;
 
     [JsonProperty]
-    public RouteTextInGame RouteTextInGame { get; private set; } = RouteTextInGame.NextTransitionOnly;
+    public RouteTextInGame RouteTextInGame { get; private set; } = RouteTextInGame.NextTransition;
 
     [JsonProperty]
     public OffRouteBehaviour WhenOffRoute { get; private set; } = OffRouteBehaviour.Reevaluate;
@@ -109,11 +106,6 @@ public class GlobalSettings
     internal void ToggleRoomSelection()
     {
         RoomSelectionOn = !RoomSelectionOn;
-    }
-
-    internal void ToggleShowReticle()
-    {
-        ShowReticle = !ShowReticle;
     }
 
     internal void ToggleProgressHint()

@@ -13,6 +13,7 @@ internal class RmcRoomManager : HookModule
 
     internal static MapObject MoRoomTexts { get; private set; }
     internal static ReadOnlyDictionary<string, RoomText> RoomTexts { get; private set; }
+    internal static RoomSelector Selector { get; private set; }
 
     public override void OnEnterGame()
     {
@@ -45,6 +46,7 @@ internal class RmcRoomManager : HookModule
         _roomTextDefs = null;
         MoRoomTexts = null;
         RoomTexts = null;
+        Selector = null;
     }
 
     internal static void Make(GameObject goMap)
@@ -72,12 +74,13 @@ internal class RmcRoomManager : HookModule
 
         if (RandoMapCoreMod.Data.EnableRoomSelection)
         {
-            // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
-            var transitionRoomSelector = Utils.MakeMonoBehaviour<TransitionRoomSelector>(
-                null,
-                "RandoMapCore Transition Room Selector"
-            );
-            transitionRoomSelector.Initialize(rooms);
+            Selector = Utils.MakeMonoBehaviour<RoomSelector>(null, "RandoMapCore Transition Room Selector");
+            Selector.Initialize(rooms);
         }
+    }
+
+    internal static void Update()
+    {
+        Selector?.MainUpdate();
     }
 }

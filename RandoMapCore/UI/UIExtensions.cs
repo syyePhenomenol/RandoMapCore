@@ -1,54 +1,24 @@
-﻿using MagicUI.Core;
-using MagicUI.Elements;
-using MapChanger.UI;
+﻿using MapChanger.UI;
 using RandoMapCore.Localization;
 
 namespace RandoMapCore.UI;
 
 internal static class UIExtensions
 {
-    internal static TextObject TextFromEdge(LayoutRoot onLayout, string name, bool onRight)
+    internal static TextFormat ToTextFormat(this (string text, RmcColorSetting colorSetting) format)
     {
-        TextObject text =
-            new(onLayout, name)
-            {
-                ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Neutral),
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Top,
-                TextAlignment = HorizontalAlignment.Left,
-                Font = MagicUI.Core.UI.TrajanNormal,
-                FontSize = 14,
-            };
-
-        if (onRight)
-        {
-            text.HorizontalAlignment = HorizontalAlignment.Right;
-            text.TextAlignment = HorizontalAlignment.Right;
-            text.Padding = new(0f, 20f, 20f, 0f);
-        }
-        else
-        {
-            text.Padding = new(20f, 20f, 0f, 0f);
-        }
-
-        return text;
+        return new(format.text, RmcColors.GetColor(format.colorSetting));
     }
 
-    internal static void SetButtonBoolToggle(this ButtonWrapper bw, string baseText, bool value)
+    internal static TextFormat ToNeutralTextFormat(this string text)
     {
-        var text = baseText;
+        return new(text, RmcColors.GetColor(RmcColorSetting.UI_Neutral));
+    }
 
-        if (value)
-        {
-            bw.Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_On);
-            text += "On".L();
-        }
-        else
-        {
-            bw.Button.ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Neutral);
-            text += "Off".L();
-        }
-
-        bw.Button.Content = text;
+    internal static TextFormat GetBoolTextFormat(string baseText, bool value)
+    {
+        return (
+            value ? (baseText + "On".L(), RmcColorSetting.UI_On) : (baseText + "Off".L(), RmcColorSetting.UI_Neutral)
+        ).ToTextFormat();
     }
 }

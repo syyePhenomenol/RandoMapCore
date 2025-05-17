@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using MapChanger;
+using MapChanger.Defs;
 using Modding;
 using RandoMapCore.Data;
 using RandoMapCore.Input;
@@ -46,7 +47,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.3";
+        return "1.0.4";
     }
 
     public override int LoadPriority()
@@ -99,7 +100,6 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
                 new ToggleItemCompassInput(),
                 new ToggleBenchwarpPinsInput(),
                 new RoomPanelInput(),
-                new SelectionReticleInput(),
                 new PathfinderBenchwarpInput(),
                 new ProgressHintPanelInput(),
                 new ToggleSpoilersInput(),
@@ -129,7 +129,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
         _dataModules.Add(dataModule);
     }
 
-    internal static void ResetToDefaultSettings()
+    internal static void ResetGlobalSettings()
     {
         GS = new();
     }
@@ -148,11 +148,11 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
         if (Data.ForceMapMode is string mapMode && _modes.FirstOrDefault(m => m.ModeName == mapMode) is RmcMapMode mode)
         {
-            MapChanger.Settings.AddModes([mode]);
+            ModeManager.AddModes([mode]);
         }
         else
         {
-            MapChanger.Settings.AddModes(_modes);
+            ModeManager.AddModes(_modes);
         }
 
         Events.OnSetGameMap += OnSetGameMap;
@@ -194,6 +194,8 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
         Events.OnSetGameMap -= OnSetGameMap;
 
+        RmcUIManager.Destroy();
+
         foreach (var hookModule in _hookModules)
         {
             hookModule.OnQuitToMenu();
@@ -215,8 +217,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
             LS.Initialize();
 
-            RmcUIBuilder uiBuilder = new();
-            uiBuilder.Build();
+            RmcUIManager.Build();
         }
         catch (Exception e)
         {

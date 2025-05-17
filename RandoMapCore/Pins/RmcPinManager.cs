@@ -28,6 +28,8 @@ internal class RmcPinManager : HookModule
 
     internal static ReadOnlyDictionary<string, RmcPin> Pins { get; private set; }
 
+    internal static PinSelector Selector { get; private set; }
+
     public override void OnEnterGame()
     {
         Dpm = new();
@@ -49,6 +51,7 @@ internal class RmcPinManager : HookModule
         Psm = null;
         PA = null;
         MoPins = null;
+        Selector = null;
         _normalPins = null;
         _pinClusters = null;
         _gridPins = null;
@@ -136,14 +139,13 @@ internal class RmcPinManager : HookModule
         PA.InitializeGridPins(_gridPins.Values);
 
         OnTrackerUpdate();
-        MainUpdate();
+        Update();
 
         if (RandoMapCoreMod.Data.EnablePinSelection)
         {
-            // The Selector base class already adds to MapObjectUpdater (gets destroyed on return to Menu)
-            var pinSelector = Utils.MakeMonoBehaviour<PinSelector>(null, "RandoMapCore Pin Selector");
-            pinSelector.Initialize(
-                _normalPins.Values.Cast<IPinSelectable>().Concat(_pinClusters.Values).Concat(_gridPins.Values)
+            Selector = Utils.MakeMonoBehaviour<PinSelector>(null, "RandoMapCore Pin Selector");
+            Selector.Initialize(
+                _normalPins.Values.Cast<ISelectable>().Concat(_pinClusters.Values).Concat(_gridPins.Values)
             );
         }
 
@@ -153,7 +155,7 @@ internal class RmcPinManager : HookModule
 
     private static ICPinDef GetICPinDef(AbstractPlacement placement)
     {
-        if (placement.IsRandomizedPlacement())
+        if (placement.IsRandomizedPlacement() || !SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
         {
             if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
             {
@@ -168,12 +170,8 @@ internal class RmcPinManager : HookModule
                 return new RandomizedPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
             }
         }
-        else if (SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
-        {
-            return new ICVanillaPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
-        }
 
-        return null;
+        return new ICVanillaPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
     }
 
     private static void TryAddPin(PinDef def)
@@ -215,7 +213,7 @@ internal class RmcPinManager : HookModule
         MoPins.AddChild(gridPin);
     }
 
-    internal static void MainUpdate()
+    internal static void Update()
     {
         foreach (var pin in Pins.Values)
         {
@@ -228,6 +226,8 @@ internal class RmcPinManager : HookModule
         {
             pc.UpdateSelectablePins();
         }
+
+        Selector?.MainUpdate();
     }
 
     private static void OnTrackerUpdate()

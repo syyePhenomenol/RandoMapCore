@@ -69,28 +69,35 @@ internal class RouteManager
 
         _reevaluated = false;
 
-        while (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
+        try
         {
-            var route = GetRoute(_ss.NewResultNodes.First());
-
-            if (
-                route.FinishedOrEmpty
-                // || route.FirstInstruction.StartText == route.LastInstruction.DestinationText
-                || _routes.Any(r =>
-                    r.FirstInstruction == route.FirstInstruction && r.LastInstruction == route.LastInstruction
-                )
-            )
+            while (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
             {
-                RandoMapCoreMod.Instance.LogFine($"Redundant route: {route.Node.DebugString}");
-                continue;
-            }
+                var route = GetRoute(_ss.NewResultNodes.First());
 
-            LogRouteResults(route);
-            _ = _routes.Add(route);
-            CurrentRoute = route;
-            RouteCompass.Update();
-            UpdateRouteUI();
-            return true;
+                if (
+                    route.FinishedOrEmpty
+                    // || route.FirstInstruction.StartText == route.LastInstruction.DestinationText
+                    || _routes.Any(r =>
+                        r.FirstInstruction == route.FirstInstruction && r.LastInstruction == route.LastInstruction
+                    )
+                )
+                {
+                    RandoMapCoreMod.Instance.LogFine($"Redundant route: {route.Node.DebugString}");
+                    continue;
+                }
+
+                LogRouteResults(route);
+                _ = _routes.Add(route);
+                CurrentRoute = route;
+                RouteCompass.Update();
+                UpdateRouteUI();
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
         }
 
         // Search exhausted, clear search state and reset
@@ -126,14 +133,14 @@ internal class RouteManager
         // The transition doesn't match the route's instruction
         switch (RandoMapCoreMod.GS.WhenOffRoute)
         {
-            case OffRouteBehaviour.Cancel:
+            case OffRouteBehaviour.CancelRoute:
                 ResetRoute();
                 break;
             case OffRouteBehaviour.Reevaluate:
                 ReevaluateRoute(lastTransition);
                 UpdateRouteUI();
                 break;
-            case OffRouteBehaviour.Keep:
+            case OffRouteBehaviour.KeepRoute:
                 break;
             default:
                 break;
@@ -162,21 +169,28 @@ internal class RouteManager
 
         _ss = new(_sp);
 
-        if (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
+        try
         {
-            var route = GetRoute(_ss.NewResultNodes.First());
-
-            if (route.FinishedOrEmpty)
+            if (Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, _sp, _ss))
             {
-                ResetRoute();
+                var route = GetRoute(_ss.NewResultNodes.First());
+
+                if (route.FinishedOrEmpty)
+                {
+                    ResetRoute();
+                    return;
+                }
+
+                LogRouteResults(route);
+
+                CurrentRoute = route;
+                _reevaluated = true;
                 return;
             }
-
-            LogRouteResults(route);
-
-            CurrentRoute = route;
-            _reevaluated = true;
-            return;
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
         }
 
         ResetRoute();
@@ -200,9 +214,8 @@ internal class RouteManager
 
     private void UpdateRouteUI()
     {
-        RouteText.Instance?.Update();
-        RouteSummaryText.Instance?.Update();
-        RoomSelectionPanel.Instance?.Update();
+        RmcUIManager.WorldMap?.Update();
+        RmcUIManager.Route?.Update();
     }
 
     private Route GetRoute(Node node)

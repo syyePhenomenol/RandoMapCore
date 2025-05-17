@@ -50,7 +50,9 @@ internal static class InteropProperties
         new("DoNotMakePin", (placement) => false);
 
     /// <summary>
-    /// If you want to make a pin for a non-randomizer placement. Has limited functionality.
+    /// Forces a pin to be placed under the "Vanilla" pins collection. These pins take precedence
+    /// over pins auto-generated from the RmcDataModule's VanillaLocations (the latter pin won't get
+    /// made if there is a name conflict with an existing AbstractPlacement pin)
     /// </summary>
     internal static readonly MetadataProperty<AbstractPlacement, bool> MakeVanillaPin =
         new("MakeVanillaPin", (placement) => false);

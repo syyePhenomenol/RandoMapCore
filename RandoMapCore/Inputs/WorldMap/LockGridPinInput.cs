@@ -25,10 +25,10 @@ internal class LockGridPinInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        if (PinSelector.Instance?.SelectedObject is GridPin)
+        if (RmcPinManager.Selector?.SelectedObject is GridPin)
         {
-            PinSelector.Instance.ToggleLockSelection();
-            PinSelectionPanel.Instance.Update();
+            RmcPinManager.Selector.ToggleLockSelection();
+            PinSelectionPanel.Instance?.Update();
         }
     }
 }

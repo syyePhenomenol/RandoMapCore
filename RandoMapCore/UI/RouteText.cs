@@ -1,68 +1,39 @@
-﻿using MagicUI.Elements;
+using MagicUI.Core;
 using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 using RandoMapCore.Pathfinder.Actions;
 using RandoMapCore.Settings;
 
 namespace RandoMapCore.UI;
 
-internal class RouteText : MapUILayer
+internal class RouteText : TopEdgeText<RouteLayout>
 {
-    private static TextObject _route;
+    internal override HorizontalAlignment Alignment => HorizontalAlignment.Left;
 
-    internal static RouteManager RM => RmcPathfinder.RM;
-    internal static RouteText Instance { get; private set; }
-
-    protected override bool Condition()
-    {
-        return Conditions.TransitionRandoModeEnabled()
-            && (
-                States.WorldMapOpen
-                || States.QuickMapOpen
-                || (
-                    !GameManager.instance.IsGamePaused()
-                    && RandoMapCoreMod.GS.RouteTextInGame is RouteTextInGame.NextTransitionOnly or RouteTextInGame.Show
-                )
-            );
-    }
-
-    public override void BuildLayout()
-    {
-        Instance = this;
-
-        _route = UIExtensions.TextFromEdge(Root, "Unchecked", false);
-    }
-
-    public override void Update()
-    {
-        _route.Text = GetRouteText();
-    }
-
-    private static string GetRouteText()
+    private protected override TextFormat GetTextFormat()
     {
         var text = "";
 
-        if (RM.CurrentRoute is null)
+        if (RmcPathfinder.RM.CurrentRoute is not Route route)
         {
-            return text;
+            return text.ToNeutralTextFormat();
         }
 
         if (
-            RandoMapCoreMod.GS.RouteTextInGame is RouteTextInGame.NextTransitionOnly
+            RandoMapCoreMod.GS.RouteTextInGame is RouteTextInGame.NextTransition
             && !States.QuickMapOpen
             && !States.WorldMapOpen
         )
         {
-            return RM.CurrentRoute.CurrentInstruction.ToArrowedText();
+            return route.CurrentInstruction.ToArrowedText().ToNeutralTextFormat();
         }
 
-        foreach (var instruction in RM.CurrentRoute.RemainingInstructions)
+        foreach (var instruction in route.RemainingInstructions)
         {
-            if (text.Length > 100)
+            if (text.Length > (int)(100f / Math.Pow(MapChangerMod.GS.UIScale, 3)))
             {
-                text += " -> ..." + RM.CurrentRoute.LastInstruction.SourceText;
+                text += " -> ..." + route.LastInstruction.SourceText;
                 break;
             }
 
@@ -71,13 +42,13 @@ internal class RouteText : MapUILayer
 
         if (
             (States.WorldMapOpen || States.QuickMapOpen)
-            && RM.CurrentRoute.GetHintText() is string hints
+            && route.GetHintText() is string hints
             && hints != string.Empty
         )
         {
             text += $"\n\n{hints}";
         }
 
-        return text;
+        return text.ToNeutralTextFormat();
     }
 }

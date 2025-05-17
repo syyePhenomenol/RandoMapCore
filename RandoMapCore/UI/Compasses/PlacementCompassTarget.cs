@@ -22,7 +22,7 @@ internal class PlacementCompassTarget : CompassTarget
     {
         Position = compassPosition;
 
-        _color = RmcColors.GetColor(RmcColorSetting.UI_Compass);
+        _color = Color.white;
 
         Placement = placement;
 

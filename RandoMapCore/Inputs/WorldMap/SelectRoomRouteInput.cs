@@ -27,13 +27,16 @@ internal class SelectRoomRouteInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        if (TransitionRoomSelector.Instance?.SelectedObject is ISelectable obj)
+        if (RmcRoomManager.Selector?.SelectedObject is ISelectable obj)
         {
-            RmcPathfinder.RM.TryGetNextRouteTo(obj.Key);
-
-            RouteText.Instance.Update();
-            RouteSummaryText.Instance.Update();
-            RoomSelectionPanel.Instance.Update();
+            try
+            {
+                RmcPathfinder.RM.TryGetNextRouteTo(obj.Key);
+            }
+            catch (Exception e)
+            {
+                RandoMapCoreMod.Instance.LogError(e);
+            }
         }
     }
 }

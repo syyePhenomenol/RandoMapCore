@@ -12,7 +12,10 @@ internal static class PlacementExtensions
     internal static string GetScene(this AbstractPlacement placement)
     {
         if (
-            RandoMapCoreMod.Data.RandomizedLocations.TryGetValue(placement.Name, out var ld)
+            (
+                RandoMapCoreMod.Data.RandomizedLocations.TryGetValue(placement.Name, out var ld)
+                || RandoMapCoreMod.Data.VanillaLocations.TryGetValue(placement.Name, out ld)
+            )
             && ld is not null
             && ld.SceneName is not null
         )

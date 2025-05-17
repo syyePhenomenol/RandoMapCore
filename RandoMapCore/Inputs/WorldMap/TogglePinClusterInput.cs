@@ -25,11 +25,11 @@ internal class TogglePinClusterInput : RmcWorldMapInput
 
     public override void DoAction()
     {
-        if (PinSelector.Instance?.SelectedObject is PinCluster pinCluster)
+        if (RmcPinManager.Selector?.SelectedObject is PinCluster pinCluster)
         {
             pinCluster.ToggleSelectedPin();
-            PinSelectionPanel.Instance.HideHint();
-            PinSelectionPanel.Instance.Update();
+            PinSelectionPanel.Instance?.HideHint();
+            PinSelectionPanel.Instance?.Update();
         }
     }
 }
