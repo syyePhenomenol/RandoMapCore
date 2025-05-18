@@ -2,7 +2,6 @@
 using RandoMapCore.Pathfinder.Actions;
 using RandoMapCore.Transition;
 using RandomizerCore.Logic;
-using RandomizerCore.Logic.StateLogic;
 using RCPathfinder;
 using RCPathfinder.Actions;
 using JU = RandomizerCore.Json.JsonUtil;
@@ -145,7 +144,16 @@ internal class RmcSearchData : SearchData
                 if (waypointActions.TryGetValue((start.Name, destination.Name), out var text))
                 {
                     _ = routeCompassOverrides.TryGetValue(start.Name, out var compassObjects);
-                    AddAction(new WaypointAction(start, destination, logic, text ?? start.Name, compassObjects));
+
+                    if (start.Name is "Can_Stag")
+                    {
+                        AddAction(new StagAction(start, destination, logic, text, compassObjects));
+                    }
+                    else
+                    {
+                        AddAction(new WaypointAction(start, destination, logic, text ?? start.Name, compassObjects));
+                    }
+
                     continue;
                 }
 
@@ -219,7 +227,7 @@ internal class RmcSearchData : SearchData
                 );
             }
 
-            if (DreamgateAction.Target is not null)
+            if (RandoMapCoreMod.GS.PathfinderDreamgate && DreamgateAction.Target is not null)
             {
                 actions.Add(DreamgateAction);
             }

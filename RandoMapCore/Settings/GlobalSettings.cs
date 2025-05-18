@@ -28,6 +28,12 @@ public class GlobalSettings
     public bool RoomSelectionOn { get; private set; } = true;
 
     [JsonProperty]
+    public bool PathfinderStags { get; private set; } = true;
+
+    [JsonProperty]
+    public bool PathfinderDreamgate { get; private set; } = true;
+
+    [JsonProperty]
     public bool PathfinderBenchwarp { get; private set; } = true;
 
     // Pin options
@@ -126,7 +132,17 @@ public class GlobalSettings
         RoomSelectionOn = !RoomSelectionOn;
     }
 
-    internal void ToggleAllowBenchWarpSearch()
+    internal void TogglePathfinderStags()
+    {
+        PathfinderStags = !PathfinderStags;
+    }
+
+    internal void TogglePathfinderDreamgate()
+    {
+        PathfinderDreamgate = !PathfinderDreamgate;
+    }
+
+    internal void TogglePathfinderBenchwarp()
     {
         PathfinderBenchwarp = !PathfinderBenchwarp;
     }

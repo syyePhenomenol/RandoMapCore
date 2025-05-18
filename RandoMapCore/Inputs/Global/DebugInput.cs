@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RandoMapCore.Input;
 
-internal class DebugInput() : RmcGlobalHotkeyInput("Pin Debug Tool", "Misc", KeyCode.D)
+internal class DebugInput() : RmcGlobalHotkeyInput("Pin Debug Tool", "Misc", KeyCode.L)
 {
     public override void DoAction()
     {

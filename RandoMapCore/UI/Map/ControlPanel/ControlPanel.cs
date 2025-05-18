@@ -76,9 +76,14 @@ internal class ControlPanel : WorldMapPanel
             _collapsableTexts.Add(new RoomSelectionText());
         }
 
-        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder && Interop.HasBenchwarp)
+        if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
-            _collapsableTexts.Add(new PathfinderBenchwarpText());
+            _collapsableTexts.AddRange([new PathfinderStagsText(), new PathfinderDreamgateText()]);
+
+            if (Interop.HasBenchwarp)
+            {
+                _collapsableTexts.Add(new PathfinderBenchwarpText());
+            }
         }
 
         foreach (var text in _collapsableTexts)

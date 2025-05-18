@@ -22,7 +22,7 @@ internal class PathfinderBenchwarpInput : MapUIKeyInput
 
     public override void DoAction()
     {
-        RandoMapCoreMod.GS.ToggleAllowBenchWarpSearch();
+        RandoMapCoreMod.GS.TogglePathfinderBenchwarp();
         RmcPathfinder.RM.ResetRoute();
         base.DoAction();
     }

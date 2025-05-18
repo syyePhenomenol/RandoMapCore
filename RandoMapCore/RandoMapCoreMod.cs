@@ -49,7 +49,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.5";
+        return "1.0.6";
     }
 
     public override int LoadPriority()
@@ -102,6 +102,8 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
                 new ToggleItemCompassInput(),
                 new ToggleBenchwarpPinsInput(),
                 new RoomPanelInput(),
+                new PathfinderStagsInput(),
+                new PathfinderDreamgateInput(),
                 new PathfinderBenchwarpInput(),
                 new ProgressHintPanelInput(),
                 new ToggleSpoilersInput(),
