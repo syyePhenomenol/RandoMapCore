@@ -97,6 +97,7 @@ internal class InstructionTracker
             _lastScene is not null
             && _sd.StateTermsByScene.TryGetValue(_lastScene, out var lastScenePositions)
             && lastScenePositions
+                .Where(_sd.StandardActionLookup.ContainsKey)
                 .SelectMany(p => _sd.StandardActionLookup[p])
                 .Cast<StandardAction>()
                 .FirstOrDefault(a => a is IInstruction i && i.IsFinished(target))
