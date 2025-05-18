@@ -1,3 +1,4 @@
+using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 
 namespace RandoMapCore.Input;
@@ -15,6 +16,11 @@ internal class PathfinderDreamgateInput : MapUIKeyInput
     public override bool UseCondition()
     {
         return base.UseCondition() && RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder;
+    }
+
+    public override bool ActiveCondition()
+    {
+        return Conditions.TransitionRandoModeEnabled();
     }
 
     public override void DoAction()

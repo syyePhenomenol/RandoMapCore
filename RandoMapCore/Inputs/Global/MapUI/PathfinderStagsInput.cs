@@ -1,4 +1,5 @@
 using MapChanger.Map;
+using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 using RandoMapCore.Rooms;
 
@@ -17,6 +18,11 @@ internal class PathfinderStagsInput : MapUIKeyInput
     public override bool UseCondition()
     {
         return base.UseCondition() && RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder;
+    }
+
+    public override bool ActiveCondition()
+    {
+        return Conditions.TransitionRandoModeEnabled();
     }
 
     public override void DoAction()

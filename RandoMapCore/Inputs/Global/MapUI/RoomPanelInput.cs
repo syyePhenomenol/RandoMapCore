@@ -1,3 +1,5 @@
+using RandoMapCore.Modes;
+
 namespace RandoMapCore.Input;
 
 internal class RoomPanelInput : MapUIKeyInput
@@ -13,6 +15,11 @@ internal class RoomPanelInput : MapUIKeyInput
     public override bool UseCondition()
     {
         return base.UseCondition() && RandoMapCoreMod.Data.EnableRoomSelection;
+    }
+
+    public override bool ActiveCondition()
+    {
+        return Conditions.TransitionRandoModeEnabled();
     }
 
     public override void DoAction()

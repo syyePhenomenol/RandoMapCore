@@ -1,3 +1,4 @@
+using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 
 namespace RandoMapCore.Input;
@@ -18,6 +19,11 @@ internal class PathfinderBenchwarpInput : MapUIKeyInput
             && RandoMapCoreMod.Data.EnableRoomSelection
             && RandoMapCoreMod.Data.EnablePathfinder
             && Interop.HasBenchwarp;
+    }
+
+    public override bool ActiveCondition()
+    {
+        return Conditions.TransitionRandoModeEnabled();
     }
 
     public override void DoAction()
