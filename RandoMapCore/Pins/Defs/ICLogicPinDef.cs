@@ -94,7 +94,7 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
 
     internal override float GetZPriority()
     {
-        return base.GetZPriority() + (10f * (int)Logic?.State);
+        return base.GetZPriority() + (10f * (int)(Logic?.State ?? LogicState.Unreachable));
     }
 
     private protected override string GetStatusText()

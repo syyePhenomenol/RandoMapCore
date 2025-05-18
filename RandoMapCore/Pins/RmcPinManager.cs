@@ -85,9 +85,17 @@ internal class RmcPinManager : HookModule
                 continue;
             }
 
-            if (GetICPinDef(placement) is ICPinDef def)
+            try
             {
-                TryAddPin(def);
+                if (GetICPinDef(placement) is ICPinDef def)
+                {
+                    TryAddPin(def);
+                }
+            }
+            catch (Exception e)
+            {
+                RandoMapCoreMod.Instance.LogError($"Failed to add pin for IC placement {placement.Name}");
+                RandoMapCoreMod.Instance.LogError(e);
             }
         }
 
@@ -100,20 +108,44 @@ internal class RmcPinManager : HookModule
                 continue;
             }
 
-            TryAddPin(
-                new VanillaPinDef(vanillaLocation, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak)
-            );
+            try
+            {
+                TryAddPin(
+                    new VanillaPinDef(vanillaLocation, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak)
+                );
+            }
+            catch (Exception e)
+            {
+                RandoMapCoreMod.Instance.LogError($"Failed to add vanilla pin {vanillaLocation.Name}");
+                RandoMapCoreMod.Instance.LogError(e);
+            }
         }
 
         if (Interop.HasBenchwarp)
         {
-            TryAddPin(new StartPinDef());
+            try
+            {
+                TryAddPin(new StartPinDef());
+            }
+            catch (Exception e)
+            {
+                RandoMapCoreMod.Instance.LogError($"Failed to add start warp pin");
+                RandoMapCoreMod.Instance.LogError(e);
+            }
 
             foreach (
                 var kvp in BenchwarpInterop.BenchKeys.Where(kvp => kvp.Key is not BenchwarpInterop.BENCH_WARP_START)
             )
             {
-                TryAddPin(new BenchPinDef(kvp.Key, kvp.Value.SceneName));
+                try
+                {
+                    TryAddPin(new BenchPinDef(kvp.Key, kvp.Value.SceneName));
+                }
+                catch (Exception e)
+                {
+                    RandoMapCoreMod.Instance.LogError($"Failed to add benchwarp pin {kvp.Key}");
+                    RandoMapCoreMod.Instance.LogError(e);
+                }
             }
         }
 
