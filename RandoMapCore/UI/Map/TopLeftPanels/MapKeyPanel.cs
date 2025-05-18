@@ -2,7 +2,6 @@ using MagicUI.Core;
 using MagicUI.Elements;
 using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 using UnityEngine;
 

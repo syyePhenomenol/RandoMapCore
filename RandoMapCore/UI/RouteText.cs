@@ -33,7 +33,7 @@ internal class RouteText : TopEdgeText<RouteLayout>
         {
             if (text.Length > (int)(100f / Math.Pow(MapChangerMod.GS.UIScale, 3)))
             {
-                text += " -> ..." + route.LastInstruction.SourceText;
+                text += " -> ..." + route.LastInstruction.SourceText.L();
                 break;
             }
 

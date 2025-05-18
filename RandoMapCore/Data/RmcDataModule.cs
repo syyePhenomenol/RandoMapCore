@@ -152,13 +152,6 @@ public abstract class RmcDataModule : HookModule
     public abstract IEnumerable<RandoPlacement> RandomizedPlacements { get; }
     public abstract IEnumerable<GeneralizedPlacement> VanillaPlacements { get; }
 
-    /// <summary>
-    /// Translates the input text into a target language.
-    /// </summary>
-    /// <param name="text"></param>
-    /// <returns></returns>
-    public abstract string Localize(string text);
-
     public abstract string GetMapArea(string scene);
 
     /// <summary>

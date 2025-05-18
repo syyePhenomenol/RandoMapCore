@@ -1,7 +1,6 @@
 using ConnectionMetadataInjector;
 using ItemChanger;
 using MapChanger.Defs;
-using RandoMapCore.Localization;
 using RandoMapCore.Settings;
 using UnityEngine;
 using SM = ConnectionMetadataInjector.SupplementalMetadata;

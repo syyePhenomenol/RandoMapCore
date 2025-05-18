@@ -1,28 +1,9 @@
 using System.Text.RegularExpressions;
-using MapChanger;
 
 namespace RandoMapCore.Localization;
 
 public static class Localization
 {
-    /// <summary>
-    /// Localize text
-    /// </summary>
-    /// <param name="text"></param>
-    public static string L(this string text)
-    {
-        return RandoMapCoreMod.Data.Localize(text);
-    }
-
-    /// <summary>
-    /// Localize and clean text
-    /// </summary>
-    /// <param name="text"></param>
-    public static string LC(this string text)
-    {
-        return text.L().ToCleanName();
-    }
-
     /// <summary>
     /// Localize and clean text in transition format A[B]
     /// </summary>

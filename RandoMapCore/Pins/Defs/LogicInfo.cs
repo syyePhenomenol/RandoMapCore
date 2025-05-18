@@ -1,4 +1,3 @@
-using RandoMapCore.Localization;
 using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pins;

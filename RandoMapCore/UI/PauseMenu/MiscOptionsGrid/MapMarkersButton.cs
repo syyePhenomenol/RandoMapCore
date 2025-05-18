@@ -1,5 +1,4 @@
 ﻿using MapChanger.UI;
-using RandoMapCore.Localization;
 
 namespace RandoMapCore.UI;
 
@@ -15,7 +14,7 @@ internal class MapMarkersButton : ExtraButton
 
     protected override TextFormat GetTextFormat()
     {
-        var text = $"{"Show map\nmarkers".L()}: ";
+        var text = $"{"Show Map\nMarkers".L()}: ";
 
         if (!RandoMapCoreMod.Data.EnableVisualCustomization)
         {

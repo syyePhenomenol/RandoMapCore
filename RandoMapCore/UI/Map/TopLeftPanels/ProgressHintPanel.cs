@@ -2,7 +2,6 @@ using MagicUI.Core;
 using MagicUI.Elements;
 using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Settings;
 using RandomizerCore.Extensions;
 using RandomizerCore.Logic;

@@ -1,5 +1,4 @@
-﻿using RandoMapCore.Localization;
-using RandoMapCore.Pathfinder.Actions;
+﻿using RandoMapCore.Pathfinder.Actions;
 using RCPathfinder;
 
 namespace RandoMapCore.Pathfinder;

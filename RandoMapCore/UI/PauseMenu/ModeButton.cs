@@ -1,6 +1,5 @@
 ﻿using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 
 namespace RandoMapCore.UI;

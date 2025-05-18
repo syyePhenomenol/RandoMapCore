@@ -11,12 +11,12 @@ public class RmcPauseMenuLayout : PauseMenuLayout
 
     protected override bool ActiveCondition()
     {
-        return MapChangerMod.IsEnabled() && ModeManager.CurrentMode() is RmcMapMode;
+        return base.ActiveCondition() && MapChangerMod.IsEnabled() && ModeManager.CurrentMode() is RmcMapMode;
     }
 
     protected override PauseMenuTitle GetTitle()
     {
-        return new PauseMenuTitle();
+        return new RmcTitle();
     }
 
     protected override IEnumerable<MainButton> GetMainButtons()

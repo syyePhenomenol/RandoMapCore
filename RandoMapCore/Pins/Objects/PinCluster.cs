@@ -1,5 +1,4 @@
 using RandoMapCore.Input;
-using RandoMapCore.Localization;
 
 namespace RandoMapCore.Pins;
 

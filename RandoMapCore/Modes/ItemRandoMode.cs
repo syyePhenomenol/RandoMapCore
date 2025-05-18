@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RandoMapCore.Modes;
 
-public class ItemRandoMode : RmcMapMode
+public abstract class ItemRandoMode : RmcMapMode
 {
     public override Vector4? RoomColorOverride(RoomSprite roomSprite)
     {

@@ -112,7 +112,7 @@ internal class RmcColors : HookModule
         }
         catch (Exception)
         {
-            RandoMapCoreMod.Instance.LogError("Invalid colors.json file. Using default colors");
+            RandoMapCoreMod.Instance.LogDebug("colors.json file doesn't exist or is invalid. Using default colors");
             return;
         }
 

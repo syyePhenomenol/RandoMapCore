@@ -1,6 +1,5 @@
 ﻿using MapChanger;
 using MapChanger.MonoBehaviours;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 using TMPro;

@@ -4,7 +4,6 @@ using MapChanger.Defs;
 using MapChanger.Map;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Input;
-using RandoMapCore.Localization;
 using RandoMapCore.Rooms;
 
 namespace RandoMapCore.Pins;

@@ -2,7 +2,6 @@ using ConnectionMetadataInjector.Util;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Data;
-using RandoMapCore.Localization;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 using UnityEngine;

@@ -4,17 +4,13 @@ namespace RandoMapCore.Settings;
 
 public class GlobalSettings
 {
+    // Map UI toggles
+
     [JsonProperty]
     public bool ControlPanelOn { get; private set; } = true;
 
     [JsonProperty]
     public bool MapKeyOn { get; private set; } = false;
-
-    [JsonProperty]
-    public bool PinSelectionOn { get; private set; } = true;
-
-    [JsonProperty]
-    public bool RoomSelectionOn { get; private set; } = true;
 
     [JsonProperty]
     public ProgressHintSetting ProgressHint { get; private set; } = ProgressHintSetting.Area;
@@ -23,14 +19,34 @@ public class GlobalSettings
     public bool ItemCompassOn { get; private set; } = false;
 
     [JsonProperty]
-    public ItemCompassMode ItemCompassMode { get; private set; } = ItemCompassMode.Reachable;
+    public bool PinSelectionOn { get; private set; } = true;
 
     [JsonProperty]
-    public QuickMapCompassSetting ShowQuickMapCompasses { get; private set; } = QuickMapCompassSetting.Unchecked;
+    public bool ShowBenchwarpPins { get; private set; } = true;
+
+    [JsonProperty]
+    public bool RoomSelectionOn { get; private set; } = true;
 
     [JsonProperty]
     public bool PathfinderBenchwarp { get; private set; } = true;
 
+    // Pin options
+    [JsonProperty]
+    public PinShapeSetting PinShapes { get; private set; } = PinShapeSetting.Mixed;
+
+    [JsonProperty]
+    public PinSize PinSize { get; private set; } = PinSize.Medium;
+
+    [JsonProperty]
+    public ClearedPinsSetting ShowClearedPins { get; private set; } = ClearedPinsSetting.Persistent;
+
+    [JsonProperty]
+    public ReachablePinsSetting ShowReachablePins { get; private set; } = ReachablePinsSetting.ExpandReachable;
+
+    [JsonProperty]
+    public QMarkSetting QMarks { get; private set; } = QMarkSetting.Off;
+
+    // Pathfinder options
     [JsonProperty]
     public bool PathfinderOutOfLogic { get; private set; } = true;
 
@@ -43,23 +59,13 @@ public class GlobalSettings
     [JsonProperty]
     public OffRouteBehaviour WhenOffRoute { get; private set; } = OffRouteBehaviour.Reevaluate;
 
-    [JsonProperty]
-    public PinShapeSetting PinShapes { get; private set; } = PinShapeSetting.Mixed;
+    // Miscellaneous options
 
     [JsonProperty]
-    public QMarkSetting QMarks { get; private set; } = QMarkSetting.Off;
+    public ItemCompassMode ItemCompassMode { get; private set; } = ItemCompassMode.Reachable;
 
     [JsonProperty]
-    public PinSize PinSize { get; private set; } = PinSize.Medium;
-
-    [JsonProperty]
-    public ClearedPinsSetting ShowClearedPins { get; private set; } = ClearedPinsSetting.Persistent;
-
-    [JsonProperty]
-    public ReachablePinsSetting ShowReachablePins { get; private set; } = ReachablePinsSetting.ExpandReachable;
-
-    [JsonProperty]
-    public bool ShowBenchwarpPins { get; private set; } = true;
+    public QuickMapCompassSetting ShowQuickMapCompasses { get; private set; } = QuickMapCompassSetting.Unchecked;
 
     [JsonProperty]
     public bool ShowAreaNames { get; private set; } = true;
@@ -93,6 +99,18 @@ public class GlobalSettings
         MapKeyOn = !MapKeyOn;
     }
 
+    internal void ToggleProgressHint()
+    {
+        ProgressHint = (ProgressHintSetting)(
+            ((int)ProgressHint + 1) % Enum.GetNames(typeof(ProgressHintSetting)).Length
+        );
+    }
+
+    internal void ToggleItemCompass()
+    {
+        ItemCompassOn = !ItemCompassOn;
+    }
+
     internal void TogglePinSelection()
     {
         PinSelectionOn = !PinSelectionOn;
@@ -108,53 +126,9 @@ public class GlobalSettings
         RoomSelectionOn = !RoomSelectionOn;
     }
 
-    internal void ToggleProgressHint()
-    {
-        ProgressHint = (ProgressHintSetting)(
-            ((int)ProgressHint + 1) % Enum.GetNames(typeof(ProgressHintSetting)).Length
-        );
-    }
-
-    internal void ToggleItemCompass()
-    {
-        ItemCompassOn = !ItemCompassOn;
-    }
-
-    internal void ToggleItemCompassMode()
-    {
-        ItemCompassMode = (ItemCompassMode)(((int)ItemCompassMode + 1) % Enum.GetNames(typeof(ItemCompassMode)).Length);
-    }
-
-    internal void ToggleQuickMapCompasses()
-    {
-        ShowQuickMapCompasses = (QuickMapCompassSetting)(
-            ((int)ShowQuickMapCompasses + 1) % Enum.GetNames(typeof(QuickMapCompassSetting)).Length
-        );
-    }
-
     internal void ToggleAllowBenchWarpSearch()
     {
         PathfinderBenchwarp = !PathfinderBenchwarp;
-    }
-
-    internal void TogglePathfinderOutOfLogic()
-    {
-        PathfinderOutOfLogic = !PathfinderOutOfLogic;
-    }
-
-    internal void ToggleRouteTextInGame()
-    {
-        RouteTextInGame = (RouteTextInGame)(((int)RouteTextInGame + 1) % Enum.GetNames(typeof(RouteTextInGame)).Length);
-    }
-
-    internal void ToggleWhenOffRoute()
-    {
-        WhenOffRoute = (OffRouteBehaviour)(((int)WhenOffRoute + 1) % Enum.GetNames(typeof(OffRouteBehaviour)).Length);
-    }
-
-    internal void ToggleRouteCompassEnabled()
-    {
-        ShowRouteCompass = !ShowRouteCompass;
     }
 
     internal void TogglePinShape()
@@ -184,6 +158,38 @@ public class GlobalSettings
     internal void ToggleQMarkSetting()
     {
         QMarks = (QMarkSetting)(((int)QMarks + 1) % Enum.GetNames(typeof(QMarkSetting)).Length);
+    }
+
+    internal void TogglePathfinderOutOfLogic()
+    {
+        PathfinderOutOfLogic = !PathfinderOutOfLogic;
+    }
+
+    internal void ToggleRouteCompassEnabled()
+    {
+        ShowRouteCompass = !ShowRouteCompass;
+    }
+
+    internal void ToggleRouteTextInGame()
+    {
+        RouteTextInGame = (RouteTextInGame)(((int)RouteTextInGame + 1) % Enum.GetNames(typeof(RouteTextInGame)).Length);
+    }
+
+    internal void ToggleWhenOffRoute()
+    {
+        WhenOffRoute = (OffRouteBehaviour)(((int)WhenOffRoute + 1) % Enum.GetNames(typeof(OffRouteBehaviour)).Length);
+    }
+
+    internal void ToggleItemCompassMode()
+    {
+        ItemCompassMode = (ItemCompassMode)(((int)ItemCompassMode + 1) % Enum.GetNames(typeof(ItemCompassMode)).Length);
+    }
+
+    internal void ToggleQuickMapCompasses()
+    {
+        ShowQuickMapCompasses = (QuickMapCompassSetting)(
+            ((int)ShowQuickMapCompasses + 1) % Enum.GetNames(typeof(QuickMapCompassSetting)).Length
+        );
     }
 
     internal void ToggleAreaNames()

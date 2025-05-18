@@ -1,7 +1,6 @@
 ﻿using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Input;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 using RandoMapCore.Pins;
@@ -12,8 +11,6 @@ namespace RandoMapCore.Rooms;
 
 internal class RoomSelector : Selector
 {
-    // internal static RoomSelector Instance { get; private set; }
-
     public override float SelectionRadius { get; } = 2.5f;
     public override float SpriteSize { get; } = 0.6f;
 
@@ -22,7 +19,6 @@ internal class RoomSelector : Selector
         base.Initialize(rooms);
         ActiveModifiers.AddRange([ActiveByCurrentMode, ActiveByToggle]);
         SpriteObject.SetActive(true);
-        // Instance = this;
     }
 
     protected override void Select(ISelectable selectable)

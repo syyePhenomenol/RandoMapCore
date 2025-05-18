@@ -1,6 +1,4 @@
-﻿using MapChanger;
-using MapChanger.UI;
-using RandoMapCore.Localization;
+﻿using MapChanger.UI;
 using RandoMapCore.Settings;
 
 namespace RandoMapCore.UI;
@@ -17,7 +15,7 @@ internal class ClearedButton : ExtraButton
         var text = $"{"Show Cleared".L()}:\n";
 
         return (
-            text + RandoMapCoreMod.GS.ShowClearedPins.ToString().ToWhitespaced().L(),
+            text + RandoMapCoreMod.GS.ShowClearedPins.ToString().L(),
             RandoMapCoreMod.GS.ShowClearedPins switch
             {
                 ClearedPinsSetting.Off => RmcColorSetting.UI_Neutral,

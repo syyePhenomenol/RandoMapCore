@@ -1,5 +1,4 @@
 ﻿using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Settings;
 
 namespace RandoMapCore.UI;
@@ -26,15 +25,16 @@ internal class ItemCompassModeButton : ExtraButton
 
         return (
             text
-                + RandoMapCoreMod.GS.ItemCompassMode switch
+            + (
+                RandoMapCoreMod.GS.ItemCompassMode switch
                 {
-                    ItemCompassMode.Reachable => "Reachable".L(),
-                    ItemCompassMode.ReachableOutOfLogic => "OoL".L(),
-                    ItemCompassMode.All => "All".L(),
+                    ItemCompassMode.Reachable => "Reachable",
+                    ItemCompassMode.ReachableOutOfLogic => "OOL",
+                    ItemCompassMode.All => "All",
                     _ => "",
-                },
-            RmcColorSetting.UI_Neutral
-        ).ToTextFormat();
+                }
+            ).L()
+        ).ToNeutralTextFormat();
     }
 
     protected override TextFormat? GetHoverTextFormat()

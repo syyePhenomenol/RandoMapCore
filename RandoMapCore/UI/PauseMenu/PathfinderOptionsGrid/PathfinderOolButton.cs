@@ -1,6 +1,4 @@
-﻿using MagicUI.Elements;
-using MapChanger.UI;
-using RandoMapCore.Localization;
+﻿using MapChanger.UI;
 using RandoMapCore.Pathfinder;
 
 namespace RandoMapCore.UI;

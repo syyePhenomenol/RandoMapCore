@@ -2,7 +2,7 @@
 
 namespace RandoMapCore.Modes;
 
-public class RmcMapMode : MapMode
+public abstract class RmcMapMode : MapMode
 {
     public override string Mod => RandoMapCoreMod.Data.ModName;
     public override float Priority => 0f;

@@ -1,7 +1,5 @@
-﻿using MagicUI.Elements;
-using MapChanger;
+﻿using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Settings;
 
 namespace RandoMapCore.UI;

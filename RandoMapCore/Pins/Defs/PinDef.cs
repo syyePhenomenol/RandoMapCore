@@ -1,7 +1,6 @@
 using GlobalEnums;
 using MapChanger;
 using MapChanger.Defs;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 using RandoMapCore.Settings;
