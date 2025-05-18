@@ -15,7 +15,7 @@ using UnityEngine;
 
 namespace RandoMapCore;
 
-public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettings<GlobalSettings>, ICustomMenuMod
+public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettings<GlobalSettings>
 {
     private static readonly IEnumerable<MapMode> _modes =
     [
@@ -230,15 +230,5 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
         {
             Instance.LogError(e);
         }
-    }
-
-    public override string GetMenuButtonText()
-    {
-        return "Randomizer Map Mod".L();
-    }
-
-    public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggleDelegates)
-    {
-        return ModMenu.GetMenuScreen(modListMenu);
     }
 }
