@@ -1,5 +1,6 @@
 using ItemChanger;
 using ItemChanger.Locations;
+using ItemChanger.Placements;
 using MapChanger;
 using MapChanger.Defs;
 using RandomizerCore.Logic;
@@ -18,15 +19,14 @@ internal class DefaultPropertyManager
         );
     }
 
-    internal MapRoomPosition GetDefaultMapPosition(string name)
+    internal MapRoomPosition GetDefaultMapPosition(AbstractPlacement placement)
     {
-        if (MapChanger.Finder.TryGetLocation(name, out var mld))
+        if (GetDefaultMapPosition(placement.Name) is MapRoomPosition mrp)
         {
-            // RandoMapCore.Instance.LogFine($"Default MapLocation found for placement {name}");
-            return new(mld.MapLocations);
+            return mrp;
         }
 
-        if (ItemChanger.Finder.GetLocation(name) is AbstractLocation al)
+        if (placement is IPrimaryLocationPlacement iplp && iplp.Location is AbstractLocation al)
         {
             if (al is CoordinateLocation cl && MapChanger.Finder.IsMappedScene(cl.sceneName))
             {
@@ -41,8 +41,20 @@ internal class DefaultPropertyManager
             }
         }
 
-        // RandoMapCore.Instance.LogFine($"No valid default MapLocation for {name}.");
+        // RandoMapCore.Instance.LogFine($"No valid default MapLocation for placement {name}.");
 
+        return null;
+    }
+
+    internal MapRoomPosition GetDefaultMapPosition(string name)
+    {
+        if (MapChanger.Finder.TryGetLocation(name, out var mld))
+        {
+            // RandoMapCore.Instance.LogFine($"Default MapLocation found for {name}");
+            return new(mld.MapLocations);
+        }
+
+        // RandoMapCore.Instance.LogFine($"No valid default MapLocation for {name}.");
         return null;
     }
 

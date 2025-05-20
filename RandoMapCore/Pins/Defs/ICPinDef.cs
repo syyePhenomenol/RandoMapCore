@@ -58,7 +58,7 @@ internal abstract class ICPinDef : PinDef
         {
             MapPosition = new AbsMapPosition(absMapLocation);
         }
-        else if (RmcPinManager.Dpm.GetDefaultMapPosition(placement.Name) is MapRoomPosition defaultPosition)
+        else if (RmcPinManager.Dpm.GetDefaultMapPosition(placement) is MapRoomPosition defaultPosition)
         {
             MapPosition = defaultPosition;
         }
@@ -184,7 +184,7 @@ internal abstract class ICPinDef : PinDef
                 PlacementState.Previewable => "previewed".L(),
                 PlacementState.NotCleared => "unchecked".L(),
                 PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
-                _ => "",
+                _ => "unknown",
             };
     }
 

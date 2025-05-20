@@ -46,7 +46,7 @@ public class LogicInfo
             LogicState.Reachable => "reachable".L(),
             LogicState.ReachableSequenceBreak => "reachable through sequence break".L(),
             LogicState.Unreachable => "unreachable".L(),
-            _ => "",
+            _ => null,
         };
     }
 

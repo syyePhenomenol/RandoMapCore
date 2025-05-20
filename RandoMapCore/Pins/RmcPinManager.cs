@@ -187,7 +187,7 @@ internal class RmcPinManager : HookModule
 
     private static ICPinDef GetICPinDef(AbstractPlacement placement)
     {
-        if (placement.IsRandomizedPlacement() || !SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
+        if (placement.IsRandomizedPlacement() && !SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
         {
             if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
             {

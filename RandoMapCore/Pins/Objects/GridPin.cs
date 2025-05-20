@@ -90,6 +90,11 @@ internal class GridPin : RmcPin
 
     public string GetText(bool lockSelection)
     {
+        if (HighlightScenes is null)
+        {
+            return GetText();
+        }
+
         return $"{GetText()}\n\n{"Press".L()} {LockGridPinInput.Instance.GetBindingsText()} {(lockSelection ? "to unlock pin selection" : "to lock pin selection and view highlighted rooms").L()}.";
     }
 }
