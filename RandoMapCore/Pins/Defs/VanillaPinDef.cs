@@ -148,7 +148,7 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
                 text += "not cleared".L();
             }
 
-            text += ", " + Logic?.GetStatusTextFragment() ?? "unknown logic";
+            text += ", " + (Logic?.GetStatusTextFragment() ?? "unknown logic");
         }
 
         return text;

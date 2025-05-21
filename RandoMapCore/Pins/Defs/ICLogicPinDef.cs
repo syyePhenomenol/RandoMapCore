@@ -104,6 +104,6 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
             return base.GetStatusText();
         }
 
-        return $"{base.GetStatusText()}, " + Logic?.GetStatusTextFragment() ?? "unknown logic";
+        return $"{base.GetStatusText()}, " + (Logic?.GetStatusTextFragment() ?? "unknown logic");
     }
 }

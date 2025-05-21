@@ -83,7 +83,7 @@ internal abstract class PinDef
 
     private protected virtual string GetRoomText()
     {
-        return $"{"Room".L()}: {(SceneName is not null ? SceneName.LC() : "Unknown")}";
+        return $"{"Room".L()}: {SceneName?.LC() ?? "Unknown".L()}";
     }
 
     private protected virtual string GetStatusText()
