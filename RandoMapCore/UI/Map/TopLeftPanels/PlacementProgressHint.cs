@@ -166,7 +166,7 @@ internal record ItemPlacementHint(RandoPlacement RandoPlacement, AbstractPlaceme
             scenes.AddRange(inLogicHighlightScenes);
             mapAreas.AddRange(inLogicHighlightScenes.Select(RandoMapCoreMod.Data.GetMapArea).OfType<string>());
         }
-        else if (AbstractPlacement.GetScene() is string scene)
+        else if (AbstractPlacement.GetSceneName() is string scene)
         {
             scenes.Add(scene);
             if (RandoMapCoreMod.Data.GetMapArea(scene) is string mapArea)

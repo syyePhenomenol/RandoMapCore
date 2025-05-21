@@ -57,7 +57,7 @@ public class ItemCompassInfo : CompassInfo
 
             if (
                 !hasInteropCompassLocations
-                && placement.GetScene() is string scene
+                && placement.GetSceneName() is string scene
                 && TryGetDefaultCompassTarget(placement, scene, out var target)
             )
             {
@@ -127,7 +127,7 @@ public class ItemCompassInfo : CompassInfo
             // RandoMapCore.Instance.LogFine($"Got {position.GetType().Name} for {placement.Name} from internal coordinates");
         }
         else if (
-            ItemChanger.Finder.GetLocation(placement.Name) is AbstractLocation al
+            placement.GetAbstractLocation() is AbstractLocation al
             && TryGetAbstractLocationCompassPosition(al, out position)
         )
         {

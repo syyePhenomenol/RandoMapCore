@@ -26,7 +26,7 @@ internal class DefaultPropertyManager
             return mrp;
         }
 
-        if (placement is IPrimaryLocationPlacement iplp && iplp.Location is AbstractLocation al)
+        if (placement.GetAbstractLocation() is AbstractLocation al)
         {
             if (al is CoordinateLocation cl && MapChanger.Finder.IsMappedScene(cl.sceneName))
             {

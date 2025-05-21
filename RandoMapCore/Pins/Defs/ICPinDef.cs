@@ -27,7 +27,7 @@ internal abstract class ICPinDef : PinDef
 
         ItemPoolGroups = itemPoolGroups;
 
-        SceneName = placement.GetScene();
+        SceneName = placement.GetSceneName();
 
         if (
             SM.Of(placement).Get(InteropProperties.WorldMapLocation) is (string, float, float) worldMapLocation

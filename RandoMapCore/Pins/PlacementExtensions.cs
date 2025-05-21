@@ -1,4 +1,5 @@
 ﻿using ItemChanger;
+using ItemChanger.Placements;
 
 namespace RandoMapCore.Pins;
 
@@ -9,21 +10,24 @@ internal static class PlacementExtensions
         return RandoMapCoreMod.Data.RandomizedLocations.ContainsKey(placement.Name);
     }
 
-    internal static string GetScene(this AbstractPlacement placement)
+    internal static AbstractLocation GetAbstractLocation(this AbstractPlacement placement)
     {
-        if (
-            (
-                RandoMapCoreMod.Data.RandomizedLocations.TryGetValue(placement.Name, out var ld)
-                || RandoMapCoreMod.Data.VanillaLocations.TryGetValue(placement.Name, out ld)
-            )
-            && ld is not null
-            && ld.SceneName is not null
-        )
-        {
-            return ld.SceneName;
-        }
+        return (placement is IPrimaryLocationPlacement iplp ? iplp.Location : null)
+            ?? Finder.GetLocation(placement.Name);
+    }
 
-        return Finder.GetLocation(placement.Name)?.sceneName;
+    internal static string GetSceneName(this AbstractPlacement placement)
+    {
+        return (
+                (
+                    RandoMapCoreMod.Data.RandomizedLocations.TryGetValue(placement.Name, out var ld)
+                    || RandoMapCoreMod.Data.VanillaLocations.TryGetValue(placement.Name, out ld)
+                )
+                    ? ld?.SceneName
+                    : null
+            )
+            ?? placement.GetAbstractLocation()?.sceneName
+            ?? null;
     }
 
     internal static bool CanPreview(this TaggableObject taggable)
