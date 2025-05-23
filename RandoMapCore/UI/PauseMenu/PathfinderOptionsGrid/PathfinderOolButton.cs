@@ -1,4 +1,5 @@
-﻿using MapChanger.UI;
+﻿using MapChanger;
+using MapChanger.UI;
 using RandoMapCore.Pathfinder;
 
 namespace RandoMapCore.UI;

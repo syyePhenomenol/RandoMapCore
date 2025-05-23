@@ -1,3 +1,4 @@
+using MapChanger;
 using RandoMapCore.Input;
 
 namespace RandoMapCore.Pins;

@@ -1,3 +1,4 @@
+using MapChanger;
 using RandoMapCore.Input;
 using RandoMapCore.UI;
 using RandomizerCore.Logic;

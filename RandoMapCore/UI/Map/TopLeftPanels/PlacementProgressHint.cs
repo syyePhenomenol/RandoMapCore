@@ -1,9 +1,9 @@
 using ConnectionMetadataInjector;
 using ItemChanger;
 using ItemChanger.Extensions;
+using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Data;
-using RandoMapCore.Localization;
 using RandoMapCore.Pathfinder;
 using RandoMapCore.Pins;
 using RandoMapCore.Rooms;

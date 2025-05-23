@@ -1,4 +1,5 @@
 using MagicUI.Core;
+using MapChanger;
 using MapChanger.UI;
 using RandoMapCore.Input;
 using RandoMapCore.Modes;

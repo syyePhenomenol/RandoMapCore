@@ -1,3 +1,4 @@
+using MapChanger;
 using MapChanger.UI;
 
 namespace RandoMapCore.UI;

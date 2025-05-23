@@ -1,4 +1,5 @@
 using ItemChanger;
+using MapChanger;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 

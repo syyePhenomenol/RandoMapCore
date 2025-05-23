@@ -1,3 +1,4 @@
+using MapChanger;
 using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pins;

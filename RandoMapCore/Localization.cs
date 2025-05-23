@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
+using MapChanger;
 
-namespace RandoMapCore.Localization;
+namespace RandoMapCore;
 
 public static class Localization
 {

@@ -1,5 +1,3 @@
-using RandoMapCore.Localization;
-
 namespace RandoMapCore.Pathfinder.Actions;
 
 internal static class InstructionExtensions

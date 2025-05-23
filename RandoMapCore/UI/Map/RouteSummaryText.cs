@@ -1,7 +1,6 @@
 ﻿using MagicUI.Core;
 using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.Localization;
 using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
 
