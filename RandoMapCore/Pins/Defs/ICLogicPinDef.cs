@@ -1,4 +1,5 @@
 using ItemChanger;
+using MapChanger;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 using UnityEngine;
@@ -104,6 +105,6 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
             return base.GetStatusText();
         }
 
-        return $"{base.GetStatusText()}, " + (Logic?.GetStatusTextFragment() ?? "unknown logic");
+        return $"{base.GetStatusText()}, " + (Logic?.GetStatusTextFragment() ?? "unknown logic".L());
     }
 }

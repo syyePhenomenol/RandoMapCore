@@ -9,9 +9,9 @@ internal class RandomizedPinDef(
     ProgressionManager pmNoSequenceBreak
 ) : ICLogicPinDef(placement, "Randomized", pm, pmNoSequenceBreak)
 {
-    private protected override string GetPreviewText()
+    private protected override string GetNeverObtainedText()
     {
-        return base.GetPreviewText()
+        return base.GetNeverObtainedText()
             ?.Replace("Pay ", "")
             ?.Replace("Once you own ", "")
             ?.Replace(", I'll gladly sell it to you.", "")

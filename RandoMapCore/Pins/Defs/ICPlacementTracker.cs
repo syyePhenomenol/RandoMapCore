@@ -7,22 +7,32 @@ namespace RandoMapCore.Pins;
 
 internal class ICPlacementTracker(AbstractPlacement placement)
 {
+    // Items that can be fully previewed without spoilers even if the placement isn't visited yet.
+    private readonly List<AbstractItem> _neverObtainedForcePreviewItems = [];
+
+    // Items of which name/sprite can be displayed without spoilers after visiting the placement.
     private readonly List<AbstractItem> _neverObtainedPreviewableItems = [];
+
+    // Items of which name/sprite cannot be displayed without spoilers after visiting the placement.
     private readonly List<AbstractItem> _neverObtainedUnpreviewableItems = [];
     private readonly List<AbstractItem> _everObtainedPersistentItems = [];
     private readonly List<AbstractItem> _everObtainedNonPersistentItems = [];
+
     private readonly List<AbstractItem> _activeItems = [];
 
     private bool _enqueueUpdateItems;
 
     internal PlacementState State { get; private set; }
 
-    // The following should all be mutually exclusive and sum to all items
-    internal ReadOnlyCollection<AbstractItem> NeverObtainedPreviewableItems => new(_neverObtainedPreviewableItems);
-    internal ReadOnlyCollection<AbstractItem> NeverObtainedUnpreviewableItems => new(_neverObtainedUnpreviewableItems);
-    internal ReadOnlyCollection<AbstractItem> EverObtainedPersistentItems => new(_everObtainedPersistentItems);
-    internal ReadOnlyCollection<AbstractItem> EverObtainedNonPersistentItems => new(_everObtainedNonPersistentItems);
+    // The following are used for text generation
+    internal IEnumerable<AbstractItem> ForcePreviewedItems => _neverObtainedForcePreviewItems;
+    internal IEnumerable<AbstractItem> NeverObtainedItems =>
+        _neverObtainedForcePreviewItems.Concat(_neverObtainedPreviewableItems).Concat(_neverObtainedUnpreviewableItems);
+    internal IEnumerable<AbstractItem> EverObtainedItems =>
+        _everObtainedNonPersistentItems.Concat(_everObtainedPersistentItems);
+    internal IEnumerable<AbstractItem> EverObtainedPersistentItems => _everObtainedPersistentItems;
 
+    // This is used primarily for getting the sprites
     internal ReadOnlyCollection<AbstractItem> ActiveItems => new(_activeItems);
 
     internal void EnqueueUpdateItems()
@@ -43,18 +53,23 @@ internal class ICPlacementTracker(AbstractPlacement placement)
 
     private void UpdateItems()
     {
+        _neverObtainedForcePreviewItems.Clear();
         _neverObtainedPreviewableItems.Clear();
         _neverObtainedUnpreviewableItems.Clear();
         _everObtainedPersistentItems.Clear();
         _everObtainedNonPersistentItems.Clear();
 
-        var placementPreviewed = placement.CanPreview() && placement.CheckVisitedAny(VisitState.Previewed);
+        var placementPreviewable = placement.CanPreviewName();
 
         foreach (var i in placement.Items)
         {
             if (!i.WasEverObtained())
             {
-                if ((placementPreviewed && i.CanPreview()) || SM.Of(i).Get(InteropProperties.ForceEnablePreview))
+                if (SM.Of(i).Get(InteropProperties.ForceEnablePreview))
+                {
+                    _neverObtainedForcePreviewItems.Add(i);
+                }
+                else if (placementPreviewable && i.CanPreviewName())
                 {
                     _neverObtainedPreviewableItems.Add(i);
                 }
@@ -81,12 +96,27 @@ internal class ICPlacementTracker(AbstractPlacement placement)
     {
         _activeItems.Clear();
 
-        if (_neverObtainedPreviewableItems.Any())
+        if (placement.CheckVisitedAny(VisitState.Previewed) && NeverObtainedItems.Any())
         {
-            State = PlacementState.Previewable;
+            State = PlacementState.Previewed;
+            _activeItems.AddRange(_neverObtainedForcePreviewItems);
             _activeItems.AddRange(_neverObtainedPreviewableItems);
+            if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
+            {
+                _activeItems.AddRange(_neverObtainedUnpreviewableItems);
+            }
         }
-        else if (_neverObtainedUnpreviewableItems.Any())
+        else if (_neverObtainedForcePreviewItems.Any())
+        {
+            State = PlacementState.ForcePreviewed;
+            _activeItems.AddRange(_neverObtainedForcePreviewItems);
+            if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
+            {
+                _activeItems.AddRange(_neverObtainedPreviewableItems);
+                _activeItems.AddRange(_neverObtainedUnpreviewableItems);
+            }
+        }
+        else if (_neverObtainedPreviewableItems.Any() || _neverObtainedUnpreviewableItems.Any())
         {
             State = PlacementState.NotCleared;
             if (RandoMapCoreMod.Data.EnableSpoilerToggle && RandoMapCoreMod.LS.SpoilerOn)
@@ -100,7 +130,7 @@ internal class ICPlacementTracker(AbstractPlacement placement)
             State = PlacementState.ClearedPersistent;
             if (RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.Persistent or ClearedPinsSetting.All)
             {
-                _activeItems.AddRange(EverObtainedPersistentItems);
+                _activeItems.AddRange(_everObtainedPersistentItems);
             }
         }
         else
@@ -108,8 +138,7 @@ internal class ICPlacementTracker(AbstractPlacement placement)
             State = PlacementState.Cleared;
             if (RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.All)
             {
-                _activeItems.AddRange(EverObtainedPersistentItems);
-                _activeItems.AddRange(EverObtainedNonPersistentItems);
+                _activeItems.AddRange(_everObtainedNonPersistentItems);
             }
         }
     }
@@ -117,10 +146,18 @@ internal class ICPlacementTracker(AbstractPlacement placement)
 
 internal enum PlacementState
 {
-    Previewable,
+    // The placement has been visited, and there are items with name/sprite that can be displayed
+    Previewed,
+
+    // The placement hasn't been visited but items can be force shown with name/sprite/cost
+    ForcePreviewed,
+
+    // The placement has items that haven't ever been obtained, and hasn't ever been previewed
     NotCleared,
 
     // The placement is cleared, but has persistent items that are currently obtainable
     ClearedPersistent,
+
+    // The placement is cleared with no persistent items currently obtainable
     Cleared,
 }

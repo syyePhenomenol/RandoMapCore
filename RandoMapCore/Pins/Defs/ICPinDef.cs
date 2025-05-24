@@ -85,7 +85,7 @@ internal abstract class ICPinDef : PinDef
 
         PoolsCollection = poolsCollection;
 
-        TextBuilders.AddRange([GetPreviewText, GetObtainedText, GetPersistentText, GetUnobtainedText]);
+        TextBuilders.AddRange([GetNeverObtainedText, GetObtainedText, GetPersistentText]);
     }
 
     internal string ModSource { get; }
@@ -115,7 +115,7 @@ internal abstract class ICPinDef : PinDef
 
     internal override bool ActiveByProgress()
     {
-        return State is PlacementState.Previewable or PlacementState.NotCleared
+        return State is PlacementState.Previewed or PlacementState.ForcePreviewed or PlacementState.NotCleared
             || (
                 State is PlacementState.ClearedPersistent
                 && RandoMapCoreMod.GS.ShowClearedPins is ClearedPinsSetting.Persistent or ClearedPinsSetting.All
@@ -133,6 +133,12 @@ internal abstract class ICPinDef : PinDef
                 .Select(g => g.First());
         }
 
+        // Placement is previewed without item previews enabled
+        if (State is PlacementState.Previewed)
+        {
+            return [RmcPinManager.Psm.GetSprite("Unknown")];
+        }
+
         return [RmcPinManager.Psm.GetLocationSprite(Placement)];
     }
 
@@ -140,7 +146,9 @@ internal abstract class ICPinDef : PinDef
     {
         return State switch
         {
-            PlacementState.Previewable => RmcColors.GetColor(RmcColorSetting.Pin_Previewed),
+            PlacementState.Previewed or PlacementState.ForcePreviewed => RmcColors.GetColor(
+                RmcColorSetting.Pin_Previewed
+            ),
             PlacementState.Cleared => RmcColors.GetColor(RmcColorSetting.Pin_Cleared),
             PlacementState.ClearedPersistent => RmcColors.GetColor(RmcColorSetting.Pin_Persistent),
             _ => RmcColors.GetColor(RmcColorSetting.Pin_Normal),
@@ -149,7 +157,7 @@ internal abstract class ICPinDef : PinDef
 
     internal override PinShape GetMixedPinShape()
     {
-        if (State is PlacementState.Previewable)
+        if (State is PlacementState.Previewed or PlacementState.ForcePreviewed)
         {
             return PinShape.Diamond;
         }
@@ -182,40 +190,87 @@ internal abstract class ICPinDef : PinDef
         return $"{"Status".L()}: {PoolsCollection}, "
             + State switch
             {
-                PlacementState.Previewable => "previewed".L(),
+                PlacementState.Previewed or PlacementState.ForcePreviewed => "previewed".L(),
                 PlacementState.NotCleared => "unchecked".L(),
                 PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
-                _ => "unknown",
+                _ => "unknown".L(),
             };
     }
 
-    private protected virtual string GetPreviewText()
+    private protected virtual string GetNeverObtainedText()
     {
-        var text = $"{"Previewed item(s)".L()}: ";
+        var canPreviewPlacementName = Placement.CanPreviewName();
+        var canPreviewPlacementCost = Placement.CanPreviewCost();
+        var placementCosts = Placement.GetCosts();
 
-        if (Placement.GetTagPreviewText() is var previewTexts && previewTexts.Any())
+        if (
+            RandoMapCoreMod.Data.EnableSpoilerToggle
+            && RandoMapCoreMod.LS.SpoilerOn
+            && ICPlacementTracker.NeverObtainedItems.Any()
+        )
         {
-            return text + string.Join(", ", previewTexts);
+            return GetItemTextWithPlacementCosts(
+                $"{"Spoiler item(s)".L()}: ",
+                ICPlacementTracker.NeverObtainedItems,
+                true
+            );
         }
 
-        // Default handler if tag isn't found
-        if (ICPlacementTracker.NeverObtainedPreviewableItems.Any())
+        if (State is PlacementState.Previewed)
         {
-            return text + string.Join(", ", ToStringList(ICPlacementTracker.NeverObtainedPreviewableItems));
+            return GetItemTextWithPlacementCosts(
+                $"{"Previewed item(s)".L()}: ",
+                ICPlacementTracker.NeverObtainedItems,
+                false
+            );
+        }
+
+        if (State is PlacementState.ForcePreviewed)
+        {
+            return GetItemTextWithPlacementCosts(
+                $"{"Previewed item(s)".L()}: ",
+                ICPlacementTracker.ForcePreviewedItems,
+                false
+            );
         }
 
         return null;
+
+        string GetItemTextWithPlacementCosts(string heading, IEnumerable<AbstractItem> items, bool spoilers)
+        {
+            var itemText = items.ToTextWithCost(
+                spoilers ? true
+                    : canPreviewPlacementName ? null
+                    : false,
+                spoilers ? true
+                    : canPreviewPlacementCost ? null
+                    : false
+            );
+
+            if (placementCosts is not null)
+            {
+                var placementCostText = string.Join(
+                    ", ",
+                    placementCosts.Select(c => c.ToCostText(spoilers || canPreviewPlacementCost))
+                );
+
+                if (items.Count() is 1)
+                {
+                    return heading + $"{itemText} - {placementCostText}";
+                }
+
+                return heading + $"({itemText}) - {placementCostText}";
+            }
+
+            return heading + itemText;
+        }
     }
 
     private protected virtual string GetObtainedText()
     {
-        var obtainedItems = ICPlacementTracker.EverObtainedPersistentItems.Concat(
-            ICPlacementTracker.EverObtainedNonPersistentItems
-        );
-
-        if (obtainedItems.Any())
+        if (ICPlacementTracker.EverObtainedItems.Any())
         {
-            return $"{"Obtained item(s)".L()}: {ToStringList(obtainedItems)}";
+            return $"{"Obtained item(s)".L()}: {ICPlacementTracker.EverObtainedItems.ToText(true)}";
         }
 
         return null;
@@ -225,28 +280,9 @@ internal abstract class ICPinDef : PinDef
     {
         if (ICPlacementTracker.EverObtainedPersistentItems.Any())
         {
-            return $"{"Available persistent item(s)".L()}: {ToStringList(ICPlacementTracker.EverObtainedPersistentItems)}";
+            return $"{"Available persistent item(s)".L()}: {ICPlacementTracker.EverObtainedPersistentItems.ToTextWithCost(true, true)}";
         }
 
         return null;
-    }
-
-    private protected virtual string GetUnobtainedText()
-    {
-        if (
-            RandoMapCoreMod.Data.EnableSpoilerToggle
-            && RandoMapCoreMod.LS.SpoilerOn
-            && ICPlacementTracker.NeverObtainedUnpreviewableItems.Any()
-        )
-        {
-            return $"{"Spoiler item(s)".L()}: {ToStringList(ICPlacementTracker.NeverObtainedUnpreviewableItems)}";
-        }
-
-        return null;
-    }
-
-    private string ToStringList(IEnumerable<AbstractItem> items)
-    {
-        return string.Join(", ", items.Select(i => i.GetPreviewName().LC()));
     }
 }
