@@ -1,13 +1,12 @@
 using ItemChanger;
 using ItemChanger.Locations;
-using ItemChanger.Placements;
 using MapChanger;
 using MapChanger.Defs;
 using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pins;
 
-internal class DefaultPropertyManager
+public class DefaultPropertyManager
 {
     private readonly Dictionary<string, RawLogicDef[]> _locationHints;
 
@@ -19,7 +18,7 @@ internal class DefaultPropertyManager
         );
     }
 
-    internal MapRoomPosition GetDefaultMapPosition(AbstractPlacement placement)
+    public MapRoomPosition GetDefaultMapPosition(AbstractPlacement placement)
     {
         if (GetDefaultMapPosition(placement.Name) is MapRoomPosition mrp)
         {
@@ -46,7 +45,7 @@ internal class DefaultPropertyManager
         return null;
     }
 
-    internal MapRoomPosition GetDefaultMapPosition(string name)
+    public MapRoomPosition GetDefaultMapPosition(string name)
     {
         if (MapChanger.Finder.TryGetLocation(name, out var mld))
         {
@@ -58,7 +57,7 @@ internal class DefaultPropertyManager
         return null;
     }
 
-    internal RawLogicDef[] GetDefaultLocationHints(string name)
+    public RawLogicDef[] GetDefaultLocationHints(string name)
     {
         if (_locationHints.TryGetValue(name, out var hints))
         {

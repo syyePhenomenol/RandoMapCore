@@ -79,7 +79,7 @@ public abstract class ItemRandoMode : RmcMapMode
     }
 }
 
-internal class FullMapMode : ItemRandoMode
+public class FullMapMode : ItemRandoMode
 {
     public override string ModeName => RmcMode.Full_Map.ToString().ToCleanName();
 
@@ -112,19 +112,19 @@ internal class FullMapMode : ItemRandoMode
     }
 }
 
-internal class AllPinsMode : ItemRandoMode
+public class AllPinsMode : ItemRandoMode
 {
     public override string ModeName => RmcMode.All_Pins.ToString().ToCleanName();
     public override bool FullMap => false;
 }
 
-internal class PinsOverAreaMode : ItemRandoMode
+public class PinsOverAreaMode : ItemRandoMode
 {
     public override string ModeName => RmcMode.Pins_Over_Area.ToString().ToCleanName();
     public override bool FullMap => false;
 }
 
-internal class PinsOverRoomMode : ItemRandoMode
+public class PinsOverRoomMode : ItemRandoMode
 {
     public override string ModeName => RmcMode.Pins_Over_Room.ToString().ToCleanName();
     public override bool FullMap => false;

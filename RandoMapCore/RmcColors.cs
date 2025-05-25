@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RandoMapCore;
 
-internal enum RmcColorSetting
+public enum RmcColorSetting
 {
     None,
 
@@ -57,7 +57,7 @@ internal enum RmcColorSetting
     Room_Debug,
 }
 
-internal class RmcColors : HookModule
+public class RmcColors : HookModule
 {
     internal static readonly RmcColorSetting[] PinBorderColors =
     [
@@ -98,7 +98,7 @@ internal class RmcColors : HookModule
             { RmcColorSetting.UI_Compass, new(1f, 1f, 1f, 0.83f) },
         };
 
-    internal static bool HasCustomColors { get; private set; } = false;
+    public static bool HasCustomColors { get; private set; } = false;
 
     public override void OnEnterGame()
     {
@@ -154,7 +154,7 @@ internal class RmcColors : HookModule
         _customColors = [];
     }
 
-    internal static Vector4 GetColor(RmcColorSetting rmcColor)
+    public static Vector4 GetColor(RmcColorSetting rmcColor)
     {
         if (_customColors.TryGetValue(rmcColor, out var customColor))
         {
@@ -174,7 +174,7 @@ internal class RmcColors : HookModule
         return Vector4.negativeInfinity;
     }
 
-    internal static Vector4 GetColor(ColorSetting mcColor)
+    public static Vector4 GetColor(ColorSetting mcColor)
     {
         if (Enum.TryParse(mcColor.ToString(), out RmcColorSetting rmcColor))
         {
@@ -184,7 +184,7 @@ internal class RmcColors : HookModule
         return Vector4.negativeInfinity;
     }
 
-    internal static Vector4 GetColorFromMapZone(MapZone mapZone)
+    public static Vector4 GetColorFromMapZone(MapZone mapZone)
     {
         return mapZone switch
         {
