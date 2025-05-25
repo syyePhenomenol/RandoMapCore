@@ -171,7 +171,7 @@ public abstract class RmcDataModule : HookModule
     /// Add extra buttons to the main pause menu.
     /// </summary>
     /// <returns></returns>
-    public virtual IEnumerable<RmcMainButton> GetPauseMenuMainButtons()
+    public virtual IEnumerable<MainButton> GetPauseMenuMainButtons()
     {
         return [];
     }
