@@ -1,3 +1,4 @@
+using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Input;
 
@@ -14,7 +15,7 @@ internal class BenchInfo(string name)
         IsActiveBench = RandoMapCoreMod.GS.ShowBenchwarpPins && IsVisitedBench;
     }
 
-    internal string GetBenchwarpText()
+    internal RunCollection GetBenchwarpText()
     {
         if (!IsActiveBench)
         {
@@ -22,6 +23,10 @@ internal class BenchInfo(string name)
         }
 
         var bindingsText = BenchwarpInput.Instance.GetBindingsText();
-        return $"{"Hold".L()} {bindingsText} {"to benchwarp".L()}.";
+        return [
+            new Run($"{"Hold".L()} "),
+            new Run(bindingsText),
+            new Run($"{"to benchwarp".L()}.")
+        ];
     }
 }

@@ -1,3 +1,4 @@
+using MagicUI.Elements;
 using MapChanger;
 using RandomizerCore.Logic;
 
@@ -51,9 +52,12 @@ public class LogicInfo
         };
     }
 
-    internal string GetLogicText()
+    internal RunCollection GetLogicText()
     {
-        return $"{"Logic".L()}: {_logic.InfixSource}";
+        return [
+            new Run($"{"Logic".L()}: "),
+            new Run(_logic.InfixSource),
+        ];
     }
 }
 

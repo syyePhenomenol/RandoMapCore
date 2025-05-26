@@ -1,6 +1,7 @@
 ﻿using ItemChanger;
 using ItemChanger.Placements;
 using ItemChanger.Tags;
+using MagicUI.Elements;
 using MapChanger;
 
 namespace RandoMapCore.Pins;
@@ -62,19 +63,28 @@ internal static class PlacementExtensions
         return costs.Any() ? costs : null;
     }
 
-    internal static string ToText(this IEnumerable<AbstractItem> items, bool? nameOverride)
+    internal static RunCollection ToText(this IEnumerable<AbstractItem> items, bool? nameOverride)
     {
-        return string.Join(", ", items.Select(i => i.ToText(nameOverride)));
+        return RunCollection.Join("  -  ", items.Select(i => i.ToText(nameOverride)));
     }
 
-    internal static string ToTextWithCost(this IEnumerable<AbstractItem> items, bool? nameOverride, bool? costOverride)
+    internal static RunCollection ToTextWithCost(this IEnumerable<AbstractItem> items, bool? nameOverride, bool? costOverride)
     {
-        return string.Join(", ", items.Select(i => i.ToTextWithCosts(nameOverride, costOverride)));
+        return RunCollection.Join("  -  ", items.Select(i => i.ToTextWithCosts(nameOverride, costOverride)));
     }
 
-    internal static string ToCostText(this Cost cost, bool revealCost)
+    internal static RunCollection ToCostText(this Cost cost, bool revealCost)
     {
-        return $"{(revealCost ? cost.GetCostText() : "???")} {(cost.CanPay() ? "☑" : "☒")}";
+        string costText = cost.GetCostText()
+            ?.Replace("Pay ", "")
+            ?.Replace("Once you own ", "")
+            ?.Replace(", I'll gladly sell it to you.", "")
+            ?.Replace("Requires ", "");
+        return [
+            new Run(revealCost ? costText : "???"),
+            new Run(" "),
+            new Run(cost.CanPay() ? "☑" : "☒")
+        ];
     }
 
     internal static bool IsPersistent(this AbstractItem item)
@@ -87,23 +97,29 @@ internal static class PlacementExtensions
         return placement.Items.All(i => i.WasEverObtained());
     }
 
-    private static string ToText(this AbstractItem item, bool? showNameOverride)
+    private static Run ToText(this AbstractItem item, bool? showNameOverride)
     {
-        return (showNameOverride is true || (showNameOverride is null && item.CanPreviewName()))
+        string text = (showNameOverride is true || (showNameOverride is null && item.CanPreviewName()))
             ? item.GetPreviewName().LC()
             : "???";
+        return new Run(text);
     }
 
-    private static string ToTextWithCosts(this AbstractItem item, bool? showNameOverride, bool? showCostOverride)
+    private static RunCollection ToTextWithCosts(this AbstractItem item, bool? showNameOverride, bool? showCostOverride)
     {
+        var itemText = item.ToText(showNameOverride) with { Bold = true };
         if (item.GetTag<CostTag>()?.Cost?.GetInnerCosts() is not IEnumerable<Cost> costs)
         {
-            return item.ToText(showNameOverride);
+            return [itemText];
         }
 
         var showCost = showCostOverride is true || (showCostOverride is null && item.CanPreviewCost());
-        var costText = string.Join(", ", costs.Select(c => c.ToCostText(showCost)));
-        return $"{item.ToText(showNameOverride)} - {costText}";
+        var costText = RunCollection.Join(", ", costs.Select(c => c.ToCostText(showCost)));
+        return [
+            itemText,
+            new Run(": "),
+            .. costText,
+        ];
     }
 
     private static IEnumerable<Cost> GetInnerCosts(this Cost cost)

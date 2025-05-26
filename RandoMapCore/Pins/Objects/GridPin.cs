@@ -1,10 +1,11 @@
-using System.Collections.ObjectModel;
+using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using MapChanger.Map;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Input;
 using RandoMapCore.Rooms;
+using System.Collections.ObjectModel;
 
 namespace RandoMapCore.Pins;
 
@@ -88,13 +89,19 @@ internal class GridPin : RmcPin
         return true;
     }
 
-    public string GetText(bool lockSelection)
+    public RunCollection GetText(bool lockSelection)
     {
         if (HighlightScenes is null)
         {
             return GetText();
         }
 
-        return $"{GetText()}\n\n{"Press".L()} {LockGridPinInput.Instance.GetBindingsText()} {(lockSelection ? "to unlock pin selection" : "to lock pin selection and view highlighted rooms").L()}.";
+        return [
+            .. GetText(),
+            new Run("\n\n"),
+            new Run($"{"Press".L()} "),
+            new Run(LockGridPinInput.Instance.GetBindingsText()),
+            new Run($" {(lockSelection ? "to unlock pin selection" : "to lock pin selection and view highlighted rooms").L()}."),
+        ];
     }
 }
