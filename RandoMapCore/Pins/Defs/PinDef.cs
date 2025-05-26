@@ -1,4 +1,5 @@
 using GlobalEnums;
+using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Modes;
@@ -23,7 +24,7 @@ internal abstract class PinDef
     internal IMapPosition MapPosition { get; init; }
     internal MapZone MapZone { get; init; } = MapZone.NONE;
 
-    private protected List<Func<string>> TextBuilders { get; } = [];
+    private protected List<Func<RunCollection>> TextBuilders { get; } = [];
 
     internal virtual void Update() { }
 
@@ -71,24 +72,31 @@ internal abstract class PinDef
         return RmcColors.GetColor(RmcColorSetting.Pin_Normal);
     }
 
-    public string GetText()
+    public RunCollection GetText()
     {
-        return string.Join("\n\n", TextBuilders.Select(tb => tb()).Where(t => t is not null));
+        return RunCollection.Join("\n\n", TextBuilders.Select(tb => tb()).Where(t => t is not null));
     }
 
-    private protected virtual string GetNameText()
+    private protected virtual RunCollection GetNameText()
     {
-        return Name.LC();
+        return [new Run(Name.LC())];
     }
 
-    private protected virtual string GetRoomText()
+    private protected virtual RunCollection GetRoomText()
     {
-        return $"{"Room".L()}: {SceneName?.LC() ?? "Unknown".L()}";
+        var sceneText = new Run(SceneName?.LC() ?? "Unknown".L());
+        return [
+            new Run($"{"Room".L()}: "),
+            sceneText,
+        ];
     }
 
-    private protected virtual string GetStatusText()
+    private protected virtual RunCollection GetStatusText()
     {
-        return $"{"Status".L()}: {"Unknown".L()}";
+        return [
+            new Run($"{"Status".L()}: "),
+            new Run("Unknown".L()),
+        ];
     }
 
     internal virtual float GetZPriority()

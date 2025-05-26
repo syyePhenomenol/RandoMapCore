@@ -39,10 +39,10 @@ internal class PinSelectionPanel : WorldMapPanel
     {
         base.Update();
 
-        if (RandoMapCoreMod.GS.PinSelectionOn && RmcPinManager.Selector?.GetSelectionText() is string text)
+        if (RandoMapCoreMod.GS.PinSelectionOn && RmcPinManager.Selector?.GetSelectionText() is RunCollection inlines)
         {
             Panel.Visibility = Visibility.Visible;
-            _text.Text = text;
+            _text.Inlines = inlines;
             _text.FontSize = (int)(20f * MapChangerMod.GS.UIScale);
             _text.MaxWidth = (int)(450f * MapChangerMod.GS.UIScale);
         }

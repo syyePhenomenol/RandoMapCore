@@ -1,4 +1,5 @@
 using ItemChanger;
+using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
@@ -98,13 +99,17 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
         return base.GetZPriority() + (10f * (int)(Logic?.State ?? LogicState.Unreachable));
     }
 
-    private protected override string GetStatusText()
+    private protected override RunCollection GetStatusText()
     {
         if (State is PlacementState.Cleared)
         {
             return base.GetStatusText();
         }
 
-        return $"{base.GetStatusText()}, " + (Logic?.GetStatusTextFragment() ?? "unknown logic".L());
+        return [
+            .. base.GetStatusText(),
+            new Run(", "),
+            new Run(Logic?.GetStatusTextFragment() ?? "unknown logic".L())
+        ];
     }
 }

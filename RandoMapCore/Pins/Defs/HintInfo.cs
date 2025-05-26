@@ -1,3 +1,4 @@
+using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Input;
 using RandoMapCore.UI;
@@ -36,7 +37,7 @@ public class HintInfo
         _text = string.Join("\n", _logicDefs.Where(ld => ld.CanGet(_pm)).Select(ld => ld.Name.L()));
     }
 
-    internal string GetHintText()
+    internal RunCollection GetHintText()
     {
         if (_text == string.Empty)
         {
@@ -45,10 +46,14 @@ public class HintInfo
 
         if (PinSelectionPanel.Instance?.ShowHint ?? false)
         {
-            return _text;
+            return [new Run(_text)];
         }
 
         var bindingsText = LocationHintInput.Instance.GetBindingsText();
-        return $"{"Press".L()} {bindingsText} {"to reveal location hint".L()}.";
+        return [
+            new Run($"{"Press".L()} "),
+            new Run(bindingsText),
+            new Run($" {"to reveal location hint".L()}."),
+        ];
     }
 }

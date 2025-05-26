@@ -1,3 +1,4 @@
+using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Settings;
@@ -89,8 +90,11 @@ internal class BenchPinDef : PinDef
         return base.GetZPriority();
     }
 
-    private protected override string GetStatusText()
+    private protected override RunCollection GetStatusText()
     {
-        return $"{"Status".L()}: {(Bench.IsVisitedBench ? "Can warp" : "Cannot warp").L()}";
+        return [
+            new Run($"{"Status".L()}: "),
+            new Run((Bench.IsVisitedBench ? "Can warp" : "Cannot warp").L())
+        ];
     }
 }

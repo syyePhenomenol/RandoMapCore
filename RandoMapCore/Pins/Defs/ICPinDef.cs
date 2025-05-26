@@ -1,5 +1,6 @@
 using ConnectionMetadataInjector;
 using ItemChanger;
+using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Settings;
@@ -175,29 +176,37 @@ internal abstract class ICPinDef : PinDef
         return (int)State;
     }
 
-    private protected override string GetRoomText()
+    private protected override RunCollection GetRoomText()
     {
         if (HighlightScenes is not null && HighlightScenes.Any())
         {
-            return $"{"Rooms".L()}: {string.Join(", ", HighlightScenes)}";
+            return [
+                new Run($"{"Rooms".L()}: "),
+                .. RunCollection.Join(", ", HighlightScenes.Select(s => new Run(s)))
+            ];
         }
 
         return base.GetRoomText();
     }
 
-    private protected override string GetStatusText()
+    private protected override RunCollection GetStatusText()
     {
-        return $"{"Status".L()}: {PoolsCollection}, "
-            + State switch
-            {
-                PlacementState.Previewed or PlacementState.ForcePreviewed => "previewed".L(),
-                PlacementState.NotCleared => "unchecked".L(),
-                PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
-                _ => "unknown".L(),
-            };
+        var stateText = new Run(State switch
+        {
+            PlacementState.Previewed or PlacementState.ForcePreviewed => "previewed".L(),
+            PlacementState.NotCleared => "unchecked".L(),
+            PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
+            _ => "unknown".L(),
+        });
+        return [
+            new Run($"{"Status".L()}: "),
+            new Run(PoolsCollection),
+            new Run(", "),
+            stateText
+        ];
     }
 
-    private protected virtual string GetNeverObtainedText()
+    private protected virtual RunCollection GetNeverObtainedText()
     {
         var canPreviewPlacementName = Placement.CanPreviewName();
         var canPreviewPlacementCost = Placement.CanPreviewCost();
@@ -236,7 +245,7 @@ internal abstract class ICPinDef : PinDef
 
         return null;
 
-        string GetItemTextWithPlacementCosts(string heading, IEnumerable<AbstractItem> items, bool spoilers)
+        RunCollection GetItemTextWithPlacementCosts(string heading, IEnumerable<AbstractItem> items, bool spoilers)
         {
             var itemText = items.ToTextWithCost(
                 spoilers ? true
@@ -249,38 +258,44 @@ internal abstract class ICPinDef : PinDef
 
             if (placementCosts is not null)
             {
-                var placementCostText = string.Join(
+                var placementCostText = RunCollection.Join(
                     ", ",
                     placementCosts.Select(c => c.ToCostText(spoilers || canPreviewPlacementCost))
                 );
 
                 if (items.Count() is 1)
                 {
-                    return heading + $"{itemText} - {placementCostText}";
+                    return [new Run(heading), .. itemText, new Run(": "), .. placementCostText];
                 }
 
-                return heading + $"({itemText}) - {placementCostText}";
+                return [new Run(heading), new Run("("), .. itemText, new Run("): "), .. placementCostText];
             }
 
-            return heading + itemText;
+            return [new Run(heading), .. itemText];
         }
     }
 
-    private protected virtual string GetObtainedText()
+    private protected virtual RunCollection GetObtainedText()
     {
         if (ICPlacementTracker.EverObtainedItems.Any())
         {
-            return $"{"Obtained item(s)".L()}: {ICPlacementTracker.EverObtainedItems.ToText(true)}";
+            return [
+                new Run($"{"Obtained item(s)".L()}: "),
+                .. ICPlacementTracker.EverObtainedItems.ToText(true)
+            ];
         }
 
         return null;
     }
 
-    private protected virtual string GetPersistentText()
+    private protected virtual RunCollection GetPersistentText()
     {
         if (ICPlacementTracker.EverObtainedPersistentItems.Any())
         {
-            return $"{"Available persistent item(s)".L()}: {ICPlacementTracker.EverObtainedPersistentItems.ToTextWithCost(true, true)}";
+            return [
+                new Run($"{"Available persistent item(s)".L()}: "),
+                .. ICPlacementTracker.EverObtainedPersistentItems.ToTextWithCost(true, true)
+            ];
         }
 
         return null;
