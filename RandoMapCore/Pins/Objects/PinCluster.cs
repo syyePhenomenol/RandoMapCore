@@ -63,7 +63,9 @@ internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(se
             new Run("\n\n"),
             new Run($"{"Press".L()} "),
             new Run(TogglePinClusterInput.Instance.GetBindingsText()),
-            new Run($" {nextPin.Name.LC()}."),
+            new Run($" {"to toggle selected pin to".L()} "),
+            new Run(nextPin.Name.LC()),
+            new Run("."),
         ];
     }
 }

@@ -26,7 +26,7 @@ internal class BenchInfo(string name)
         [
             new Run($"{"Hold".L()} "),
             new Run(BenchwarpInput.Instance.GetBindingsText()),
-            new Run($"{"to benchwarp".L()}."),
+            new Run($" {"to benchwarp".L()}."),
         ];
     }
 }
