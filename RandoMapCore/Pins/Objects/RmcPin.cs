@@ -1,4 +1,5 @@
 using System.Collections;
+using MagicUI.Elements;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Settings;
 using UnityEngine;
@@ -248,7 +249,7 @@ internal class RmcPin : BorderedBackgroundPin, ISelectable, IPeriodicUpdater
         }
     }
 
-    internal string GetText()
+    internal RunCollection GetText()
     {
         return Def.GetText();
     }

@@ -1,3 +1,4 @@
+using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Input;
 
@@ -41,7 +42,7 @@ internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(se
         }
     }
 
-    internal string GetText()
+    internal RunCollection GetText()
     {
         if (!_sortedPins.Any())
         {
@@ -56,7 +57,15 @@ internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(se
 
         var nextPin = _sortedPins[(_selectionIndex + 1) % _sortedPins.Length];
 
-        var bindingsText = TogglePinClusterInput.Instance.GetBindingsText();
-        return $"{SelectedPin.GetText()}\n\n{"Press".L()} {bindingsText} {"to toggle selected pin to".L()} {nextPin.Name.LC()}.";
+        return
+        [
+            .. SelectedPin.GetText(),
+            new Run("\n\n"),
+            new Run($"{"Press".L()} "),
+            new Run(TogglePinClusterInput.Instance.GetBindingsText()),
+            new Run($" {"to toggle selected pin to".L()} "),
+            new Run(nextPin.Name.LC()),
+            new Run("."),
+        ];
     }
 }

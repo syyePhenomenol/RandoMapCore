@@ -1,4 +1,5 @@
-﻿using MapChanger;
+﻿using MagicUI.Elements;
+using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Modes;
 using RandoMapCore.UI;
@@ -66,7 +67,7 @@ internal class PinSelector : Selector
         RmcUIManager.WorldMap?.Update();
     }
 
-    internal string GetSelectionText()
+    internal RunCollection GetSelectionText()
     {
         return SelectedObject switch
         {

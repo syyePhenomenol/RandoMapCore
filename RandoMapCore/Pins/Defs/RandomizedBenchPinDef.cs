@@ -1,4 +1,5 @@
 using ItemChanger;
+using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
@@ -90,8 +91,13 @@ internal sealed class RandomizedBenchPinDef : RandomizedPinDef
         return base.GetZPriority();
     }
 
-    private protected override string GetStatusText()
+    private protected override RunCollection GetStatusText()
     {
-        return $"{base.GetStatusText()}, {(Bench.IsVisitedBench ? "can warp" : "cannot warp").L()}";
+        return
+        [
+            .. base.GetStatusText(),
+            new Run(", "),
+            new Run((Bench.IsVisitedBench ? "can warp" : "cannot warp").L()),
+        ];
     }
 }

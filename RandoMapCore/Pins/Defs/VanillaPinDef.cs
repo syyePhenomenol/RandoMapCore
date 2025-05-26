@@ -1,4 +1,5 @@
 using ConnectionMetadataInjector.Util;
+using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Data;
@@ -129,28 +130,28 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
         return base.GetMixedPinShape();
     }
 
-    private protected override string GetStatusText()
+    private protected override RunCollection GetStatusText()
     {
-        var text = $"{"Status".L()}: {"Vanilla".L()}, ";
+        List<string> statuses = ["Vanilla".L()];
 
         if (Tracker.HasClearedLocation(Name))
         {
-            text += "cleared".L();
+            statuses.Add("cleared".L());
         }
         else
         {
             if (Persistent)
             {
-                text += "persistent".L();
+                statuses.Add("persistent".L());
             }
             else
             {
-                text += "not cleared".L();
+                statuses.Add("not cleared".L());
             }
 
-            text += ", " + (Logic?.GetStatusTextFragment() ?? "unknown logic".L());
+            statuses.Add(Logic?.GetStatusTextFragment() ?? "unknown logic".L());
         }
 
-        return text;
+        return [new Run($"{"Status".L()}: "), .. RunCollection.Join(", ", statuses.Select(s => new Run(s)))];
     }
 }
