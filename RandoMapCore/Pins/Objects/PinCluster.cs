@@ -57,12 +57,12 @@ internal class PinCluster(List<RmcPin> selectables) : SelectableGroup<RmcPin>(se
 
         var nextPin = _sortedPins[(_selectionIndex + 1) % _sortedPins.Length];
 
-        var bindingsText = TogglePinClusterInput.Instance.GetBindingsText();
-        return [
+        return
+        [
             .. SelectedPin.GetText(),
             new Run("\n\n"),
             new Run($"{"Press".L()} "),
-            new Run(bindingsText),
+            new Run(TogglePinClusterInput.Instance.GetBindingsText()),
             new Run($" {nextPin.Name.LC()}."),
         ];
     }

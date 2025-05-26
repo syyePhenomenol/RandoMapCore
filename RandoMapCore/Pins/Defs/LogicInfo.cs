@@ -54,10 +54,7 @@ public class LogicInfo
 
     internal RunCollection GetLogicText()
     {
-        return [
-            new Run($"{"Logic".L()}: "),
-            new Run(_logic.InfixSource),
-        ];
+        return [new Run($"{"Logic".L()}: "), new Run(_logic.InfixSource)];
     }
 }
 

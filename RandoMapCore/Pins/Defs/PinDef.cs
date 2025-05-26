@@ -84,19 +84,12 @@ internal abstract class PinDef
 
     private protected virtual RunCollection GetRoomText()
     {
-        var sceneText = new Run(SceneName?.LC() ?? "Unknown".L());
-        return [
-            new Run($"{"Room".L()}: "),
-            sceneText,
-        ];
+        return [new Run($"{"Room".L()}: "), new Run(SceneName?.LC() ?? "Unknown".L())];
     }
 
     private protected virtual RunCollection GetStatusText()
     {
-        return [
-            new Run($"{"Status".L()}: "),
-            new Run("Unknown".L()),
-        ];
+        return [new Run($"{"Status".L()}: "), new Run("Unknown".L())];
     }
 
     internal virtual float GetZPriority()

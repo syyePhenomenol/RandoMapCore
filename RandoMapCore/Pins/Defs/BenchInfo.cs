@@ -22,11 +22,11 @@ internal class BenchInfo(string name)
             return null;
         }
 
-        var bindingsText = BenchwarpInput.Instance.GetBindingsText();
-        return [
+        return
+        [
             new Run($"{"Hold".L()} "),
-            new Run(bindingsText),
-            new Run($"{"to benchwarp".L()}.")
+            new Run(BenchwarpInput.Instance.GetBindingsText()),
+            new Run($"{"to benchwarp".L()}."),
         ];
     }
 }

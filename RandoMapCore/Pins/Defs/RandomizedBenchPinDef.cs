@@ -93,10 +93,11 @@ internal sealed class RandomizedBenchPinDef : RandomizedPinDef
 
     private protected override RunCollection GetStatusText()
     {
-        return [
+        return
+        [
             .. base.GetStatusText(),
             new Run(", "),
-            new Run((Bench.IsVisitedBench ? "can warp" : "cannot warp").L())
+            new Run((Bench.IsVisitedBench ? "can warp" : "cannot warp").L()),
         ];
     }
 }

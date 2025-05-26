@@ -50,10 +50,6 @@ public class HintInfo
         }
 
         var bindingsText = LocationHintInput.Instance.GetBindingsText();
-        return [
-            new Run($"{"Press".L()} "),
-            new Run(bindingsText),
-            new Run($" {"to reveal location hint".L()}."),
-        ];
+        return [new Run($"{"Press".L()} "), new Run(bindingsText), new Run($" {"to reveal location hint".L()}.")];
     }
 }

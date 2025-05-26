@@ -1,7 +1,7 @@
+using System.Collections;
 using MagicUI.Elements;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Settings;
-using System.Collections;
 using UnityEngine;
 
 namespace RandoMapCore.Pins;

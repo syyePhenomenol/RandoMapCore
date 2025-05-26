@@ -92,9 +92,6 @@ internal class BenchPinDef : PinDef
 
     private protected override RunCollection GetStatusText()
     {
-        return [
-            new Run($"{"Status".L()}: "),
-            new Run((Bench.IsVisitedBench ? "Can warp" : "Cannot warp").L())
-        ];
+        return [new Run($"{"Status".L()}: "), new Run((Bench.IsVisitedBench ? "Can warp" : "Cannot warp").L())];
     }
 }

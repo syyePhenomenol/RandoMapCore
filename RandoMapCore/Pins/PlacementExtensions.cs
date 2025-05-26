@@ -68,22 +68,34 @@ internal static class PlacementExtensions
         return RunCollection.Join("  -  ", items.Select(i => i.ToText(nameOverride)));
     }
 
-    internal static RunCollection ToTextWithCost(this IEnumerable<AbstractItem> items, bool? nameOverride, bool? costOverride)
+    internal static RunCollection ToTextWithCosts(
+        this IEnumerable<AbstractItem> items,
+        bool? nameOverride,
+        bool? costOverride,
+        bool canPayPlacement
+    )
     {
-        return RunCollection.Join("  -  ", items.Select(i => i.ToTextWithCosts(nameOverride, costOverride)));
+        return RunCollection.Join(
+            "  -  ",
+            items.Select(i => i.ToTextWithCosts(nameOverride, costOverride, canPayPlacement))
+        );
     }
 
     internal static RunCollection ToCostText(this Cost cost, bool revealCost)
     {
-        string costText = cost.GetCostText()
+        var costText = cost.GetCostText()
             ?.Replace("Pay ", "")
             ?.Replace("Once you own ", "")
             ?.Replace(", I'll gladly sell it to you.", "")
             ?.Replace("Requires ", "");
-        return [
+
+        var canPay = cost.CanPay();
+
+        return
+        [
             new Run(revealCost ? costText : "???"),
             new Run(" "),
-            new Run(cost.CanPay() ? "☑" : "☒")
+            new Run(cost.CanPay() ? "☑" : "☒") { Color = canPay ? RmcColors.GetColor(RmcColorSetting.UI_On) : null },
         ];
     }
 
@@ -99,24 +111,37 @@ internal static class PlacementExtensions
 
     private static Run ToText(this AbstractItem item, bool? showNameOverride)
     {
-        string text = (showNameOverride is true || (showNameOverride is null && item.CanPreviewName()))
-            ? item.GetPreviewName().LC()
-            : "???";
+        var text =
+            (showNameOverride is true || (showNameOverride is null && item.CanPreviewName()))
+                ? item.GetPreviewName().LC()
+                : "???";
         return new Run(text);
     }
 
-    private static RunCollection ToTextWithCosts(this AbstractItem item, bool? showNameOverride, bool? showCostOverride)
+    private static RunCollection ToTextWithCosts(
+        this AbstractItem item,
+        bool? showNameOverride,
+        bool? showCostOverride,
+        bool canPayPlacement
+    )
     {
         var itemText = item.ToText(showNameOverride) with { Bold = true };
+
         if (item.GetTag<CostTag>()?.Cost?.GetInnerCosts() is not IEnumerable<Cost> costs)
         {
-            return [itemText];
+            return [itemText with { Color = canPayPlacement ? RmcColors.GetColor(RmcColorSetting.UI_On) : null }];
         }
 
         var showCost = showCostOverride is true || (showCostOverride is null && item.CanPreviewCost());
         var costText = RunCollection.Join(", ", costs.Select(c => c.ToCostText(showCost)));
-        return [
-            itemText,
+
+        return
+        [
+            itemText with
+            {
+                Color =
+                    (canPayPlacement && costs.All(c => c.CanPay())) ? RmcColors.GetColor(RmcColorSetting.UI_On) : null,
+            },
             new Run(": "),
             .. costText,
         ];

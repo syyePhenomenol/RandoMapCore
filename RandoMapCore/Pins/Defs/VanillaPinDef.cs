@@ -132,8 +132,7 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
 
     private protected override RunCollection GetStatusText()
     {
-        var statuses = new List<string>();
-        statuses.Add("Vanilla".L());
+        List<string> statuses = ["Vanilla".L()];
 
         if (Tracker.HasClearedLocation(Name))
         {
@@ -153,9 +152,6 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
             statuses.Add(Logic?.GetStatusTextFragment() ?? "unknown logic".L());
         }
 
-        return [
-            new Run($"{"Status".L()}: "),
-            .. RunCollection.Join(", ", statuses.Select(s => new Run(s))),
-        ];
+        return [new Run($"{"Status".L()}: "), .. RunCollection.Join(", ", statuses.Select(s => new Run(s)))];
     }
 }

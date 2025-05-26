@@ -180,10 +180,7 @@ internal abstract class ICPinDef : PinDef
     {
         if (HighlightScenes is not null && HighlightScenes.Any())
         {
-            return [
-                new Run($"{"Rooms".L()}: "),
-                .. RunCollection.Join(", ", HighlightScenes.Select(s => new Run(s)))
-            ];
+            return [new Run($"{"Rooms".L()}: "), .. RunCollection.Join(", ", HighlightScenes.Select(s => new Run(s)))];
         }
 
         return base.GetRoomText();
@@ -191,19 +188,16 @@ internal abstract class ICPinDef : PinDef
 
     private protected override RunCollection GetStatusText()
     {
-        var stateText = new Run(State switch
-        {
-            PlacementState.Previewed or PlacementState.ForcePreviewed => "previewed".L(),
-            PlacementState.NotCleared => "unchecked".L(),
-            PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
-            _ => "unknown".L(),
-        });
-        return [
-            new Run($"{"Status".L()}: "),
-            new Run(PoolsCollection),
-            new Run(", "),
-            stateText
-        ];
+        var stateText = new Run(
+            State switch
+            {
+                PlacementState.Previewed or PlacementState.ForcePreviewed => "previewed".L(),
+                PlacementState.NotCleared => "unchecked".L(),
+                PlacementState.ClearedPersistent or PlacementState.Cleared => "cleared".L(),
+                _ => "unknown".L(),
+            }
+        );
+        return [new Run($"{"Status".L()}: "), new Run(PoolsCollection), new Run(", "), stateText];
     }
 
     private protected virtual RunCollection GetNeverObtainedText()
@@ -211,6 +205,7 @@ internal abstract class ICPinDef : PinDef
         var canPreviewPlacementName = Placement.CanPreviewName();
         var canPreviewPlacementCost = Placement.CanPreviewCost();
         var placementCosts = Placement.GetCosts();
+        var canPayPlacement = placementCosts?.All(c => c.CanPay()) ?? true;
 
         if (
             RandoMapCoreMod.Data.EnableSpoilerToggle
@@ -247,31 +242,32 @@ internal abstract class ICPinDef : PinDef
 
         RunCollection GetItemTextWithPlacementCosts(string heading, IEnumerable<AbstractItem> items, bool spoilers)
         {
-            var itemText = items.ToTextWithCost(
+            var itemText = items.ToTextWithCosts(
                 spoilers ? true
                     : canPreviewPlacementName ? null
                     : false,
                 spoilers ? true
                     : canPreviewPlacementCost ? null
-                    : false
+                    : false,
+                canPayPlacement
             );
 
-            if (placementCosts is not null)
+            if (placementCosts is null)
             {
-                var placementCostText = RunCollection.Join(
-                    ", ",
-                    placementCosts.Select(c => c.ToCostText(spoilers || canPreviewPlacementCost))
-                );
-
-                if (items.Count() is 1)
-                {
-                    return [new Run(heading), .. itemText, new Run(": "), .. placementCostText];
-                }
-
-                return [new Run(heading), new Run("("), .. itemText, new Run("): "), .. placementCostText];
+                return [new Run(heading), .. itemText];
             }
 
-            return [new Run(heading), .. itemText];
+            var placementCostText = RunCollection.Join(
+                ", ",
+                placementCosts.Select(c => c.ToCostText(spoilers || canPreviewPlacementCost))
+            );
+
+            if (items.Count() is 1)
+            {
+                return [new Run(heading), .. itemText, new Run(": "), .. placementCostText];
+            }
+
+            return [new Run(heading), new Run("("), .. itemText, new Run("): "), .. placementCostText];
         }
     }
 
@@ -279,10 +275,7 @@ internal abstract class ICPinDef : PinDef
     {
         if (ICPlacementTracker.EverObtainedItems.Any())
         {
-            return [
-                new Run($"{"Obtained item(s)".L()}: "),
-                .. ICPlacementTracker.EverObtainedItems.ToText(true)
-            ];
+            return [new Run($"{"Obtained item(s)".L()}: "), .. ICPlacementTracker.EverObtainedItems.ToText(true)];
         }
 
         return null;
@@ -290,11 +283,14 @@ internal abstract class ICPinDef : PinDef
 
     private protected virtual RunCollection GetPersistentText()
     {
+        var canPayPlacement = Placement.GetCosts()?.All(c => c.CanPay()) ?? true;
+
         if (ICPlacementTracker.EverObtainedPersistentItems.Any())
         {
-            return [
+            return
+            [
                 new Run($"{"Available persistent item(s)".L()}: "),
-                .. ICPlacementTracker.EverObtainedPersistentItems.ToTextWithCost(true, true)
+                .. ICPlacementTracker.EverObtainedPersistentItems.ToTextWithCosts(true, true, canPayPlacement),
             ];
         }
 
