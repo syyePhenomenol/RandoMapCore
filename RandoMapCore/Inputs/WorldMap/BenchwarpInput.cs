@@ -17,7 +17,10 @@ internal class BenchwarpInput : RmcWorldMapInput
     public override bool UseCondition()
     {
         return base.UseCondition()
-            && (RandoMapCoreMod.Data.EnablePinSelection || RandoMapCoreMod.Data.EnableRoomSelection)
+            && (
+                RandoMapCoreMod.Data.EnablePinSelection
+                || (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
+            )
             && RandoMapCoreMod.Data.EnableMapBenchwarp
             && Interop.HasBenchwarp;
     }
@@ -27,7 +30,11 @@ internal class BenchwarpInput : RmcWorldMapInput
         return base.ActiveCondition()
             && (
                 (RandoMapCoreMod.Data.EnablePinSelection && RandoMapCoreMod.GS.PinSelectionOn)
-                || (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.GS.RoomSelectionOn)
+                || (
+                    RandoMapCoreMod.Data.EnableRoomSelection
+                    && RandoMapCoreMod.Data.EnablePathfinder
+                    && RandoMapCoreMod.GS.RoomSelectionOn
+                )
             );
     }
 
@@ -50,7 +57,11 @@ internal class BenchwarpInput : RmcWorldMapInput
             }
         }
 
-        if (RandoMapCoreMod.Data.EnableRoomSelection && TryGetBenchwarpFromRoute(out var benchKey))
+        if (
+            RandoMapCoreMod.Data.EnableRoomSelection
+            && RandoMapCoreMod.Data.EnablePathfinder
+            && TryGetBenchwarpFromRoute(out var benchKey)
+        )
         {
             _ = GameManager.instance.StartCoroutine(BenchwarpInterop.DoBenchwarp(benchKey));
         }

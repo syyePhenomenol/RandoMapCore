@@ -1,3 +1,4 @@
+using RandomizerCore;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
 using RCPathfinder.Logic;
@@ -5,8 +6,8 @@ using SN = ItemChanger.SceneNames;
 
 namespace RandoMapCore.Pathfinder;
 
-internal class RmcProgressionSynchronizer(ProgressionManager reference, RmcLogicExtender logicExtender)
-    : ProgressionSynchronizer(reference, logicExtender)
+internal class RmcProgressionSynchronizer(RmcLogicExtender logicExtender, RandoContext ctx, bool sequenceBreak)
+    : ProgressionSynchronizer(logicExtender, ctx)
 {
     private static readonly (string term, string pdBool)[] _pdBoolTerms =
     [
@@ -38,6 +39,9 @@ internal class RmcProgressionSynchronizer(ProgressionManager reference, RmcLogic
         ("RMC_Waterways_Acid", nameof(PlayerData.waterwaysAcidDrained)),
         ("RMC_Infected", nameof(PlayerData.crossroadsInfected)),
     ];
+
+    public override ProgressionManager ReferencePM =>
+        sequenceBreak ? RandoMapCoreMod.Data.PM : RandoMapCoreMod.Data.PMNoSequenceBreak;
 
     protected override void ManuallyUpdateTerms()
     {

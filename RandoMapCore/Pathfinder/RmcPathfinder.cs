@@ -1,4 +1,5 @@
-﻿using MapChanger;
+﻿using HutongGames.PlayMaker.Actions;
+using MapChanger;
 using RandomizerCore.Logic;
 using RCPathfinder;
 
@@ -11,34 +12,32 @@ public class RmcPathfinder : HookModule
     internal static RmcProgressionSynchronizer PS { get; private set; }
     internal static RmcProgressionSynchronizer PSNoSequenceBreak { get; private set; }
     internal static StateSynchronizer StateSync { get; private set; }
-    internal static RouteManager RM { get; private set; }
     internal static InstructionTracker IT { get; private set; }
     internal static SceneLogicTracker Slt { get; private set; }
+    internal static RouteManager RM { get; private set; }
 
     public override void OnEnterGame()
     {
         LE = new(RandoMapCoreMod.Data.PM.lm);
         SD = new(LE.LocalLM);
-
-        PS = new(RandoMapCoreMod.Data.PM, LE);
-        PSNoSequenceBreak = new(RandoMapCoreMod.Data.PMNoSequenceBreak, LE);
+        PS = new(LE, RandoMapCoreMod.Data.Context, true);
+        PSNoSequenceBreak = new(LE, RandoMapCoreMod.Data.Context, false);
         StateSync = new(LE.LocalLM.StateManager);
+        IT = new(SD);
+        Slt = new(SD, PS.LocalPM, PSNoSequenceBreak.LocalPM);
+
+        Events.OnWorldMap += OnWorldMap;
+        Events.OnQuickMap += OnQuickMap;
+
+        Data.PlacementTracker.Update += OnPlacementTrackerUpdate;
+        ItemChanger.Events.OnBeginSceneTransition += OnBeginSceneTransition;
 
         if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
             RM = new();
-            IT = new(SD, RM);
-
-            ItemChanger.Events.OnBeginSceneTransition += OnBeginSceneTransition;
             ModeManager.OnModeChanged += RM.ResetRoute;
-            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += IT.TrackDreamgateSet;
-            Data.PlacementTracker.Update += OnPlacementTrackerUpdate;
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter += TrackDreamgateSet;
         }
-
-        Slt = new();
-
-        Events.OnWorldMap += OnWorldMap;
-        Events.OnQuickMap += OnQuickMap;
 
         // Testing.LogProgressionData();
         // Testing.DebugActions();
@@ -50,23 +49,24 @@ public class RmcPathfinder : HookModule
     {
         if (RandoMapCoreMod.Data.EnableRoomSelection && RandoMapCoreMod.Data.EnablePathfinder)
         {
-            ItemChanger.Events.OnBeginSceneTransition -= OnBeginSceneTransition;
             ModeManager.OnModeChanged -= RM.ResetRoute;
-            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= IT.TrackDreamgateSet;
-            Data.PlacementTracker.Update -= OnPlacementTrackerUpdate;
+            On.HutongGames.PlayMaker.Actions.SetPlayerDataString.OnEnter -= TrackDreamgateSet;
         }
 
         Events.OnWorldMap -= OnWorldMap;
         Events.OnQuickMap -= OnQuickMap;
+
+        Data.PlacementTracker.Update -= OnPlacementTrackerUpdate;
+        ItemChanger.Events.OnBeginSceneTransition -= OnBeginSceneTransition;
 
         LE = null;
         SD = null;
         PS = null;
         PSNoSequenceBreak = null;
         StateSync = null;
-        RM = null;
         IT = null;
         Slt = null;
+        RM = null;
     }
 
     internal static ProgressionManager GetLocalPM()
@@ -74,41 +74,57 @@ public class RmcPathfinder : HookModule
         return RandoMapCoreMod.GS.PathfinderOutOfLogic ? PS.LocalPM : PSNoSequenceBreak.LocalPM;
     }
 
-    private static void OnPlacementTrackerUpdate()
-    {
-        PSNoSequenceBreak.Update();
-        IT.UpdateSequenceBreakActions();
-    }
-
-    private static void OnBeginSceneTransition(ItemChanger.Transition transition)
-    {
-        Update();
-        IT.TrackAction(transition);
-        RM.CheckRoute(transition);
-    }
-
     private static void OnWorldMap(GameMap _)
     {
-        Update();
+        UpdateLocalProgression();
+        Slt.Update();
     }
 
     private static void OnQuickMap(GameMap _0, GlobalEnums.MapZone _1)
     {
-        Update();
+        UpdateLocalProgression();
+        Slt.Update();
     }
 
-    internal static void Update()
+    private static void OnPlacementTrackerUpdate()
+    {
+        PS.ReferenceUpdate();
+        PSNoSequenceBreak.ReferenceUpdate();
+    }
+
+    private static void OnBeginSceneTransition(ItemChanger.Transition transition)
+    {
+        UpdateLocalProgression();
+        IT.TrackAction(transition);
+        RM?.CheckRoute(transition);
+    }
+
+    private static void UpdateLocalProgression()
     {
         try
         {
-            PS.Update();
-            PSNoSequenceBreak.Update();
+            PS.LocalUpdate();
+            PSNoSequenceBreak.LocalUpdate();
             StateSync.Update();
-            Slt.Update();
+            IT.UpdateSequenceBreakActions();
         }
         catch (Exception e)
         {
             RandoMapCoreMod.Instance.LogError(e);
+        }
+    }
+
+    private static void TrackDreamgateSet(
+        On.HutongGames.PlayMaker.Actions.SetPlayerDataString.orig_OnEnter orig,
+        SetPlayerDataString self
+    )
+    {
+        orig(self);
+
+        if (self.stringName.Value is "dreamGateScene")
+        {
+            IT.LinkDreamgateAction();
+            RM?.ResetRoute();
         }
     }
 }

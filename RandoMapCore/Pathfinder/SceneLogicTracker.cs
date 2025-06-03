@@ -3,11 +3,16 @@ using MapChanger;
 using RandoMapCore.Data;
 using RandoMapCore.Modes;
 using RandoMapCore.Transition;
+using RandomizerCore.Logic;
 using UnityEngine;
 
 namespace RandoMapCore.Pathfinder;
 
-internal class SceneLogicTracker
+internal class SceneLogicTracker(
+    RmcSearchData sd,
+    ProgressionManager localPM,
+    ProgressionManager localPMNoSequenceBreak
+)
 {
     private readonly HashSet<string> _inLogicScenes = [];
     private readonly HashSet<string> _sequenceBreakScenes = [];
@@ -23,21 +28,17 @@ internal class SceneLogicTracker
         _adjacentScenes.Clear();
         _uncheckedReachableScenes.Clear();
 
-        var sd = RmcPathfinder.SD;
-        var pm = RmcPathfinder.PS.LocalPM;
-        var pmNoSequenceBreak = RmcPathfinder.PSNoSequenceBreak.LocalPM;
-
         // Get in-logic scenes from in-logic terms in SearchData
         foreach (var position in sd.GetAllStateTerms())
         {
-            if (pmNoSequenceBreak.Has(position))
+            if (localPMNoSequenceBreak.Has(position))
             {
                 if (TransitionData.TryGetScene(position.Name, out var scene))
                 {
                     _inLogicScenes.Add(scene);
                 }
             }
-            else if (pm.Has(position))
+            else if (localPM.Has(position))
             {
                 if (TransitionData.TryGetScene(position.Name, out var scene))
                 {
@@ -49,7 +50,7 @@ internal class SceneLogicTracker
         // Get more sequence break scenes from OOL transition actions
         foreach (var source in RandoMapCoreMod.LS.SequenceBreakActions.Values.SelectMany(t => t))
         {
-            if (RmcPathfinder.SD.TryGetSequenceBreakAction(source, out var action))
+            if (sd.TryGetSequenceBreakAction(source, out var action))
             {
                 if (TransitionData.TryGetScene(source, out var scene) && !_inLogicScenes.Contains(scene))
                 {

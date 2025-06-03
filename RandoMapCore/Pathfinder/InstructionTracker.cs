@@ -1,4 +1,3 @@
-using HutongGames.PlayMaker.Actions;
 using RandoMapCore.Pathfinder.Actions;
 using RandomizerCore.Logic;
 using RCPathfinder.Actions;
@@ -8,35 +7,17 @@ namespace RandoMapCore.Pathfinder;
 internal class InstructionTracker
 {
     private readonly RmcSearchData _sd;
-    private readonly RouteManager _rm;
-
     private string _lastScene;
 
-    internal InstructionTracker(RmcSearchData sd, RouteManager rm)
+    internal InstructionTracker(RmcSearchData sd)
     {
         _sd = sd;
-        _rm = rm;
 
         UpdateSequenceBreakActions();
     }
 
     internal AbstractAction LastAction { get; private set; }
     internal AbstractAction DreamgateLinkedAction { get; private set; } = null;
-
-    internal void TrackDreamgateSet(
-        On.HutongGames.PlayMaker.Actions.SetPlayerDataString.orig_OnEnter orig,
-        SetPlayerDataString self
-    )
-    {
-        orig(self);
-
-        if (self.stringName.Value is "dreamGateScene")
-        {
-            DreamgateLinkedAction = LastAction;
-            RandoMapCoreMod.Instance.LogFine($"Linking Dreamgate instruction to {LastAction}");
-            _rm.ResetRoute();
-        }
-    }
 
     internal void TrackAction(ItemChanger.Transition target)
     {
@@ -65,6 +46,12 @@ internal class InstructionTracker
         LastAction = action;
     }
 
+    internal void LinkDreamgateAction()
+    {
+        DreamgateLinkedAction = LastAction;
+        RandoMapCoreMod.Instance.LogFine($"Linking Dreamgate instruction to {LastAction}");
+    }
+
     internal void UpdateSequenceBreakActions()
     {
         List<string> emptySets = [];
@@ -83,12 +70,6 @@ internal class InstructionTracker
         {
             RandoMapCoreMod.LS.SequenceBreakActions.Remove(key);
         }
-    }
-
-    private bool IsOutOfLogic(string termName)
-    {
-        return RmcPathfinder.LE.LocalLM.LogicLookup.TryGetValue(termName, out var logic)
-            && !logic.CanGet(RmcPathfinder.PSNoSequenceBreak.LocalPM);
     }
 
     private AbstractAction GetAction(ItemChanger.Transition target)
@@ -118,5 +99,11 @@ internal class InstructionTracker
         }
 
         return null;
+    }
+
+    private bool IsOutOfLogic(string termName)
+    {
+        return RmcPathfinder.LE.LocalLM.LogicLookup.TryGetValue(termName, out var logic)
+            && !logic.CanGet(RmcPathfinder.PSNoSequenceBreak.LocalPM);
     }
 }

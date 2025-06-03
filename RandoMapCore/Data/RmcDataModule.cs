@@ -1,7 +1,6 @@
 using ItemChanger;
 using MapChanger;
 using MapChanger.UI;
-using RandoMapCore.UI;
 using RandomizerCore;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
