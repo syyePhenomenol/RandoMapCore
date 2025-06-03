@@ -3,8 +3,16 @@ using RandomizerCore.Logic.StateLogic;
 
 namespace RCPathfinder;
 
-internal class StateSynchronizer(StateManager stateManager)
+internal class StateSynchronizer
 {
+    private readonly StateManager _sm;
+
+    internal StateSynchronizer(StateManager stateManager)
+    {
+        _sm = stateManager;
+        Update();
+    }
+
     internal StateUnion CurrentState { get; private set; }
 
     internal void Update()
@@ -12,7 +20,7 @@ internal class StateSynchronizer(StateManager stateManager)
         var pd = PlayerData.instance;
 
         // Update current state
-        StateBuilder sb = new(stateManager);
+        StateBuilder sb = new(_sm);
 
         // USEDSHADE
         TrySetStateBool("OVERCHARMED", pd.GetBool(nameof(PlayerData.overcharmed)));
@@ -43,8 +51,8 @@ internal class StateSynchronizer(StateManager stateManager)
 
         CurrentState = new((State)new(sb));
 
-        void TrySetStateBool(string name, bool value) => sb.TrySetStateBool(stateManager, name, value);
+        void TrySetStateBool(string name, bool value) => sb.TrySetStateBool(_sm, name, value);
 
-        void TrySetStateInt(string name, int value) => sb.TrySetStateInt(stateManager, name, value);
+        void TrySetStateInt(string name, int value) => sb.TrySetStateInt(_sm, name, value);
     }
 }
