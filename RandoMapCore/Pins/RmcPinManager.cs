@@ -110,9 +110,7 @@ internal class RmcPinManager : HookModule
 
             try
             {
-                TryAddPin(
-                    new VanillaPinDef(vanillaLocation, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak)
-                );
+                TryAddPin(new VanillaPinDef(vanillaLocation));
             }
             catch (Exception e)
             {
@@ -191,19 +189,15 @@ internal class RmcPinManager : HookModule
         {
             if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
             {
-                return new RandomizedBenchPinDef(
-                    placement,
-                    RandoMapCoreMod.Data.PM,
-                    RandoMapCoreMod.Data.PMNoSequenceBreak
-                );
+                return new RandomizedBenchPinDef(placement);
             }
             else
             {
-                return new RandomizedPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
+                return new RandomizedPinDef(placement);
             }
         }
 
-        return new ICVanillaPinDef(placement, RandoMapCoreMod.Data.PM, RandoMapCoreMod.Data.PMNoSequenceBreak);
+        return new ICVanillaPinDef(placement);
     }
 
     private static void TryAddPin(PinDef def)

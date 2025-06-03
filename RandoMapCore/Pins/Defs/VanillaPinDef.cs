@@ -13,7 +13,7 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
 {
     private readonly string _locationPoolGroup;
 
-    internal VanillaPinDef(RmcLocationDef vanillaLocation, ProgressionManager pm, ProgressionManager pmNoSequenceBreak)
+    internal VanillaPinDef(RmcLocationDef vanillaLocation)
         : base()
     {
         Name = vanillaLocation.Name;
@@ -32,9 +32,9 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
             MapZone = mrp.MapZone;
         }
 
-        if (pm.lm.LogicLookup.TryGetValue(Name, out var logic))
+        if (RandoMapCoreMod.Data.PM.lm.LogicLookup.TryGetValue(Name, out var logic))
         {
-            Logic = new(logic, pm, pmNoSequenceBreak);
+            Logic = new(logic);
             TextBuilders.Add(Logic.GetLogicText);
         }
         else
@@ -44,7 +44,7 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
 
         if (RmcPinManager.Dpm.GetDefaultLocationHints(Name) is RawLogicDef[] hints)
         {
-            Hint = new(hints, pm);
+            Hint = new(hints);
             if (RandoMapCoreMod.Data.EnableLocationHints)
             {
                 TextBuilders.Add(Hint.GetHintText);

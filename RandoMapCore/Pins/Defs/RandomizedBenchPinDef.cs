@@ -2,18 +2,13 @@ using ItemChanger;
 using MagicUI.Elements;
 using MapChanger;
 using RandoMapCore.Settings;
-using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pins;
 
 internal sealed class RandomizedBenchPinDef : RandomizedPinDef
 {
-    public RandomizedBenchPinDef(
-        AbstractPlacement placement,
-        ProgressionManager pm,
-        ProgressionManager pmNoSequenceBreak
-    )
-        : base(placement, pm, pmNoSequenceBreak)
+    public RandomizedBenchPinDef(AbstractPlacement placement)
+        : base(placement)
     {
         Bench = new(placement.Name);
 

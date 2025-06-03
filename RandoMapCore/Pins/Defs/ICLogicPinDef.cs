@@ -10,19 +10,14 @@ namespace RandoMapCore.Pins;
 
 internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
 {
-    internal ICLogicPinDef(
-        AbstractPlacement placement,
-        string poolsCollection,
-        ProgressionManager pm,
-        ProgressionManager pmNoSequenceBreak
-    )
+    internal ICLogicPinDef(AbstractPlacement placement, string poolsCollection)
         : base(placement, poolsCollection)
     {
         if (SM.Of(placement).Get(InteropProperties.LogicInfix) is string logicInfix)
         {
             try
             {
-                Logic = new(pm.lm.CreateDNFLogicDef(new(placement.Name, logicInfix)), pm, pmNoSequenceBreak);
+                Logic = new(RandoMapCoreMod.Data.PM.lm.CreateDNFLogicDef(new(placement.Name, logicInfix)));
                 TextBuilders.Add(Logic.GetLogicText);
             }
             catch
@@ -32,9 +27,9 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
                 );
             }
         }
-        else if (pm.lm.LogicLookup.TryGetValue(placement.Name, out var logic))
+        else if (RandoMapCoreMod.Data.PM.lm.LogicLookup.TryGetValue(placement.Name, out var logic))
         {
-            Logic = new(logic, pm, pmNoSequenceBreak);
+            Logic = new(logic);
             TextBuilders.Add(Logic.GetLogicText);
         }
         else
@@ -44,7 +39,7 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
 
         if (SM.Of(placement).Get(InteropProperties.LocationHints) is RawLogicDef[] hints)
         {
-            Hint = new(hints, pm);
+            Hint = new(hints);
             if (RandoMapCoreMod.Data.EnableLocationHints)
             {
                 TextBuilders.Add(Hint.GetHintText);

@@ -8,20 +8,17 @@ namespace RandoMapCore.Pins;
 
 public class HintInfo
 {
-    private readonly ProgressionManager _pm;
     private readonly List<LogicDef> _logicDefs = [];
 
     private string _text;
 
-    internal HintInfo(IEnumerable<RawLogicDef> rawLogicDefs, ProgressionManager pm)
+    internal HintInfo(IEnumerable<RawLogicDef> rawLogicDefs)
     {
-        _pm = pm;
-
         foreach (var def in rawLogicDefs)
         {
             try
             {
-                _logicDefs.Add(pm.lm.CreateDNFLogicDef(def));
+                _logicDefs.Add(RandoMapCoreMod.Data.PM.lm.CreateDNFLogicDef(def));
             }
             catch
             {
@@ -34,7 +31,7 @@ public class HintInfo
 
     internal void Update()
     {
-        _text = string.Join("\n", _logicDefs.Where(ld => ld.CanGet(_pm)).Select(ld => ld.Name.L()));
+        _text = string.Join("\n", _logicDefs.Where(ld => ld.CanGet(RandoMapCoreMod.Data.PM)).Select(ld => ld.Name.L()));
     }
 
     internal RunCollection GetHintText()

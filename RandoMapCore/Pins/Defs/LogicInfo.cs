@@ -4,28 +4,17 @@ using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pins;
 
-public class LogicInfo
+public class LogicInfo(LogicDef logic)
 {
-    private readonly LogicDef _logic;
-    private readonly ProgressionManager _pm;
-    private readonly ProgressionManager _pmNoSequenceBreak;
-
-    internal LogicInfo(LogicDef logic, ProgressionManager pm, ProgressionManager pmNoSequenceBreak)
-    {
-        _logic = logic;
-        _pm = pm;
-        _pmNoSequenceBreak = pmNoSequenceBreak;
-    }
-
     internal LogicState State { get; private set; }
 
     internal void Update()
     {
-        if (_logic.CanGet(_pmNoSequenceBreak))
+        if (logic.CanGet(RandoMapCoreMod.Data.PMNoSequenceBreak))
         {
             State = LogicState.Reachable;
         }
-        else if (_logic.CanGet(_pm))
+        else if (logic.CanGet(RandoMapCoreMod.Data.PM))
         {
             State = LogicState.ReachableSequenceBreak;
         }
@@ -54,7 +43,7 @@ public class LogicInfo
 
     internal RunCollection GetLogicText()
     {
-        return [new Run($"{"Logic".L()}: "), new Run(_logic.InfixSource)];
+        return [new Run($"{"Logic".L()}: "), new Run(logic.InfixSource)];
     }
 }
 
