@@ -91,8 +91,8 @@ public class RmcColors : HookModule
             { RmcColorSetting.Room_Normal, new(1f, 1f, 1f, 0.3f) }, // white
             { RmcColorSetting.Room_Current, new(0, 1f, 0, 0.4f) }, // green
             { RmcColorSetting.Room_Adjacent, new(0, 1f, 1f, 0.4f) }, // cyan
-            { RmcColorSetting.Room_Sequence_break, new(1f, 0.5f, 0f, 0.3f) }, // orange
-            { RmcColorSetting.Room_Out_of_logic, new(1f, 0, 0, 0.3f) }, // red
+            { RmcColorSetting.Room_Sequence_break, new(1f, 0.5f, 0f, 0.4f) }, // orange
+            { RmcColorSetting.Room_Out_of_logic, new(1f, 0, 0, 0.4f) }, // red
             { RmcColorSetting.Room_Selected, new(1f, 1f, 0, 0.7f) }, // yellow
             { RmcColorSetting.Room_Debug, new(0, 0, 1f, 0.5f) }, // blue
             { RmcColorSetting.UI_Compass, new(1f, 1f, 1f, 0.83f) },
