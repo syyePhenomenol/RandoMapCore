@@ -1,5 +1,6 @@
 using RandoMapCore.Pathfinder.Actions;
 using RandomizerCore.Logic;
+using RCPathfinder;
 using RCPathfinder.Actions;
 
 namespace RandoMapCore.Pathfinder;
@@ -7,7 +8,6 @@ namespace RandoMapCore.Pathfinder;
 internal class InstructionTracker
 {
     private readonly RmcSearchData _sd;
-    private string _lastScene;
 
     internal InstructionTracker(RmcSearchData sd)
     {
@@ -17,48 +17,59 @@ internal class InstructionTracker
     }
 
     internal AbstractAction LastAction { get; private set; }
-    internal AbstractAction DreamgateLinkedAction { get; private set; } = null;
 
     internal void TrackAction(ItemChanger.Transition target)
     {
-        var action = GetAction(target);
+        var action = GetAction(target.ToString());
 
         if (action is not null)
         {
-            // RandoMapCoreMod.Instance.LogDebug($"Last action: {action.DebugString}");
+            RandoMapCoreMod.Instance.LogFine($"Last action: {action.DebugString}");
 
-            if (LastAction?.Target is Term lastTarget && action is StandardAction sa && IsOutOfLogic(sa.Source.Name))
+            if (
+                LastAction?.Target is Term lastTarget
+                && action is StandardAction sa
+                && IsSuperSequenceBreak(lastTarget, sa)
+            )
             {
-                RandoMapCoreMod.Instance.LogFine($"Adding OOL action: {sa.Source}");
+                RandoMapCoreMod.Instance.LogFine($"Adding super sequence break: {((IInstruction)sa).SourceText}");
 
-                if (RandoMapCoreMod.LS.SequenceBreakActions.TryGetValue(lastTarget.ToString(), out var actionTargets))
+                if (RandoMapCoreMod.LS.SuperSequenceBreaks.TryGetValue(lastTarget.ToString(), out var actionTargets))
                 {
-                    actionTargets.Add(sa.Source.ToString());
+                    actionTargets.Add(sa.Target.ToString());
                 }
                 else
                 {
-                    RandoMapCoreMod.LS.SequenceBreakActions[lastTarget.ToString()] = new([sa.Source.ToString()]);
+                    RandoMapCoreMod.LS.SuperSequenceBreaks[lastTarget.ToString()] = new([sa.Target.ToString()]);
                 }
             }
         }
 
-        _lastScene = target.SceneName;
         LastAction = action;
     }
 
-    internal void LinkDreamgateAction()
+    internal void LinkDreamgate()
     {
-        DreamgateLinkedAction = LastAction;
         RandoMapCoreMod.Instance.LogFine($"Linking Dreamgate instruction to {LastAction}");
+        RandoMapCoreMod.LS.SetDreamgateLinkedTerm(LastAction?.Target);
     }
 
     internal void UpdateSequenceBreakActions()
     {
         List<string> emptySets = [];
 
-        foreach (var kvp in RandoMapCoreMod.LS.SequenceBreakActions)
+        foreach (var kvp in RandoMapCoreMod.LS.SuperSequenceBreaks)
         {
-            kvp.Value.RemoveWhere(s => !IsOutOfLogic(s));
+            if (RmcPathfinder.LE.LocalLM.GetTerm(kvp.Key) is not Term term)
+            {
+                emptySets.Add(kvp.Key);
+                continue;
+            }
+
+            kvp.Value.RemoveWhere(target =>
+                !_sd.TargetInstructionLookup.TryGetValue(target, out var sa)
+                || !IsSuperSequenceBreak(term, (StandardAction)sa)
+            );
 
             if (!kvp.Value.Any())
             {
@@ -68,24 +79,15 @@ internal class InstructionTracker
 
         foreach (var key in emptySets)
         {
-            RandoMapCoreMod.LS.SequenceBreakActions.Remove(key);
+            RandoMapCoreMod.LS.SuperSequenceBreaks.Remove(key);
         }
     }
 
-    private AbstractAction GetAction(ItemChanger.Transition target)
+    private AbstractAction GetAction(string target)
     {
-        if (
-            _lastScene is not null
-            && _sd.StateTermsByScene.TryGetValue(_lastScene, out var lastScenePositions)
-            && lastScenePositions
-                .Where(_sd.StandardActionLookup.ContainsKey)
-                .SelectMany(p => _sd.StandardActionLookup[p])
-                .Cast<StandardAction>()
-                .FirstOrDefault(a => a is IInstruction i && i.IsFinished(target))
-                is StandardAction sa
-        )
+        if (_sd.TargetInstructionLookup.TryGetValue(target, out var standardAction))
         {
-            return sa;
+            return (StandardAction)standardAction;
         }
 
         if (_sd.BenchwarpActions.FirstOrDefault(ba => ba.IsFinished(target)) is BenchwarpAction ba)
@@ -98,12 +100,40 @@ internal class InstructionTracker
             return _sd.DreamgateAction;
         }
 
+        RandoMapCoreMod.Instance.LogDebug($"Could not find action that matches target {target}");
+
         return null;
     }
 
-    private bool IsOutOfLogic(string termName)
+    // Checks if the action was not reachable nor performable from the term of the previous scene,
+    // allowing sequence breaks.
+    private static bool IsSuperSequenceBreak(Term lastSceneTerm, StandardAction action)
     {
-        return RmcPathfinder.LE.LocalLM.LogicLookup.TryGetValue(termName, out var logic)
-            && !logic.CanGet(RmcPathfinder.PSNoSequenceBreak.LocalPM);
+        try
+        {
+            SearchParams sp =
+                new()
+                {
+                    StartPositions = [lastSceneTerm.ToStartPosition(0f)],
+                    Destinations = [action.Target],
+                    MaxCost = 1f,
+                    MaxTime = 1000f,
+                    DisallowBacktracking = true,
+                    TerminationCondition = TerminationConditionType.Any,
+                };
+            SearchState ss = new(sp);
+
+            RmcPathfinder.SD.SuperSequenceBreakTempMode = true;
+            var result = Algorithms.DijkstraSearch(RmcPathfinder.PS.LocalPM, RmcPathfinder.SD, sp, ss);
+            RmcPathfinder.SD.SuperSequenceBreakTempMode = false;
+
+            return !result;
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(e);
+        }
+
+        return false;
     }
 }

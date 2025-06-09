@@ -1,12 +1,11 @@
 ﻿namespace RandoMapCore.Settings;
 
-public enum PinSize
+public enum ProgressHintSetting
 {
-    Tiny,
-    Small,
-    Medium,
-    Large,
-    Huge,
+    Off,
+    Area,
+    Room,
+    Location,
 }
 
 public enum PinShape
@@ -16,6 +15,15 @@ public enum PinShape
     Square,
     Pentagon,
     Hexagon,
+}
+
+public enum PinSize
+{
+    Tiny,
+    Small,
+    Medium,
+    Large,
+    Huge,
 }
 
 public enum PinShapeSetting
@@ -50,19 +58,11 @@ public enum QMarkSetting
     Mixed,
 }
 
-public enum ProgressHintSetting
+public enum SequenceBreakSetting
 {
     Off,
-    Area,
-    Room,
-    Location,
-}
-
-public enum ItemCompassMode
-{
-    Reachable,
-    ReachableOutOfLogic,
-    All,
+    SequenceBreaks,
+    SuperSequenceBreaks,
 }
 
 public enum RouteTextInGame
@@ -77,6 +77,26 @@ public enum OffRouteBehaviour
     KeepRoute,
     CancelRoute,
     Reevaluate,
+}
+
+public enum ItemCompassMode
+{
+    Reachable,
+    ReachableOutOfLogic,
+    All,
+}
+
+public enum QuickMapCompassSetting
+{
+    Unchecked,
+    All,
+}
+
+public enum NextAreaSetting
+{
+    Off,
+    Arrows,
+    Full,
 }
 
 public enum RmcMode
@@ -101,17 +121,4 @@ public enum PoolState
     Off,
     On,
     Mixed,
-}
-
-public enum NextAreaSetting
-{
-    Off,
-    Arrows,
-    Full,
-}
-
-public enum QuickMapCompassSetting
-{
-    Unchecked,
-    All,
 }

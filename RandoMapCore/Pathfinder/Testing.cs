@@ -56,7 +56,7 @@ internal static class Testing
         {
             foreach (var action in kvp.Value)
             {
-                var start = PositionHelper.GetNormalStartPosition(kvp.Key);
+                var start = kvp.Key.ToStartPosition(0f);
                 RmcPathfinder.PS.LocalPM.SetState(start);
                 RandoMapCoreMod.Instance?.LogDebug(
                     $"    {action.DebugString}, {action.Cost}: {action.TryDo(new Node(start), RmcPathfinder.PS.LocalPM, out var _)}"
@@ -101,7 +101,7 @@ internal static class Testing
             var start = GetRandomTerm(inLogicTransitions);
             var destination = GetRandomTerm(inLogicTransitions);
 
-            sp.StartPositions = [PositionHelper.GetNormalStartPosition(start), PositionHelper.GetArbitraryPosition()];
+            sp.StartPositions = [start.ToStartPosition(0f), PositionHelper.GetArbitraryPosition(-0.5f)];
             sp.Destinations = [destination];
             SearchState ss = new(sp);
 
@@ -168,9 +168,9 @@ internal static class Testing
             var destScene = RmcPathfinder.Slt.InLogicScenes.ElementAt(_rng.Next(RmcPathfinder.Slt.InLogicScenes.Count));
 
             sp.StartPositions = PositionHelper
-                .GetPrunedPositionsFromScene(pm, startScene)
-                .Select(PositionHelper.GetNormalStartPosition);
-            sp.Destinations = PositionHelper.GetPrunedPositionsFromScene(pm, destScene);
+                .GetNonEquivalentTermsInScene(startScene)
+                .Select(t => t.ToStartPosition(0f));
+            sp.Destinations = PositionHelper.GetTermsInScene(destScene);
 
             if (!sp.StartPositions.Any() || !sp.Destinations.Any())
             {

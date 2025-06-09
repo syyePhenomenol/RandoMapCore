@@ -63,13 +63,6 @@ internal class TransitionData : HookModule
         return ExtraTransitions.ContainsKey(transition);
     }
 
-    internal static bool IsVisitedOrVanillaTransition(string transition)
-    {
-        return RandoMapCoreMod.Data.VisitedTransitions.ContainsKey(transition)
-            || IsVanillaTransition(transition)
-            || IsExtraTransition(transition);
-    }
-
     internal static RmcTransitionDef GetTransitionDef(string transition)
     {
         if (

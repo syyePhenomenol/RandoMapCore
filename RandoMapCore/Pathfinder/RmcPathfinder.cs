@@ -1,5 +1,6 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using MapChanger;
+using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 using RCPathfinder;
 
@@ -71,7 +72,12 @@ public class RmcPathfinder : HookModule
 
     internal static ProgressionManager GetLocalPM()
     {
-        return RandoMapCoreMod.GS.PathfinderOutOfLogic ? PS.LocalPM : PSNoSequenceBreak.LocalPM;
+        return
+            RandoMapCoreMod.GS.PathfinderSequenceBreaks
+                is SequenceBreakSetting.SequenceBreaks
+                    or SequenceBreakSetting.SuperSequenceBreaks
+            ? PS.LocalPM
+            : PSNoSequenceBreak.LocalPM;
     }
 
     private static void OnWorldMap(GameMap _)
@@ -123,7 +129,7 @@ public class RmcPathfinder : HookModule
 
         if (self.stringName.Value is "dreamGateScene")
         {
-            IT.LinkDreamgateAction();
+            IT.LinkDreamgate();
             RM?.ResetRoute();
         }
     }

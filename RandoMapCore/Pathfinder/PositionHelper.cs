@@ -1,4 +1,5 @@
 using MapChanger;
+using RandoMapCore.Settings;
 using RandoMapCore.Transition;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
@@ -9,67 +10,38 @@ namespace RandoMapCore.Pathfinder;
 
 internal static class PositionHelper
 {
-    internal static IEnumerable<Position> GetStartPositions(string scene, bool withArbitraryPosition)
+    internal static IEnumerable<Term> GetTermsInScene(string scene)
     {
-        try
+        if (RmcPathfinder.SD.StateTermsByScene.TryGetValue(scene, out var sceneTerms))
         {
-            if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
-            {
-                return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
-                    .Select(GetNormalStartPosition)
-                    .Concat(GetOutOfLogicStarts(scene))
-                    .Distinct()
-                    .Concat(withArbitraryPosition ? [GetArbitraryPosition()] : []);
-            }
-
-            return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene)
-                .Select(GetNormalStartPosition)
-                .Concat(withArbitraryPosition ? [GetArbitraryPosition()] : []);
-        }
-        catch (Exception e)
-        {
-            RandoMapCoreMod.Instance.LogError(e);
+            return sceneTerms;
         }
 
         return [];
     }
 
-    internal static IEnumerable<Position> GetStartPositionsFromLastTransition()
+    internal static IEnumerable<Position> GetStartPositionsInCurrentScene(bool lastActionOnly)
     {
         try
         {
-            if (RmcPathfinder.IT.LastAction?.Target is Term targetTerm)
+            var lastActionTerm = RmcPathfinder.IT.LastAction?.Target;
+            List<Position> startPositions = lastActionTerm is not null ? [lastActionTerm.ToStartPosition(0f)] : [];
+
+            // Prioritize direct backtrack through last transition for single action routes
+            startPositions.Add(GetArbitraryPosition(0.5f));
+
+            if (lastActionOnly && lastActionTerm is not null)
             {
-                return
-                [
-                    GetNormalStartPosition(targetTerm),
-                    // Make start jumps lower priority here
-                    new ArbitraryPosition(RmcPathfinder.StateSync.CurrentState, 0.5f),
-                ];
+                return startPositions;
             }
 
-            return GetStartPositions(Utils.CurrentScene(), true);
-        }
-        catch (Exception e)
-        {
-            RandoMapCoreMod.Instance.LogError(e);
-        }
+            // Make other terms in scene not logically equivalent to the last action much lower in priority
+            // (search is exhausted from last action and start jumps before considering these other "currently unreachable" terms)
+            startPositions.AddRange(
+                GetNonEquivalentTermsInScene(Utils.CurrentScene(), lastActionTerm).Select(t => t.ToStartPosition(50f))
+            );
 
-        return [];
-    }
-
-    internal static IEnumerable<Term> GetDestinations(string scene)
-    {
-        try
-        {
-            if (RandoMapCoreMod.GS.PathfinderOutOfLogic)
-            {
-                return GetPrunedPositionsFromScene(RmcPathfinder.PS.LocalPM, scene)
-                    .Concat(GetOutOfLogicDestinations(scene))
-                    .Distinct();
-            }
-
-            return GetPrunedPositionsFromScene(RmcPathfinder.PSNoSequenceBreak.LocalPM, scene);
+            return startPositions;
         }
         catch (Exception e)
         {
@@ -86,7 +58,8 @@ internal static class PositionHelper
             SearchParams sp =
                 new()
                 {
-                    StartPositions = GetStartPositions(Utils.CurrentScene(), false),
+                    StartPositions = GetRelevantStartTermsInScene(Utils.CurrentScene())
+                        .Select(t => t.ToStartPosition(0f)),
                     Destinations = [],
                     MaxCost = 1f,
                     MaxTime = 1000f,
@@ -119,29 +92,34 @@ internal static class PositionHelper
         return [];
     }
 
-    internal static Position GetNormalStartPosition(Term term)
+    internal static Position ToStartPosition(this Term term, float cost)
     {
-        return new Position(term, RmcPathfinder.StateSync.CurrentState, 0f);
+        return new Position(term, RmcPathfinder.StateSync.CurrentState, cost);
     }
 
-    internal static ArbitraryPosition GetArbitraryPosition()
+    internal static Position GetArbitraryPosition(float cost)
     {
-        return new ArbitraryPosition(RmcPathfinder.StateSync.CurrentState, -0.5f);
+        return new ArbitraryPosition(RmcPathfinder.StateSync.CurrentState, cost);
     }
 
-    internal static IEnumerable<Term> GetPrunedPositionsFromScene(ProgressionManager pm, string scene)
+    // Returns all terms in the scene that are not logically equivalent to each other.
+    // Does not include any terms that are logically equivalent to priorityTerm.
+    internal static IEnumerable<Term> GetNonEquivalentTermsInScene(string scene, Term priorityTerm = null)
     {
-        if (!TryGetInLogicPositionsFromScene(pm, scene, out var inLogicPositions) || !inLogicPositions.Any())
+        HashSet<Term> relevantTerms = priorityTerm is not null ? [priorityTerm] : [];
+
+        relevantTerms.UnionWith(GetRelevantStartTermsInScene(scene));
+
+        if (!relevantTerms.Any())
         {
             return [];
         }
 
-        // Prune positions that are reachable from another in the same scene (two-way).
         SearchParams sp =
             new()
             {
-                StartPositions = inLogicPositions.Select(GetNormalStartPosition),
-                Destinations = inLogicPositions,
+                StartPositions = relevantTerms.Select(t => t.ToStartPosition(0f)),
+                Destinations = relevantTerms,
                 MaxCost = 0f,
                 MaxDepth = 10,
                 MaxTime = 1000f,
@@ -149,90 +127,58 @@ internal static class PositionHelper
             };
 
         SearchState ss = new(sp);
-        _ = Algorithms.DijkstraSearch(pm, RmcPathfinder.SD, sp, ss);
+        _ = Algorithms.DijkstraSearch(RmcPathfinder.GetLocalPM(), RmcPathfinder.SD, sp, ss);
         var resultNodes = ss.ResultNodes.Where(n => n.Depth > 0 && n.Start.Term != n.Current.Term);
 
-        List<Term> newPositions = new(inLogicPositions);
+        HashSet<Term> newTerms = new(relevantTerms);
+        HashSet<(Term, Term)> reachableTermPairs = [];
 
         foreach (var node in resultNodes)
         {
-            if (!newPositions.Contains(node.Start.Term) || !newPositions.Contains(node.Current.Term))
+            if (!newTerms.Contains(node.Start.Term) || !newTerms.Contains(node.Current.Term))
             {
                 continue;
             }
 
-            if (
-                resultNodes.Any(n =>
-                    node.Start.Term == n.Current.Term
-                    && node.Current.Term == n.Start.Term
-                    && StateUnion.IsProgressivelyLE(node.Start.States, node.Current.States)
-                    && StateUnion.IsProgressivelyLE(n.Start.States, n.Current.States)
-                )
-            )
+            if (StateUnion.IsProgressivelyLE(node.Start.States, node.Current.States))
             {
-                RandoMapCoreMod.Instance.LogFine(
-                    $"Pruning {node.Current.Term} which is equivalent to {node.Start.Term}"
-                );
-                _ = newPositions.Remove(node.Current.Term);
+                reachableTermPairs.Add((node.Start.Term, node.Current.Term));
+
+                // The start and destination of the node are logically equivalent
+                if (reachableTermPairs.Contains((node.Current.Term, node.Start.Term)))
+                {
+                    if (node.Start.Term == priorityTerm)
+                    {
+                        newTerms.Remove(node.Current.Term);
+                    }
+                    else
+                    {
+                        newTerms.Remove(node.Start.Term);
+                    }
+                }
             }
         }
 
-        RandoMapCoreMod.Instance.LogFine($"Remaining: {string.Join(", ", newPositions.Select(p => p.Name))}");
-
-        return newPositions;
+        newTerms.Remove(priorityTerm);
+        RandoMapCoreMod.Instance.LogFine($"Remaining: {string.Join(", ", newTerms.Select(p => p.Name))}");
+        return newTerms;
     }
 
-    private static bool TryGetInLogicPositionsFromScene(
-        ProgressionManager pm,
-        string scene,
-        out IEnumerable<Term> inLogicPositions
-    )
+    // Gather all relevant terms in scene depending on if OOL search is used or not
+    private static IEnumerable<Term> GetRelevantStartTermsInScene(string scene)
     {
-        if (RmcPathfinder.SD.StateTermsByScene.TryGetValue(scene, out var positions))
-        {
-            inLogicPositions = positions.Where(p => pm.Has(p));
-            return true;
-        }
+        var pm = RmcPathfinder.GetLocalPM();
 
-        inLogicPositions = default;
-        return false;
-    }
-
-    private static IEnumerable<Position> GetOutOfLogicStarts(string scene)
-    {
-        if (!RmcPathfinder.SD.StateTermsByScene.TryGetValue(scene, out var terms))
-        {
-            return [];
-        }
-
-        var oolTerms = terms.Where(t => RandoMapCoreMod.LS.SequenceBreakActions.ContainsKey(t.Name));
-
-        foreach (var t in oolTerms)
-        {
-            RandoMapCoreMod.Instance.LogFine($"OOL start: {t}");
-        }
-
-        return oolTerms.Select(GetNormalStartPosition);
-    }
-
-    private static IEnumerable<Term> GetOutOfLogicDestinations(string scene)
-    {
-        if (!RmcPathfinder.SD.StateTermsByScene.TryGetValue(scene, out var terms))
-        {
-            return [];
-        }
-
-        List<Term> destinations = [];
-
-        foreach (var oolSource in RandoMapCoreMod.LS.SequenceBreakActions.Values.SelectMany(a => a))
-        {
-            if (RmcPathfinder.SD.TryGetSequenceBreakAction(oolSource, out var action) && terms.Contains(action.Target))
-            {
-                RandoMapCoreMod.Instance.LogFine($"OOL destination: {action.Target.Name}");
-                destinations.Add(action.Target);
-            }
-        }
-
-        return destinations;
+        return
+        [
+            .. GetTermsInScene(scene)
+                .Where(t =>
+                    pm.Has(t)
+                    || (
+                        RandoMapCoreMod.GS.PathfinderSequenceBreaks is SequenceBreakSetting.SuperSequenceBreaks
+                        && RandoMapCoreMod.LS.SuperSequenceBreaks.ContainsKey(t.Name)
+                    )
+                ),
+        ];
     }
 }

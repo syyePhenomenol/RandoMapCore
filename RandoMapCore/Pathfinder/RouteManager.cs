@@ -48,8 +48,8 @@ internal class RouteManager
 
             _sp = new()
             {
-                StartPositions = PositionHelper.GetStartPositions(_startScene, true),
-                Destinations = PositionHelper.GetDestinations(_finalScene),
+                StartPositions = PositionHelper.GetStartPositionsInCurrentScene(false),
+                Destinations = PositionHelper.GetTermsInScene(scene),
                 MaxCost = 100f,
                 MaxTime = 1000f,
                 TerminationCondition = TerminationConditionType.Any,
@@ -77,9 +77,9 @@ internal class RouteManager
 
                 if (
                     route.FinishedOrEmpty
-                    // || route.FirstInstruction.StartText == route.LastInstruction.DestinationText
                     || _routes.Any(r =>
-                        r.FirstInstruction == route.FirstInstruction && r.LastInstruction == route.LastInstruction
+                        r.FirstInstruction.Equals(route.FirstInstruction)
+                        && r.LastInstruction.Equals(route.LastInstruction)
                     )
                 )
                 {
@@ -107,12 +107,12 @@ internal class RouteManager
 
     internal void CheckRoute(ItemChanger.Transition lastTransition)
     {
-        RandoMapCoreMod.Instance.LogFine($"Last transition: {lastTransition}");
+        // RandoMapCoreMod.Instance.LogFine($"Last transition: {lastTransition}");
 
-        if (!RmcPathfinder.LE.LocalLM.Terms.IsTerm(lastTransition.ToString()))
-        {
-            RandoMapCoreMod.Instance.LogFine("Transition not in LM");
-        }
+        // if (!RmcPathfinder.LE.LocalLM.Terms.IsTerm(lastTransition.ToString()))
+        // {
+        //     RandoMapCoreMod.Instance.LogFine("Transition not in LM");
+        // }
 
         if (CurrentRoute is null)
         {
@@ -153,7 +153,7 @@ internal class RouteManager
 
         _sp = new()
         {
-            StartPositions = PositionHelper.GetStartPositionsFromLastTransition(),
+            StartPositions = PositionHelper.GetStartPositionsInCurrentScene(true),
             Destinations = [CurrentRoute.Node.Current.Term],
             MaxCost = 100f,
             MaxTime = 1000f,
@@ -161,7 +161,7 @@ internal class RouteManager
             DisallowBacktracking = false,
         };
 
-        if (!_sp.StartPositions.Any() || !_sp.Destinations.Any())
+        if (!_sp.StartPositions.Any())
         {
             ResetRoute();
             return;

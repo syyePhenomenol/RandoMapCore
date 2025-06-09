@@ -16,9 +16,9 @@ internal class WaypointAction(
     public string SourceText => text;
     public string TargetText => null;
 
-    public bool IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(string lastTransition)
     {
-        return lastTransition.ToString() == Target.Name;
+        return lastTransition == Target.Name;
     }
 
     public string GetCompassObjectPath(string scene)
@@ -29,5 +29,15 @@ internal class WaypointAction(
         }
 
         return null;
+    }
+
+    public bool Equals(IInstruction other)
+    {
+        if (other is SuperSequenceBreakAction ssba)
+        {
+            return ReferenceEquals(this, ssba.OrigAction);
+        }
+
+        return ReferenceEquals(this, other);
     }
 }

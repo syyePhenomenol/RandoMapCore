@@ -54,7 +54,8 @@ public class GlobalSettings
 
     // Pathfinder options
     [JsonProperty]
-    public bool PathfinderOutOfLogic { get; private set; } = true;
+    public SequenceBreakSetting PathfinderSequenceBreaks { get; private set; } =
+        SequenceBreakSetting.SuperSequenceBreaks;
 
     [JsonProperty]
     public bool ShowRouteCompass { get; private set; } = true;
@@ -176,9 +177,12 @@ public class GlobalSettings
         QMarks = (QMarkSetting)(((int)QMarks + 1) % Enum.GetNames(typeof(QMarkSetting)).Length);
     }
 
-    internal void TogglePathfinderOutOfLogic()
+    internal void TogglePathfinderSequenceBreaks()
     {
-        PathfinderOutOfLogic = !PathfinderOutOfLogic;
+        PathfinderSequenceBreaks = (SequenceBreakSetting)(
+            ((int)PathfinderSequenceBreaks + 1) % Enum.GetNames(typeof(SequenceBreakSetting)).Length
+        );
+        ;
     }
 
     internal void ToggleRouteCompassEnabled()

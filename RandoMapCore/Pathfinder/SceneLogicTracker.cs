@@ -48,22 +48,11 @@ internal class SceneLogicTracker(
         }
 
         // Get more sequence break scenes from OOL transition actions
-        foreach (var source in RandoMapCoreMod.LS.SequenceBreakActions.Values.SelectMany(t => t))
+        foreach (var target in RandoMapCoreMod.LS.SuperSequenceBreaks.Values.SelectMany(t => t))
         {
-            if (sd.TryGetSequenceBreakAction(source, out var action))
+            if (TransitionData.TryGetScene(target, out var scene) && !_inLogicScenes.Contains(scene))
             {
-                if (TransitionData.TryGetScene(source, out var scene) && !_inLogicScenes.Contains(scene))
-                {
-                    _sequenceBreakScenes.Add(scene);
-                }
-
-                if (
-                    TransitionData.TryGetScene(action.Target.Name, out var targetScene)
-                    && !_inLogicScenes.Contains(targetScene)
-                )
-                {
-                    _sequenceBreakScenes.Add(targetScene);
-                }
+                _sequenceBreakScenes.Add(scene);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using RandoMapCore.Pathfinder.Actions;
+using RandoMapCore.Settings;
 using RandoMapCore.Transition;
 using RandomizerCore.Logic;
 using RCPathfinder;
@@ -81,9 +82,6 @@ internal class RmcSearchData : SearchData
     internal RmcSearchData(LogicManager localLM)
         : base(localLM)
     {
-        BenchwarpActions = new([.. MakeBenchwarpActions().OrderBy(a => a.Target?.Id)]);
-        DreamgateAction = new();
-
         Dictionary<string, HashSet<Term>> positionsByScene = [];
         foreach (var term in GetAllStateTerms())
         {
@@ -107,18 +105,33 @@ internal class RmcSearchData : SearchData
             StandardActionLookup
                 .Values.SelectMany(list => list)
                 .Where(a => a is TransitionAction)
-                .ToDictionary(ta => ta.Source.Name, ta => (TransitionAction)ta)
+                .ToDictionary(a => a.Source.Name, a => (TransitionAction)a)
         );
-    }
 
-    internal ReadOnlyCollection<BenchwarpAction> BenchwarpActions { get; }
-    internal DreamgateAction DreamgateAction { get; }
+        TargetInstructionLookup = new(
+            StandardActionLookup
+                .Values.SelectMany(list => list)
+                .Where(a => a is IInstruction)
+                .ToDictionary(a => a.Target.Name, a => (IInstruction)a)
+        );
+
+        BenchwarpActions = new([.. MakeBenchwarpActions().OrderBy(a => a.Target?.Id)]);
+        DreamgateAction = new();
+    }
 
     // Only for terms with a single defined scene. Should not be using these to look up terms like
     // Can_Stag or Lower_Tram
     internal ReadOnlyDictionary<string, ReadOnlyCollection<Term>> StateTermsByScene { get; }
 
     internal ReadOnlyDictionary<string, TransitionAction> TransitionActions { get; }
+
+    // Includes transition and waypoint-based instructions, where the target terms are fixed and unique.
+    internal ReadOnlyDictionary<string, IInstruction> TargetInstructionLookup { get; }
+    internal ReadOnlyCollection<BenchwarpAction> BenchwarpActions { get; }
+    internal DreamgateAction DreamgateAction { get; }
+
+    // Set to true to temporarily check if super sequence breaks are back in logic or not
+    internal bool SuperSequenceBreakTempMode { get; set; } = false;
 
     protected override Dictionary<Term, List<StandardAction>> MakeStandardActions()
     {
@@ -145,14 +158,11 @@ internal class RmcSearchData : SearchData
                 {
                     _ = routeCompassOverrides.TryGetValue(start.Name, out var compassObjects);
 
-                    if (start.Name is "Can_Stag")
-                    {
-                        AddAction(new StagAction(start, destination, logic, text, compassObjects));
-                    }
-                    else
-                    {
-                        AddAction(new WaypointAction(start, destination, logic, text ?? start.Name, compassObjects));
-                    }
+                    AddAction(
+                        start.Name is "Can_Stag"
+                            ? new StagAction(start, destination, logic, text, compassObjects)
+                            : new WaypointAction(start, destination, logic, text ?? start.Name, compassObjects)
+                    );
 
                     continue;
                 }
@@ -234,18 +244,18 @@ internal class RmcSearchData : SearchData
         }
 
         if (
-            RandoMapCoreMod.GS.PathfinderOutOfLogic
-            && RandoMapCoreMod.LS.SequenceBreakActions.TryGetValue(node.Current.Term.Name, out var source)
+            !SuperSequenceBreakTempMode
+            && RandoMapCoreMod.GS.PathfinderSequenceBreaks is SequenceBreakSetting.SuperSequenceBreaks
+            && RandoMapCoreMod.LS.SuperSequenceBreaks.TryGetValue(node.Current.Term.Name, out var oolTargets)
         )
         {
-            actions.AddRange(
-                source
-                    .Select(s => StateTermLookup[s])
-                    .Select(s => new OutOfLogicTransitionAction(
-                        node.Current.Term,
-                        (TransitionAction)StandardActionLookup[s].First(a => a is TransitionAction)
-                    ))
-            );
+            foreach (var target in oolTargets)
+            {
+                if (TargetInstructionLookup.TryGetValue(target, out var oolInstruction))
+                {
+                    actions.Add(new SuperSequenceBreakAction(node.Current.Term, oolInstruction));
+                }
+            }
         }
 
         // foreach (var a in actions)
@@ -254,22 +264,6 @@ internal class RmcSearchData : SearchData
         // }
 
         return actions;
-    }
-
-    internal bool TryGetSequenceBreakAction(string source, out StandardAction result)
-    {
-        if (
-            StateTermLookup.TryGetValue(source, out var sourceTerm)
-            && StandardActionLookup.TryGetValue(sourceTerm, out var actions)
-            && actions.FirstOrDefault(a => a is IInstruction) is StandardAction action
-        )
-        {
-            result = action;
-            return true;
-        }
-
-        result = null;
-        return false;
     }
 
     private IEnumerable<BenchwarpAction> MakeBenchwarpActions()

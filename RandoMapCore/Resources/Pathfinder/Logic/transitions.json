@@ -106,11 +106,7 @@
   },
   {
     "name": "Abyss_05[door_dreamReturn_reality]",
-    "logic": "Warp-White_Palace_Entrance_to_Palace_Grounds"
-  },
-  {
-    "name": "Abyss_05[door_dreamReturn_reality]",
-    "logic": "Warp-White_Palace_Atrium_to_Palace_Grounds"
+    "logic": "RMC_Warp-Palace_Grounds"
   },
   {
     "name": "White_Palace_06[door_dreamReturn]",
@@ -171,6 +167,6 @@
   },
   {
     "name": "RestingGrounds_08[door_dreamReturn]",
-    "logic": "RMC_Warp-Backer_Shrine_to_Glade | RMC_Warp-Believer_Shrine_to_Glade"
+    "logic": "RMC_Warp-Spirits'_Glade"
   }
 ]

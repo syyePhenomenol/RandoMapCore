@@ -1,6 +1,7 @@
 ﻿using ConnectionMetadataInjector.Util;
 using Newtonsoft.Json;
 using RandoMapCore.Pins;
+using RandomizerCore.Logic;
 
 namespace RandoMapCore.Settings;
 
@@ -42,9 +43,16 @@ public class LocalSettings
     [JsonProperty]
     public GroupBySetting GroupBy { get; private set; } = GroupBySetting.Location;
 
-    // Key is logically linked term, values are source terms of the actions
     [JsonProperty]
-    public Dictionary<string, HashSet<string>> SequenceBreakActions { get; private set; } = [];
+    public string DreamgateLinkedTerm { get; private set; } = string.Empty;
+
+    /// <summary>
+    /// Represents sequence breaks that are outside of what is normally tracked by the randomizer
+    /// (e.g. vanilla transitions, stags, waypoint jumps)
+    /// Key is logically linked term in starting scene, values are target terms of the actions
+    /// </summary>
+    [JsonProperty]
+    public Dictionary<string, HashSet<string>> SuperSequenceBreaks { get; private set; } = [];
 
     internal void Initialize()
     {
@@ -232,6 +240,11 @@ public class LocalSettings
             PoolState.Mixed => PoolState.On,
             _ => PoolState.On,
         };
+    }
+
+    internal void SetDreamgateLinkedTerm(Term term)
+    {
+        DreamgateLinkedTerm = term?.ToString() ?? string.Empty;
     }
 
     /// <summary>

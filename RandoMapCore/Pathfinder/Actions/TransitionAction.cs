@@ -1,3 +1,4 @@
+using RandoMapCore.Settings;
 using RandoMapCore.Transition;
 using RandomizerCore.Logic;
 using RandomizerCore.Logic.StateLogic;
@@ -10,7 +11,8 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
     : PlacementAction(sourceTerm, targetTerm),
         IInstruction
 {
-    public string SourceText => Source.Name;
+    public string SourceText =>
+        RandoMapCoreMod.Data.OutOfLogicVisitedTransitions.Contains(Source.Name) ? $"*{Source.Name}" : Source.Name;
     public string TargetText => Target.Name;
 
     internal string CompassObj { get; } = compassObj;
@@ -38,7 +40,20 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
 
     private protected virtual bool IsInvalidTransition(Node node, ProgressionManager pm)
     {
-        return !TransitionData.IsVisitedOrVanillaTransition(node.Term.Name);
+        if (TransitionData.IsVanillaTransition(node.Term.Name) || TransitionData.IsExtraTransition(node.Term.Name))
+        {
+            return false;
+        }
+
+        if (
+            RandoMapCoreMod.GS.PathfinderSequenceBreaks is SequenceBreakSetting.Off
+            && RandoMapCoreMod.Data.OutOfLogicVisitedTransitions.Contains(node.Term.Name)
+        )
+        {
+            return true;
+        }
+
+        return !RandoMapCoreMod.Data.VisitedTransitions.ContainsKey(node.Term.Name);
     }
 
     public string GetCompassObjectPath(string scene)
@@ -51,7 +66,7 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
         return CompassObj;
     }
 
-    public bool IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(string lastTransition)
     {
         // Fix for big mantis village transition
         return lastTransition.ToString() switch
@@ -60,6 +75,16 @@ internal class TransitionAction(Term sourceTerm, Term targetTerm, string compass
             "Fungus2_14[bot1]" => Target.Name is "Fungus2_14[bot3]",
             _ => Target.Name == lastTransition.ToString(),
         };
+    }
+
+    public bool Equals(IInstruction other)
+    {
+        if (other is SuperSequenceBreakAction ssba)
+        {
+            return ReferenceEquals(this, ssba.OrigAction);
+        }
+
+        return ReferenceEquals(this, other);
     }
 }
 

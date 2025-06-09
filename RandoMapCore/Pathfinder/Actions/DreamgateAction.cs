@@ -8,7 +8,7 @@ namespace RandoMapCore.Pathfinder.Actions;
 internal class DreamgateAction() : JumpAction, IInstruction
 {
     // Used for figuring out where Dreamgate goes to during the pathfinder search
-    public override Term Target => RmcPathfinder.IT?.DreamgateLinkedAction?.Target;
+    public override Term Target => RmcPathfinder.LE.LocalLM.GetTerm(RandoMapCoreMod.LS.DreamgateLinkedTerm);
     public override float Cost => 1f;
 
     public override bool TryDo(Node node, ProgressionManager pm, out StateUnion satisfiableStates)
@@ -27,13 +27,18 @@ internal class DreamgateAction() : JumpAction, IInstruction
     public string SourceText => "Dreamgate";
     public string TargetText => null;
 
-    public bool IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(string lastTransition)
     {
-        return lastTransition.GateName is "dreamGate";
+        return lastTransition.Contains("dreamGate");
     }
 
     public string GetCompassObjectPath(string scene)
     {
         return null;
+    }
+
+    public bool Equals(IInstruction other)
+    {
+        return ReferenceEquals(this, other);
     }
 }

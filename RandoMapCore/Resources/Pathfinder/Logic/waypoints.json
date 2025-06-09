@@ -36,16 +36,16 @@
     "logic": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
   },
   {
+    "name": "RMC_Warp-Palace_Grounds",
+    "logic": "Warp-White_Palace_Entrance_to_Palace_Grounds | Warp-White_Palace_Atrium_to_Palace_Grounds"
+  },
+  {
     "name": "RMC_Warp-Glade_to_Backer_Shrine",
     "logic": "*King's_Idol-Glade_of_Hope + (WINGS | RIGHTCLAW + LEFTSUPERDASH) + DREAMNAIL"
   },
   {
-    "name": "RMC_Warp-Backer_Shrine_to_Glade",
-    "logic": "Dream_Backer_Shrine[door1] | Dream_Backer_Shrine[door2]"
-  },
-  {
-    "name": "RMC_Warp-Believer_Shrine_to_Glade",
-    "logic": "Dream_Room_Believer_Shrine[left1]"
+    "name": "RMC_Warp-Spirits'_Glade",
+    "logic": "Dream_Backer_Shrine[door1] | Dream_Backer_Shrine[door2] | Dream_Room_Believer_Shrine[left1]"
   },
   {
     "name": "RMC_Dung_Defender_Wall",

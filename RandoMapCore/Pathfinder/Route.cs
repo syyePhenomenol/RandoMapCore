@@ -35,7 +35,7 @@ internal class Route
             throw new InvalidDataException();
         }
 
-        if (CurrentInstruction.IsFinished(lastTransition))
+        if (CurrentInstruction.IsFinished(lastTransition.ToString()))
         {
             _currentIndex += 1;
             return true;

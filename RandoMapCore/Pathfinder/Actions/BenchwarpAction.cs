@@ -30,14 +30,19 @@ internal class BenchwarpAction(Term term, RmcBenchKey benchKey) : JumpAction, II
     public string SourceText { get; } = term.Name;
     public string TargetText => null;
 
-    public bool IsFinished(ItemChanger.Transition lastTransition)
+    public bool IsFinished(string lastTransition)
     {
-        return lastTransition.ToString() == $"{BenchKey.SceneName}[]"
+        return lastTransition == $"{BenchKey.SceneName}[]"
             && PlayerData.instance.GetString("respawnMarkerName") == BenchKey.RespawnMarkerName;
     }
 
     public string GetCompassObjectPath(string scene)
     {
         return null;
+    }
+
+    public bool Equals(IInstruction other)
+    {
+        return ReferenceEquals(this, other);
     }
 }
