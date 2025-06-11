@@ -33,18 +33,15 @@ public class RmcPauseMenuLayout : PauseMenuLayout
             new PoolOptionsGridButton(),
             new PinOptionsGridButton(),
             new PathfinderOptionsGridButton(),
-            new MiscOptionsGridButton(),
-        }.Concat(RandoMapCoreMod.Data.GetPauseMenuMainButtons());
+        }
+            .Concat(RandoMapCoreMod.Data.GetPauseMenuMainButtons())
+            .Concat([new MiscOptionsGridButton()]);
     }
 
     protected override IEnumerable<ExtraButtonGrid> GetExtraButtonGrids()
     {
-        return new List<ExtraButtonGrid>
-        {
-            new PoolOptionsGrid(),
-            new PinOptionsGrid(),
-            new PathfinderOptionsGrid(),
-            new MiscOptionsGrid(),
-        }.Concat(RandoMapCoreMod.Data.GetPauseMenuExtraButtonGrids());
+        return new List<ExtraButtonGrid> { new PoolOptionsGrid(), new PinOptionsGrid(), new PathfinderOptionsGrid() }
+            .Concat(RandoMapCoreMod.Data.GetPauseMenuExtraButtonGrids())
+            .Concat([new MiscOptionsGrid()]);
     }
 }
