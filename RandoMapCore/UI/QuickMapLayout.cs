@@ -5,6 +5,7 @@ using MapChanger;
 using MapChanger.UI;
 using RandoMapCore.Modes;
 using RandoMapCore.Pathfinder;
+using RandoMapCore.Settings;
 using RandoMapCore.Transition;
 using UnityEngine;
 
@@ -29,27 +30,30 @@ internal class QuickMapLayout : MapLayout
 
     public override void Update()
     {
-        var tsd = new TransitionStringDef(Utils.CurrentScene());
-
-        MakeTransitionsWithCompasses(tsd.Unchecked);
-
-        foreach (var tsl in new TransitionStringList[] { tsd.VisitedOut, tsd.VisitedIn, tsd.VanillaOut, tsd.VanillaIn })
+        if (_stack is null)
         {
-            if (
-                RandoMapCoreMod.GS.ShowQuickMapCompasses is Settings.QuickMapCompassSetting.All
-                && tsl is VisitedOutTransitionStringList or VanillaOutTransitionStringList
-            )
-            {
-                MakeTransitionsWithCompasses(tsl);
-                continue;
-            }
-
-            if (tsl.Placements.Any())
-            {
-                _stack.Children.Add(RightCenteredText($"Text {tsl.Header}", tsl.GetFullText()));
-                continue;
-            }
+            return;
         }
+
+        _stack.Children.Clear();
+
+        var tsd = new TransitionStringDef(Utils.CurrentScene());
+        var showAllCompasses = RandoMapCoreMod.GS.ShowQuickMapCompasses is QuickMapCompassSetting.All;
+
+        MakeTransitionSubsection([tsd.RandomizedUncheckedReachable], "Unchecked Reachable".L(), true);
+        MakeTransitionSubsection([tsd.RandomizedUncheckedUnreachable], "Unchecked Unreachable".L(), true);
+        MakeTransitionSubsection([tsd.RandomizedUncheckedIn], "Unchecked (in)".L(), showAllCompasses);
+        MakeTransitionSubsection([tsd.RandomizedVisitedOut, tsd.RandomizedVisitedIn], "Visited".L(), showAllCompasses);
+        MakeTransitionSubsection(
+            [tsd.VanillaReachableOut, tsd.VanillaReachableIn],
+            "Vanilla Reachable".L(),
+            showAllCompasses
+        );
+        MakeTransitionSubsection(
+            [tsd.VanillaUnreachableOut, tsd.VanillaUnreachableIn],
+            "Vanilla Unreachable".L(),
+            showAllCompasses
+        );
     }
 
     protected override bool ActiveCondition()
@@ -69,18 +73,22 @@ internal class QuickMapLayout : MapLayout
 
     protected override void OnCloseMap(GameMap obj)
     {
-        _stack?.Children.Clear();
+        _stack?.Children?.Clear();
     }
 
-    private void MakeTransitionsWithCompasses(TransitionStringList tsl)
+    private void MakeTransitionSubsection(
+        IEnumerable<TransitionStringList> transitionLists,
+        string header,
+        bool showCompasses
+    )
     {
-        if (!tsl.Placements.Any())
+        if (!transitionLists.Any(tsl => tsl.Placements.Any()))
         {
             return;
         }
 
         StackLayout listStack =
-            new(this, $"{Name} {tsl.Header}")
+            new(this, $"{Name} {header}")
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 10f,
@@ -90,32 +98,49 @@ internal class QuickMapLayout : MapLayout
 
         _stack.Children.Add(listStack);
 
-        listStack.Children.Add(RightCenteredText($"Header {tsl.Header}", tsl.FormattedHeader));
+        listStack.Children.Add(RightCenteredText($"Header {header}", $"{header}:"));
 
-        foreach (var placement in tsl.Placements)
+        foreach (var list in transitionLists)
         {
-            StackLayout lineStack =
-                new(this, $"{Name} Unchecked Line Stack {placement}")
-                {
-                    Orientation = Orientation.Horizontal,
-                    Spacing = 10f,
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Center,
-                };
-
-            listStack.Children.Add(lineStack);
-
-            lineStack.Children.Add(
-                RightCenteredText(
-                    $"{Name} Unchecked Placement {placement.Key.Name}",
-                    tsl.GetFormattedPlacement(placement.Key, placement.Value)
-                )
-            );
-
-            if (RmcPathfinder.SD.TransitionActions.TryGetValue(placement.Key.Name, out var ta))
+            if (!list.Placements.Any())
             {
-                lineStack.Children.Add(
-                    new QuickMapCompass(this, placement.Key.Name, new TransitionCompassPosition(ta.CompassObj))
+                continue;
+            }
+
+            if (list is OutTransitionStringList && showCompasses)
+            {
+                foreach (var placement in list.Placements)
+                {
+                    StackLayout lineStack =
+                        new(this, $"{Name} Unchecked Line Stack {placement}")
+                        {
+                            Orientation = Orientation.Horizontal,
+                            Spacing = 10f,
+                            HorizontalAlignment = HorizontalAlignment.Right,
+                            VerticalAlignment = VerticalAlignment.Center,
+                        };
+
+                    listStack.Children.Add(lineStack);
+
+                    lineStack.Children.Add(
+                        RightCenteredText(
+                            $"{Name} Unchecked Placement {placement.Key.Name}",
+                            list.GetFormattedPlacement(placement.Key, placement.Value)
+                        )
+                    );
+
+                    if (RmcPathfinder.SD.TransitionActions.TryGetValue(placement.Key.Name, out var ta))
+                    {
+                        lineStack.Children.Add(
+                            new QuickMapCompass(this, placement.Key.Name, new TransitionCompassPosition(ta.CompassObj))
+                        );
+                    }
+                }
+            }
+            else
+            {
+                listStack.Children.Add(
+                    RightCenteredText($"Text {header}", RunCollection.Join("\n", list.GetFormattedPlacements()))
                 );
             }
         }
@@ -123,9 +148,14 @@ internal class QuickMapLayout : MapLayout
 
     private TextObject RightCenteredText(string name, string text)
     {
+        return RightCenteredText(name, new RunCollection(new Run(text)));
+    }
+
+    private TextObject RightCenteredText(string name, RunCollection text)
+    {
         return new TextObject(this, name)
         {
-            Text = text,
+            Inlines = text,
             ContentColor = RmcColors.GetColor(RmcColorSetting.UI_Neutral),
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Center,

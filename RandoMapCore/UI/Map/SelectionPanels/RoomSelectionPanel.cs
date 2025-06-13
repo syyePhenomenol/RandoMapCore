@@ -19,11 +19,11 @@ internal class RoomSelectionPanel : WorldMapPanel
         if (
             Conditions.TransitionRandoModeEnabled()
             && RandoMapCoreMod.GS.RoomSelectionOn
-            && RmcRoomManager.Selector?.GetSelectionText() is string text
+            && RmcRoomManager.Selector?.GetSelectionText() is RunCollection text
         )
         {
             Panel.Visibility = Visibility.Visible;
-            _text.Text = text;
+            _text.Inlines = text;
             _text.FontSize = (int)(14f * MapChangerMod.GS.UIScale);
             _text.MaxWidth = (int)(450f * MapChangerMod.GS.UIScale);
         }

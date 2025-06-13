@@ -1,4 +1,5 @@
-﻿using MapChanger;
+﻿using MagicUI.Elements;
+using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Input;
 using RandoMapCore.Modes;
@@ -36,22 +37,17 @@ internal class RoomSelector : Selector
         RmcUIManager.WorldMap?.Update();
     }
 
-    internal string GetSelectionText()
+    internal RunCollection GetSelectionText()
     {
         if (SelectedObject?.Key is not string key)
         {
             return null;
         }
 
-        var instructions = GetInstructionText();
-        var transitions = new TransitionStringDef(key).GetFullText();
-
-        if (transitions is "")
-        {
-            return instructions;
-        }
-
-        return $"{instructions}\n\n{transitions}";
+        return RunCollection.Join(
+            "\n\n",
+            new List<RunCollection>() { GetInstructionText(key), new TransitionStringDef(key).GetFullText() }
+        );
     }
 
     private bool ActiveByCurrentMode()
@@ -64,31 +60,36 @@ internal class RoomSelector : Selector
         return RandoMapCoreMod.GS.RoomSelectionOn;
     }
 
-    private string GetInstructionText()
+    private RunCollection GetInstructionText(string scene)
     {
-        var selectedScene = SelectedObject.Key;
-        var text = "";
+        var roomColor = RmcPathfinder.Slt.GetRoomColor(scene);
 
-        text += $"{"Selected room".L()}: {selectedScene.LC()}.";
+        RunCollection text =
+        [
+            new(scene.LC())
+            {
+                Color = roomColor with { w = 1f },
+                Bold = true,
+                Size = (int)(14f * MapChangerMod.GS.UIScale * 1.2f),
+            },
+        ];
 
-        if (selectedScene == Utils.CurrentScene())
+        if (scene == Utils.CurrentScene())
         {
-            text += $" {"You are here".L()}.";
+            text.Add(new($" - {"You are here".L()}"));
         }
 
         if (RandoMapCoreMod.Data.EnablePathfinder)
         {
-            var selectBindingText = SelectRoomRouteInput.Instance.GetBindingsText();
-            text += $"\n\n{"Press".L()} {selectBindingText}";
-
-            if (RmcPathfinder.RM.CanCycleRoute(selectedScene))
-            {
-                text += $" {"to change starting / final transitions of current route".L()}.";
-            }
-            else
-            {
-                text += $" {"to find a new route".L()}.";
-            }
+            text.Add(
+                new(
+                    $"\n\n{"Press".L()} {SelectRoomRouteInput
+                        .Instance
+                        .GetBindingsText()} {(RmcPathfinder.RM.CanCycleRoute(scene)
+                            ? "to change starting / final transitions of current route"
+                            : "to find a new route").L()}."
+                )
+            );
 
             if (
                 RandoMapCoreMod.Data.EnableMapBenchwarp
@@ -99,8 +100,7 @@ internal class RoomSelector : Selector
                 && BenchwarpInput.TryGetBenchwarpFromRoute(out var _)
             )
             {
-                var benchBindingText = BenchwarpInput.Instance.GetBindingsText();
-                text += $" {"Hold".L()} {benchBindingText} {"to benchwarp".L()}.";
+                text.Add(new($" {"Hold".L()} {BenchwarpInput.Instance.GetBindingsText()} {"to benchwarp".L()}."));
             }
         }
 

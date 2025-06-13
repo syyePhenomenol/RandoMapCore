@@ -79,7 +79,7 @@ internal abstract class PinDef
 
     private protected virtual RunCollection GetNameText()
     {
-        return [new Run(Name.LC())];
+        return [new Run(Name.LC()) { Size = (int)(20f * MapChangerMod.GS.UIScale * 1.1f) }];
     }
 
     private protected virtual RunCollection GetRoomText()
