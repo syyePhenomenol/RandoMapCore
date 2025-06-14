@@ -1,5 +1,5 @@
 // To deal with waypoint-based false positives in RMC, we either:
-// 1. Change the logic (in edits.json or substitutions.json) to prevent the path
+// 1. Change the logic to prevent the path
 // 2. Give a hint to remind the player to go somewhere else first to unlock the path
 [
   {

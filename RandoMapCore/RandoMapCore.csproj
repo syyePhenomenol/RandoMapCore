@@ -70,17 +70,14 @@
   	</Target>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Resources\Compass\routeCompassOverrides.json" />
 		<EmbeddedResource Include="Resources\defaultBenches.json" />
 		<EmbeddedResource Include="Resources\extraTransitions.json" />
 		<EmbeddedResource Include="Resources\locations.json" />
 		<EmbeddedResource Include="Resources\locationHints.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Data\routeHints.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Data\waypointActions.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Logic\edits.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Logic\substitutions.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Logic\transitions.json" />
-		<EmbeddedResource Include="Resources\Pathfinder\Logic\waypoints.json" />
+		<EmbeddedResource Include="Resources\Pathfinder\logicChanges.json" />
+		<EmbeddedResource Include="Resources\Pathfinder\routeCompassOverrides.json" />
+		<EmbeddedResource Include="Resources\Pathfinder\routeHints.json" />
+		<EmbeddedResource Include="Resources\Pathfinder\waypointActions.json" />
 		<EmbeddedResource Include="Resources\quickMapGrids.json" />
 		<EmbeddedResource Include="Resources\roomTexts.json" />
 		<EmbeddedResource Include="Resources\roomTextsAM.json" />

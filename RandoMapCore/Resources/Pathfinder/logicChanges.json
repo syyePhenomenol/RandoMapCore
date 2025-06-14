@@ -1,0 +1,872 @@
+[
+    {
+        "Description": "Unlink Warps",
+        "Edits": [
+            {
+                "name": "Start_State",
+                "logic": "FALSE"
+            },
+            {
+                "name": "Can_Bench",
+                "logic": "FALSE"
+            },
+            {
+                "name": "Can_Warp_To_DG_Bench",
+                "logic": "FALSE"
+            },
+            {
+                "name": "Can_Warp_To_Bench",
+                "logic": "FALSE"
+            }
+        ]
+    },
+    // Changes that insert new transitions
+    {
+        "Description": "Stags",
+        "Transitions": [
+            {
+                "name": "Room_Town_Stag_Station[door_stagExit]",
+                "logic": "Can_Stag"
+            },
+            {
+                "name": "Crossroads_47[door_stagExit]",
+                "logic": "Can_Stag + Crossroads_Stag"
+            },
+            {
+                "name": "Fungus1_16_alt[door_stagExit]",
+                "logic": "Can_Stag + Greenpath_Stag"
+            },
+            {
+                "name": "Fungus2_02[door_stagExit]",
+                "logic": "Can_Stag + Queen's_Station_Stag"
+            },
+            {
+                "name": "Deepnest_09[door_stagExit]",
+                "logic": "Can_Stag + Distant_Village_Stag"
+            },
+            {
+                "name": "Abyss_22[door_stagExit]",
+                "logic": "Can_Stag + Hidden_Station_Stag"
+            },
+            {
+                "name": "Ruins1_29[door_stagExit]",
+                "logic": "Can_Stag + City_Storerooms_Stag"
+            },
+            {
+                "name": "Ruins2_08[door_stagExit]",
+                "logic": "Can_Stag + King's_Station_Stag"
+            },
+            {
+                "name": "RestingGrounds_09[door_stagExit]",
+                "logic": "Can_Stag + Resting_Grounds_Stag"
+            },
+            {
+                "name": "Fungus3_40[door_stagExit]",
+                "logic": "Can_Stag + Queen's_Gardens_Stag"
+            },
+            {
+                "name": "Cliffs_03[door_stagExit]",
+                "logic": "Can_Stag + Stag_Nest_Stag"
+            }
+        ],
+        "Edits": [
+            {
+                "name": "Can_Stag",
+                "logic": "ORIG | (Room_Town_Stag_Station[door_stagExit] | Crossroads_47[door_stagExit] | Fungus1_16_alt[door_stagExit] | Fungus2_02[door_stagExit] | Deepnest_09[door_stagExit] | Abyss_22[door_stagExit] | Ruins1_29[door_stagExit] | Ruins2_08[door_stagExit] | RestingGrounds_09[door_stagExit] | Fungus3_40[door_stagExit]) + $STAGSTATEMODIFIER"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Room_Town_Stag_Station[left1]",
+                "old": "Can_Stag",
+                "replacement": "Room_Town_Stag_Station[door_stagExit]"
+            },
+            {
+                "name": "Crossroads_47[right1]",
+                "old": "Can_Stag",
+                "replacement": "Crossroads_47[door_stagExit]"
+            },
+            {
+                "name": "Fungus1_16_alt[right1]",
+                "old": "Can_Stag",
+                "replacement": "Fungus1_16_alt[door_stagExit]"
+            },
+            {
+                "name": "Fungus2_02[right1]",
+                "old": "Can_Stag",
+                "replacement": "Fungus2_02[door_stagExit]"
+            },
+            {
+                "name": "Deepnest_09[left1]",
+                "old": "Can_Stag",
+                "replacement": "Deepnest_09[door_stagExit]"
+            },
+            {
+                "name": "Abyss_22[left1]",
+                "old": "Can_Stag",
+                "replacement": "Abyss_22[door_stagExit]"
+            },
+            {
+                "name": "Ruins1_29[left1]",
+                "old": "Can_Stag",
+                "replacement": "Ruins1_29[door_stagExit]"
+            },
+            {
+                "name": "Ruins2_08[left1]",
+                "old": "Can_Stag",
+                "replacement": "Ruins2_08[door_stagExit]"
+            },
+            {
+                "name": "RestingGrounds_09[left1]",
+                "old": "Can_Stag",
+                "replacement": "RestingGrounds_09[door_stagExit]"
+            },
+            {
+                "name": "Bench-Gardens_Stag",
+                "old": "Can_Stag",
+                "replacement": "Fungus3_40[door_stagExit]"
+            },
+            {
+                "name": "Fungus3_40[right1]",
+                "old": "Can_Stag",
+                "replacement": "Fungus3_40[door_stagExit]"
+            },
+            {
+                "name": "Fungus3_40[top1]",
+                "old": "Can_Stag",
+                "replacement": "Fungus3_40[door_stagExit]"
+            },
+            {
+                "name": "Cliffs_03[right1]",
+                "old": "Can_Stag",
+                "replacement": "Cliffs_03[door_stagExit]"
+            }
+        ]
+    },
+    {
+        "Description": "Elevators",
+        "StateWaypoints": [
+            {
+                "name": "RMC-Left_Elevator_Up",
+                "logic": "Crossroads_49b[right1] + Left_Elevator/"
+            },
+            {
+                "name": "RMC-Left_Elevator_Down",
+                "logic": "(Crossroads_49[left1] | Crossroads_49[right1]) + Left_Elevator/"
+            },
+            {
+                "name": "RMC-Right_Elevator_Up",
+                "logic": "(Ruins2_10b[right2] | Ruins2_10b[left1]) + Right_Elevator/"
+            },
+            {
+                "name": "RMC-Right_Elevator_Down",
+                "logic": "(Ruins2_10[right1] | Ruins2_10[left1]) + Right_Elevator/"
+            }
+        ],
+        "StatelessWaypoints": [
+            "RMC-Activated_Left_Elevator"
+        ],
+        "Transitions": [
+            {
+                "name": "Crossroads_49[elev_entrance]",
+                "logic": "RMC-Left_Elevator_Up"
+            },
+            {
+                "name": "Crossroads_49b[elev_entrance]",
+                "logic": "RMC-Left_Elevator_Down"
+            },
+            {
+                "name": "Ruins2_10[elev_entrance]",
+                "logic": "RMC-Right_Elevator_Up"
+            },
+            {
+                "name": "Ruins2_10b[elev_entrance]",
+                "logic": "RMC-Right_Elevator_Down"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Crossroads_49[right1]",
+                "old": "Left_Elevator",
+                "replacement": "Crossroads_49[elev_entrance]"
+            },
+            {
+                "name": "Crossroads_49[left1]",
+                "old": "Left_Elevator",
+                "replacement": "Crossroads_49[elev_entrance]"
+            },
+            {
+                "name": "Crossroads_49b[right1]",
+                "old": "Left_Elevator",
+                "replacement": "Crossroads_49b[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10[right1]",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10[left1]",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10b[right1]",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10b[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10b[right2]",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10b[elev_entrance]"
+            },
+            {
+                "name": "Ruins2_10b[left1]",
+                "old": "Right_Elevator",
+                "replacement": "Ruins2_10b[elev_entrance]"
+            },
+            {
+                "name": "Left_Elevator",
+                "old": "Crossroads_49[left1]",
+                "replacement": "Crossroads_49[left1] + RMC-Activated_Left_Elevator"
+            },
+            {
+                "name": "Left_Elevator",
+                "old": "Crossroads_49[right1]",
+                "replacement": "Crossroads_49[right1] + RMC-Activated_Left_Elevator"
+            }
+        ]
+    },
+    {
+        "Description": "Trams",
+        "StateWaypoints": [
+            {
+                "name": "RMC-Lower_Tram_Left",
+                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+            },
+            {
+                "name": "RMC-Lower_Tram_Middle",
+                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+            },
+            {
+                "name": "RMC-Lower_Tram_Right",
+                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+            },
+            {
+                "name": "RMC-Upper_Tram_Left",
+                "logic": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
+            },
+            {
+                "name": "RMC-Upper_Tram_Right",
+                "logic": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
+            }
+        ],
+        "Transitions": [
+            {
+                "name": "Room_Tram[door1]",
+                "logic": "Lower_Tram"
+            },
+            {
+                "name": "Abyss_03_b[door_tram]",
+                "logic": "RMC-Lower_Tram_Left"
+            },
+            {
+                "name": "Abyss_03[door_tram]",
+                "logic": "RMC-Lower_Tram_Middle"
+            },
+            {
+                "name": "Abyss_03_c[door_tram]",
+                "logic": "RMC-Lower_Tram_Right"
+            },
+            {
+                "name": "Room_Tram_RG[door1]",
+                "logic": "Upper_Tram"
+            },
+            {
+                "name": "Crossroads_46[door_tram]",
+                "logic": "RMC-Upper_Tram_Left"
+            },
+            {
+                "name": "Crossroads_46b[door_tram]",
+                "logic": "RMC-Upper_Tram_Right"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Lower_Tram",
+                "old": "Bench-Lower_Tram",
+                "replacement": "FALSE"
+            },
+            {
+                "name": "Bench-Lower_Tram",
+                "old": "Lower_Tram",
+                "replacement": "Room_Tram[door1]"
+            },
+            {
+                "name": "Abyss_03_b[left1]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03_b[door_tram]"
+            },
+            {
+                "name": "Abyss_03[bot1]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03[door_tram]"
+            },
+            {
+                "name": "Abyss_03[bot2]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03[door_tram]"
+            },
+            {
+                "name": "Abyss_03[top1]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03[door_tram]"
+            },
+            {
+                "name": "Abyss_03_c[right1]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03_c[door_tram]"
+            },
+            {
+                "name": "Abyss_03_c[top1]",
+                "old": "Lower_Tram",
+                "replacement": "Abyss_03_c[door_tram]"
+            },
+            {
+                "name": "Upper_Tram",
+                "old": "Bench-Upper_Tram",
+                "replacement": "FALSE"
+            },
+            {
+                "name": "Bench-Upper_Tram",
+                "old": "Upper_Tram",
+                "replacement": "Room_Tram_RG[door1]"
+            },
+            {
+                "name": "Crossroads_46[left1]",
+                "old": "Upper_Tram",
+                "replacement": "Crossroads_46[door_tram]"
+            },
+            {
+                "name": "Crossroads_46b[right1]",
+                "old": "Upper_Tram",
+                "replacement": "Crossroads_46b[door_tram]"
+            }
+        ]
+    },
+    {
+        "Description": "Warps",
+        "StateWaypoints":  [
+            {
+                "name": "RMC-Warp-Palace_Grounds",
+                "logic": "Warp-White_Palace_Entrance_to_Palace_Grounds | Warp-White_Palace_Atrium_to_Palace_Grounds"
+            }
+        ],
+        "Transitions": [
+            {
+                "name": "White_Palace_11[door1]",
+                "logic": "Warp-Palace_Grounds_to_White_Palace"
+            },
+            {
+                "name": "Abyss_06_Core[door_dreamReturn]",
+                "logic": "Warp-Lifeblood_Core_to_Abyss"
+            },
+            {
+                "name": "GG_Waterways[door_dreamReturn]",
+                "logic": "Warp-Godhome_to_Junk_Pit"
+            },
+            {
+                "name": "GG_Atrium[door_dreamEnter]",
+                "logic": "Warp-Junk_Pit_to_Godhome"
+            },
+            {
+                "name": "Abyss_05[door_dreamReturn_reality]",
+                "logic": "RMC-Warp-Palace_Grounds"
+            },
+            {
+                "name": "White_Palace_06[door_dreamReturn]",
+                "logic": "Warp-Path_of_Pain_Complete"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "White_Palace_11[door2]",
+                "old": "Warp-Palace_Grounds_to_White_Palace",
+                "replacement": "White_Palace_11[door1]"
+            },
+            {
+                "name": "Abyss_06_Core[left1]",
+                "old": "Warp-Lifeblood_Core_to_Abyss",
+                "replacement": "Abyss_06_Core[door_dreamReturn]"
+            },
+            {
+                "name": "GG_Waterways",
+                "old": "Warp-Godhome_to_Junk_Pit",
+                "replacement": "GG_Waterways[door_dreamReturn]"
+            },
+            {
+                "name": "GG_Atrium",
+                "old": "Warp-Junk_Pit_to_Godhome",
+                "replacement": "GG_Atrium[door_dreamEnter]"
+            },
+            {
+                "name": "Warp-Godhome_to_Junk_Pit",
+                "old": "Warp-Junk_Pit_to_Godhome",
+                "replacement": "GG_Atrium[door_dreamEnter]"
+            },
+            {
+                "name": "Abyss_05",
+                "old": "Warp-White_Palace_Entrance_to_Palace_Grounds",
+                "replacement": "Abyss_05[door_dreamReturn_reality]"
+            },
+            {
+                "name": "Abyss_05",
+                "old": "Warp-White_Palace_Atrium_to_Palace_Grounds",
+                "replacement": "Abyss_05[door_dreamReturn_reality]"
+            },
+            {
+                "name": "White_Palace_06[left1]",
+                "old": "Warp-Path_of_Pain_Complete",
+                "replacement": "White_Palace_06[door_dreamReturn]"
+            },
+            {
+                "name": "White_Palace_06[top1]",
+                "old": "Warp-Path_of_Pain_Complete",
+                "replacement": "White_Palace_06[door_dreamReturn]"
+            },
+            {
+                "name": "White_Palace_06[bot1]",
+                "old": "Warp-Path_of_Pain_Complete",
+                "replacement": "White_Palace_06[door_dreamReturn]"
+            }
+        ]
+    },
+    {
+        "Description": "Black Temple",
+        "Transitions": [
+            {
+                "name": "Room_temple[door1]",
+                "logic": "Room_temple[door1] | Room_temple[left1] + Opened_Black_Egg_Temple"
+            },
+            {
+                "name": "Room_Final_Boss_Atrium[left1]",
+                "logic": "Room_Final_Boss_Atrium[left1] | (Bench-Black_Egg_Temple ? NONE)"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Room_temple[left1]",
+                "old": "Bench-Black_Egg_Temple",
+                "replacement": "Room_temple[door1]"
+            },
+                {
+                "name": "Bench-Black_Egg_Temple",
+                "old": "Room_temple[left1]",
+                "replacement": "Room_Final_Boss_Atrium[left1]"
+            },
+            {
+                "name": "Bench-Black_Egg_Temple",
+                "old": "Opened_Black_Egg_Temple",
+                "replacement": "TRUE"
+            }
+        ]
+    },
+    {
+        "Description": "Godhome",
+        "StatelessWaypoints": [
+            "RMC-Blue_Room_Door",
+            "RMC-Godhome_Roof"
+        ],
+        "Transitions": [
+            {
+                "name": "GG_Atrium[Door_Workshop]",
+                "logic": "GG_Atrium[Door_Workshop] | GG_Atrium[door1_blueRoom] | GG_Atrium"
+            },
+            {
+                "name": "GG_Atrium[door1_blueRoom]",
+                "logic": "GG_Atrium[door1_blueRoom] | GG_Atrium + RMC-Blue_Room_Door"
+            },
+            {
+                "name": "GG_Atrium[top1]",
+                "logic": "FALSE"
+            },
+            {
+                "name": "GG_Atrium[top2]",
+                "logic": "GG_Atrium[top2] + LEFTCLAW | (GG_Atrium + LEFTCLAW + RIGHTCLAW + (RIGHTDASH | RIGHTSUPERDASH | WINGS) | (Bench-Godhome_Atrium ? NONE) + LEFTCLAW) + RMC-Godhome_Roof"
+            },
+            {
+                "name": "GG_Workshop[left1]",
+                "logic": "GG_Workshop[left1] | GG_Workshop"
+            },
+            {
+                "name": "GG_Blue_Room[left1]",
+                "logic": "GG_Blue_Room[left1]"
+            },
+            {
+                "name": "GG_Atrium_Roof[bot1]",
+                "logic": "GG_Atrium_Roof[bot2] + (LEFTCLAW | RIGHTCLAW) + WINGS | (Bench-Godhome_Roof ? NONE) + LEFTCLAW"
+            },
+            {
+                "name": "GG_Atrium_Roof[bot2]",
+                "logic": "GG_Atrium_Roof[bot2] | (Bench-Godhome_Roof ? NONE)"
+            }
+        ],
+        "Edits": [
+            {
+                "name": "GG_Atrium",
+                "logic": "ORIG | GG_Atrium[top1] | GG_Atrium[top2] | (Bench-Godhome_Atrium ? NONE)"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "GG_Atrium",
+                "old": "GG_Workshop",
+                "replacement": "GG_Atrium[Door_Workshop]"
+            },
+            {
+                "name": "GG_Workshop",
+                "old": "GG_Atrium",
+                "replacement": "GG_Workshop[left1]"
+            }
+        ]
+    },
+    {
+        "Description": "Shrine of Believers",
+        "StateWaypoints": [
+            {
+                "name": "RMC-Warp-Glade_to_Backer_Shrine",
+                "logic": "*King's_Idol-Glade_of_Hope + (WINGS | RIGHTCLAW + LEFTSUPERDASH) + DREAMNAIL"
+            },
+            {
+                "name": "RMC-Warp-Spirits'_Glade",
+                "logic": "Dream_Backer_Shrine[door1] | Dream_Backer_Shrine[door2] | Dream_Room_Believer_Shrine[left1]"
+            }
+        ],
+        "Transitions": [
+            {
+                "name": "Dream_Backer_Shrine[door1]",
+                "logic": "RMC-Warp-Glade_to_Backer_Shrine"
+            },
+            {
+                "name": "Dream_Backer_Shrine[door2]",
+                "logic": "Dream_Backer_Shrine[door2] | Dream_Backer_Shrine[door1]"
+            },
+            {
+                "name": "Dream_Room_Believer_Shrine[left1]",
+                "logic": "Dream_Room_Believer_Shrine[left1]"
+            },
+            {
+                "name": "RestingGrounds_08[door_dreamReturn]",
+                "logic": "RMC-Warp-Spirits'_Glade"
+            }
+        ],
+        "Edits": [
+            {
+                "name": "RestingGrounds_08[left1]",
+                "logic": "ORIG | RestingGrounds_08[door_dreamReturn] + (SWIM | LEFTSUPERDASH)"
+            }
+        ]
+    },
+    // Changes that don't insert new transitions
+    {
+        "Description": "City of Tears",
+        "StatelessWaypoints": [
+            "RMC-Broke_City_Toll_Wall",
+            "RMC-City_Toll_Lift_Down",
+            "RMC-City_Toll_Lift_Up",
+            "RMC-Broke_Sanctum_Glass_Floor",
+            // "RMC-Lever_Fountain",
+            "RMC-Opened_Shade_Soul_Exit",
+            "RMC-Opened_Elegant_Door",
+            "RMC-Opened_Pleasure_House",
+            "RMC-Opened_Emilitia_Door",
+            "RMC-Opened_Pleasure_House_Wall",
+            "RMC-Opened_Love_Door"
+        ],
+        "Edits": [
+            {
+                "name": "Ruins1_31",
+                "logic": "ORIG | (Ruins1_31[left1] | Ruins1_31[bot1]) + RMC-Broke_City_Toll_Wall + (RMC-City_Toll_Lift_Down + (LEFTCLAW | RIGHTCLAW | WINGS) | RMC-City_Toll_Lift_Up)"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Ruins1_23[top1]",
+                "old": "Broke_Sanctum_Glass_Floor",
+                "replacement": "RMC-Broke_Sanctum_Glass_Floor"
+            },
+            // {
+            //     "name": "Ruins1_27[right1]",
+            //     "old": "Ruins1_27[left1]",
+            //     "replacement": "Ruins1_27[left1] + RMC-Lever_Fountain"
+            // },
+            {
+                "name": "Ruins1_31[left2]",
+                "old": "Lever-Shade_Soul",
+                "replacement": "RMC-Opened_Shade_Soul_Exit"
+            },
+            {
+                "name": "Ruins1_31[left3]",
+                "old": "ELEGANT",
+                "replacement": "ELEGANT | RMC-Opened_Elegant_Door"
+            },
+            {
+                "name": "Ruins2_04[door_Ruin_Elevator]",
+                "old": "PLEASUREHOUSEUNLOCK",
+                "replacement": "PLEASUREHOUSEUNLOCK | RMC-Opened_Pleasure_House"
+            },
+            {
+                "name": "Ruins2_04[door_Ruin_House_03]",
+                "old": "Opened_Emilitia_Door",
+                "replacement": "RMC-Opened_Emilitia_Door"
+            },
+            {
+                "name": "Ruins2_10b[left1]",
+                "old": "Opened_Pleasure_House_Wall",
+                "replacement": "RMC-Opened_Pleasure_House_Wall"
+            },
+            {
+                "name": "Ruins2_11_b[left1]",
+                "old": "LOVE",
+                "replacement": "LOVE | RMC-Opened_Love_Door"
+            }
+        ]
+    },
+    {
+        "Description": "Crossroads",
+        "StatelessWaypoints": [
+            "RMC-Opened_False_Knight_Gate",
+            "RMC-Opened_Mawlek_Wall",
+            "RMC-Opened_Shaman_Pillar"
+        ],
+        "Substitutions": [
+            {
+              "name": "Crossroads_10[right1]",
+              "old": "Defeated_False_Knight",
+              "replacement": "RMC-Opened_False_Knight_Gate"
+            },
+            {
+              "name": "Crossroads_33[left1]",
+              "old": "Opened_Mawlek_Wall",
+              "replacement": "RMC-Opened_Mawlek_Wall"
+            },
+            {
+              "name": "Crossroads_33[right1]",
+              "old": "Opened_Shaman_Pillar",
+              "replacement": "RMC-Opened_Shaman_Pillar"
+            }
+        ]
+    },
+    {
+        "Description": "Dirtmouth",
+        "StatelessWaypoints": [
+            "RMC-Opened_Dirtmouth_Stag_Door",
+            "RMC-Opened_Bretta_Door",
+            "RMC-Opened_Jiji_Door",
+            "RMC-Opened_Sly_Door",
+            "RMC-Opened_Divine_Door",
+            "RMC-Opened_Grimm_Door",
+            "RMC-Activated_Dirtmouth_Lift"
+        ],
+        "Edits":[
+            {
+                "name": "Town[right1]",
+                "logic": "ORIG | Town + RMC-Activated_Dirtmouth_Lift"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Room_Town_Stag_Station[left1]",
+                "old": "Dirtmouth_Stag",
+                "replacement": "Dirtmouth_Stag | RMC-Opened_Dirtmouth_Stag_Door"
+            },
+            {
+                "name": "Town[door_bretta]",
+                "old": "Rescued_Bretta",
+                "replacement": "Rescued_Bretta | RMC-Opened_Bretta_Door"
+            },
+            {
+                "name": "Town[door_jiji]",
+                "old": "JIJIUNLOCK",
+                "replacement": "JIJIUNLOCK | RMC-Opened_Jiji_Door"
+            },
+            {
+                "name": "Town[door_sly]",
+                "old": "Rescued_Sly",
+                "replacement": "Rescued_Sly | RMC-Opened_Sly_Door"
+            },
+            {
+                "name": "Town[door_station]",
+                "old": "Dirtmouth_Stag",
+                "replacement": "Dirtmouth_Stag | RMC-Opened_Dirtmouth_Stag_Door"
+            },
+            {
+                "name": "Town[room_divine]",
+                "old": "Nightmare_Lantern_Lit",
+                "replacement": "Nightmare_Lantern_Lit | RMC-Opened_Divine_Door"
+            },
+            {
+                "name": "Town[room_grimm]",
+                "old": "Nightmare_Lantern_Lit",
+                "replacement": "Nightmare_Lantern_Lit | RMC-Opened_Grimm_Door"
+            }
+        ]
+    },
+    {
+        "Description": "Fog Canyon",
+        "StatelessWaypoints": [
+            "RMC-Opened_Archives_Exit_Wall"
+        ],
+        "Substitutions": [
+            {
+                "name": "Fungus3_02[right1]",
+                "old": "Opened_Archives_Exit_Wall",
+                "replacement": "RMC-Opened_Archives_Exit_Wall"
+            }
+        ]
+    },
+    {
+        "Description": "Fungal Wastes",
+        "StatelessWaypoints": [
+            "RMC-Opened_Mantis_Village",
+            "RMC-Opened_Mantis_Lords_Door"
+        ],
+        "Edits": [
+            {
+                "name": "Fungus2_14[bot3]",
+                "logic": "ORIG | Fungus2_14 + RMC-Opened_Mantis_Village"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Fungus2_25[right1]",
+                "old": "Defeated_Mantis_Lords",
+                "replacement": "RMC-Opened_Mantis_Lords_Door"
+            }
+        ]
+    },
+    {
+        "Description": "Howling Cliffs",
+        "StatelessWaypoints": [
+            // "RMC-Plank_Cliff's_Pass"
+        ],
+        "Edits": [
+            // {
+            //     "name" : "Cliffs_02[bot1]",
+            //     "logic": "ORIG | Cliffs_02 + RMC-Plank_Cliff's_Pass"
+            // }
+        ]
+    },
+    {
+        "Description": "Kingdom's Edge",
+        "StatelessWaypoints": [
+            "RMC-Opened_Lower_Kingdom's_Edge_Wall"
+        ],
+        "Substitutions": [
+            {
+                "name": "Deepnest_East_03[left2]",
+                "old": "Opened_Lower_Kingdom's_Edge_Wall",
+                "replacement": "RMC-Opened_Lower_Kingdom's_Edge_Wall"
+            }
+        ]
+    },
+    {
+        "Description": "Queen's Gardens",
+        "StatelessWaypoints": [
+            // "RMC-Switch_Petra_Arena"
+            "RMC-Opened_Gardens_Stag_Exit"
+        ],
+        "Edits": [
+            // {
+            //     "name": "Fungus3_05[left1]",
+            //     "logic": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)"
+            // },
+            // {
+            //     "name": "Fungus3_05[right1]",
+            //     "logic": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)"
+            // }
+        ],
+        "Substitutions": [
+            {
+                "name": "Fungus3_13[left2]",
+                "old": "Opened_Gardens_Stag_Exit",
+                "replacement": "RMC-Opened_Gardens_Stag_Exit"
+            }
+        ]
+    },
+    {
+        "Description": "Resting Grounds",
+        "StatelessWaypoints": [
+            "RMC-Opened_Resting_Grounds_Floor",
+            "RMC-Opened_Glade_Door",
+            "RMC-Broke_Crypts_One_Way_Floor",
+            "RMC-Opened_Resting_Grounds_Catacombs_Wall"
+        ],
+        "Substitutions": [
+            {
+                "name": "RestingGrounds_02[bot1]",
+                "old": "Opened_Resting_Grounds_Floor",
+                "replacement": "RMC-Opened_Resting_Grounds_Floor"
+            },
+            {
+                "name": "RestingGrounds_05[right1]",
+                "old": "Opened_Glade_Door",
+                "replacement": "Opened_Glade_Door | RMC-Opened_Glade_Door"
+            },
+            {
+                "name": "RestingGrounds_10[top1]",
+                "old": "Broke_Crypts_One_Way_Floor",
+                "replacement": "RMC-Broke_Crypts_One_Way_Floor"
+            },
+            {
+                "name": "Ruins2_10[right1]",
+                "old": "Opened_Resting_Grounds_Catacombs_Wall",
+                "replacement": "RMC-Opened_Resting_Grounds_Catacombs_Wall"
+            }
+        ]
+    },
+    {
+        "Description": "Waterways",
+        "StatelessWaypoints": [
+            "RMC-Opened_Dung_Defender_Wall",
+            "RMC-Opened_Waterways_Manhole",
+            "RMC-Broke_Flukemarm_Quake_Floor",
+            "RMC-Broke_Waterways_Bench_Floor",
+            "RMC-Broke_Dung_Defender_Quake_Floor",
+            "RMC-Drained_Waterways_Acid"
+        ],
+        "Edits": [
+            {
+                "name": "Waterways_02[top3]",
+                "logic": "ORIG | Waterways_02 + RMC-Broke_Waterways_Bench_Floor + (LEFTCLAW | RIGHTCLAW + WINGS)"
+            }
+        ],
+        "Substitutions": [
+            {
+                "name": "Abyss_01[left1]",
+                "old": "Opened_Dung_Defender_Wall",
+                "replacement": "RMC-Opened_Dung_Defender_Wall"
+            },
+            {
+                "name": "Waterways_01[top1]",
+                "old": "Opened_Waterways_Manhole",
+                "replacement": "RMC-Opened_Waterways_Manhole"
+            },
+            {
+                "name": "Waterways_02[bot1]",
+                "old": "Broke_Flukemarm_Quake_Floor",
+                "replacement": "Broke_Flukemarm_Quake_Floor | RMC-Broke_Flukemarm_Quake_Floor"
+            },
+            {
+                "name": "Waterways_05[bot2]",
+                "old": "Broke_Dung_Defender_Quake_Floor",
+                "replacement": "Broke_Dung_Defender_Quake_Floor | RMC-Broke_Dung_Defender_Quake_Floor"
+            }
+        ]
+    }
+]

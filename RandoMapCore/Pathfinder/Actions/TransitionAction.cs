@@ -104,6 +104,6 @@ internal class InfectionTransitionAction(TransitionAction ta) : TransitionAction
 {
     private protected override bool IsInvalidTransition(Node node, ProgressionManager pm)
     {
-        return base.IsInvalidTransition(node, pm) || pm.Get("RMC_Infected") > 0;
+        return base.IsInvalidTransition(node, pm) || PlayerData.instance.GetBool(nameof(PlayerData.crossroadsInfected));
     }
 }

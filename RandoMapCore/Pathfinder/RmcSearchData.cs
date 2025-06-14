@@ -139,13 +139,13 @@ internal class RmcSearchData : SearchData
 
         var waypointActions = JU.DeserializeFromEmbeddedResource<WaypointActionDef[]>(
                 RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Data.waypointActions.json"
+                "RandoMapCore.Resources.Pathfinder.waypointActions.json"
             )
             .ToDictionary(wad => (wad.Start, wad.Destination), wad => wad.Text);
 
         var routeCompassOverrides = MapChanger.JsonUtil.DeserializeFromAssembly<
             Dictionary<string, Dictionary<string, string>>
-        >(RandoMapCoreMod.Assembly, "RandoMapCore.Resources.Compass.routeCompassOverrides.json");
+        >(RandoMapCoreMod.Assembly, "RandoMapCore.Resources.Pathfinder.routeCompassOverrides.json");
 
         // Logic-defined actions (both in-scene and waypoint jumps)
         foreach (var destination in GetAllStateTerms())

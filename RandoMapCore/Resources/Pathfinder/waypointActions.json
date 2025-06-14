@@ -1,21 +1,21 @@
 [
   {
-    "Start": "RMC_Left_Elevator_Up",
+    "Start": "RMC-Left_Elevator_Up",
     "Destination": "Crossroads_49[elev_entrance]",
     "Text": "Left_Elevator-Up"
   },
   {
-    "Start": "RMC_Left_Elevator_Down",
+    "Start": "RMC-Left_Elevator_Down",
     "Destination": "Crossroads_49b[elev_entrance]",
     "Text": "Left_Elevator-Down"
   },
   {
-    "Start": "RMC_Right_Elevator_Up",
+    "Start": "RMC-Right_Elevator_Up",
     "Destination": "Ruins2_10[elev_entrance]",
     "Text": "Right_Elevator-Up"
   },
   {
-    "Start": "RMC_Right_Elevator_Down",
+    "Start": "RMC-Right_Elevator_Down",
     "Destination": "Ruins2_10b[elev_entrance]",
     "Text": "Right_Elevator-Down"
   },
@@ -79,17 +79,17 @@
     "Destination": "Room_Tram[door1]"
   },
   {
-    "Start": "RMC_Lower_Tram_Left",
+    "Start": "RMC-Lower_Tram_Left",
     "Destination": "Abyss_03_b[door_tram]",
     "Text": "Exit-Left"
   },
   {
-    "Start": "RMC_Lower_Tram_Middle",
+    "Start": "RMC-Lower_Tram_Middle",
     "Destination": "Abyss_03[door_tram]",
     "Text": "Exit-Middle"
   },
   {
-    "Start": "RMC_Lower_Tram_Right",
+    "Start": "RMC-Lower_Tram_Right",
     "Destination": "Abyss_03_c[door_tram]",
     "Text": "Exit-Right"
   },
@@ -98,12 +98,12 @@
     "Destination": "Room_Tram_RG[door1]"
   },
   {
-    "Start": "RMC_Upper_Tram_Left",
+    "Start": "RMC-Upper_Tram_Left",
     "Destination": "Crossroads_46[door_tram]",
     "Text": "Exit-Left"
   },
   {
-    "Start": "RMC_Upper_Tram_Right",
+    "Start": "RMC-Upper_Tram_Right",
     "Destination": "Crossroads_46b[door_tram]",
     "Text": "Exit-Right"
   },
@@ -124,7 +124,7 @@
     "Destination": "GG_Atrium[door_dreamEnter]"
   },
   {
-    "Start": "RMC_Warp-Palace_Grounds",
+    "Start": "RMC-Warp-Palace_Grounds",
     "Destination": "Abyss_05[door_dreamReturn_reality]",
     "Text": "Warp-Palace_Grounds"
   },
@@ -133,12 +133,12 @@
     "Destination": "White_Palace_06[door_dreamReturn]"
   },
   {
-    "Start": "RMC_Warp-Glade_to_Backer_Shrine",
+    "Start": "RMC-Warp-Glade_to_Backer_Shrine",
     "Destination": "Dream_Backer_Shrine[door1]",
     "Text": "Warp-Glade_to_Backer_Shrine"
   },
   {
-    "name": "RMC_Warp-Spirits'_Glade",
+    "name": "RMC-Warp-Spirits'_Glade",
     "Destination": "RestingGrounds_08[door_dreamReturn]",
     "Text": "Warp-Spirits'_Glade"
   }

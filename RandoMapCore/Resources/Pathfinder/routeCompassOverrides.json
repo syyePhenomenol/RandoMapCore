@@ -53,16 +53,16 @@
   "White_Palace_11[door2]": {
     "White_Palace_11": "Palace Gate/door2"
   },
-  "RMC_Right_Elevator_Down": {
+  "RMC-Right_Elevator_Down": {
     "Ruins2_10": "elev_main/Lift Call Lever"
   },
-  "RMC_Right_Elevator_Up": {
+  "RMC-Right_Elevator_Up": {
     "Ruins2_10b": "elev_main/Lift Call Lever"
   },
-  "RMC_Left_Elevator_Down": {
+  "RMC-Left_Elevator_Down": {
     "Crossroads_49": "_Scenery/elev_main/Lift Call Lever"
   },
-  "RMC_Left_Elevator_Up": {
+  "RMC-Left_Elevator_Up": {
     "Crossroads_49b": "elev_main/Lift Call Lever"
   },
   "Can_Stag": {
@@ -89,7 +89,7 @@
   "Warp-Palace_Grounds_to_White_Palace": {
     "Abyss_05": "Dusk Knight/Shield"
   },
-  "RMC_Warp-Palace_Grounds": {
+  "RMC-Warp-Palace_Grounds": {
     "White_Palace_03_hub": "doorWarp",
     "White_Palace_11": "doorWarp"
   },
@@ -105,10 +105,10 @@
   "Warp-Lifeblood_Core_to_Abyss": {
     "Abyss_08": "Dream Fall Catcher/Bottom"
   },
-  "RMC_Warp-Glade_to_Backer_Shrine": {
+  "RMC-Warp-Glade_to_Backer_Shrine": {
     "RestingGrounds_08": "Dream Enter"
   },
-  "RMC_Warp-Spirits'_Glade": {
+  "RMC-Warp-Spirits'_Glade": {
     "Dream_Backer_Shrine": "Dream Fall Catcher/Bottom",
     "Dream_Room_Believer_Shrine": "Dream Fall Catcher/Bottom"
   }

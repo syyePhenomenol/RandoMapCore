@@ -11,55 +11,68 @@ internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(refere
     protected override LogicManagerBuilder ModifyReferenceLM(LogicManagerBuilder lmb)
     {
         // Inject new terms and custom logic
-        foreach (
-            var rld in JU.DeserializeFromEmbeddedResource<RawLogicDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.transitions.json"
-            )
-        )
+        var logicChanges = JU.DeserializeFromEmbeddedResource<LogicChangeDef[]>(
+            RandoMapCoreMod.Assembly,
+            "RandoMapCore.Resources.Pathfinder.logicChanges.json"
+        );
+
+        foreach (var statelessWaypoint in logicChanges.SelectMany(lc => lc.StatelessWaypoints ?? []))
         {
-            if (!lmb.Transitions.Contains(rld.name))
+            if (!lmb.Waypoints.Contains(statelessWaypoint))
             {
-                lmb.AddTransition(rld);
+                lmb.AddWaypoint(new(statelessWaypoint, "FALSE", true));
+            }
+            else
+            {
+                RandoMapCoreMod.Instance.LogFine($"Could not add waypoint {statelessWaypoint}");
             }
         }
 
-        foreach (
-            var rwd in JU.DeserializeFromEmbeddedResource<RawWaypointDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.waypoints.json"
-            )
-        )
+        foreach (var stateWaypoint in logicChanges.SelectMany(lc => lc.StateWaypoints ?? []))
         {
-            if (!lmb.Waypoints.Contains(rwd.name))
+            if (!lmb.Waypoints.Contains(stateWaypoint.name))
             {
-                lmb.AddWaypoint(rwd);
+                lmb.AddWaypoint(stateWaypoint);
+            }
+            else
+            {
+                RandoMapCoreMod.Instance.LogFine($"Could not add waypoint {stateWaypoint.name}");
             }
         }
 
-        foreach (
-            var rld in JU.DeserializeFromEmbeddedResource<RawLogicDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.edits.json"
-            )
-        )
+        foreach (var transition in logicChanges.SelectMany(lc => lc.Transitions ?? []))
         {
-            if (lmb.LogicLookup.ContainsKey(rld.name))
+            if (!lmb.Waypoints.Contains(transition.name))
             {
-                lmb.DoLogicEdit(rld);
+                lmb.AddTransition(transition);
+            }
+            else
+            {
+                RandoMapCoreMod.Instance.LogFine($"Could not add transition {transition.name}");
             }
         }
 
-        foreach (
-            var rsd in JU.DeserializeFromEmbeddedResource<RawSubstDef[]>(
-                RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Logic.substitutions.json"
-            )
-        )
+        foreach (var edit in logicChanges.SelectMany(lc => lc.Edits ?? []))
         {
-            if (lmb.LogicLookup.ContainsKey(rsd.name))
+            if (lmb.LogicLookup.ContainsKey(edit.name))
             {
-                lmb.DoSubst(rsd);
+                lmb.DoLogicEdit(edit);
+            }
+            else
+            {
+                RandoMapCoreMod.Instance.LogFine($"Could not edit logic of {edit.name}");
+            }
+        }
+
+        foreach (var substitution in logicChanges.SelectMany(lc => lc.Substitutions ?? []))
+        {
+            if (lmb.LogicLookup.ContainsKey(substitution.name))
+            {
+                lmb.DoSubst(substitution);
+            }
+            else
+            {
+                RandoMapCoreMod.Instance.LogFine($"Could not substitute logic of {substitution.name}");
             }
         }
 

@@ -22,7 +22,7 @@ internal class RouteManager
     {
         _routeHints = JU.DeserializeFromEmbeddedResource<RouteHint[]>(
                 RandoMapCoreMod.Assembly,
-                "RandoMapCore.Resources.Pathfinder.Data.routeHints.json"
+                "RandoMapCore.Resources.Pathfinder.routeHints.json"
             )
             .ToDictionary(rh => (rh.Start, rh.Destination), rh => rh);
     }
