@@ -24,7 +24,8 @@ internal class RouteManager
                 RandoMapCoreMod.Assembly,
                 "RandoMapCore.Resources.Pathfinder.routeHints.json"
             )
-            .ToDictionary(rh => (rh.Start, rh.Destination), rh => rh);
+            .SelectMany(rh => rh.TermPairs.Select(tp => (tp, rh)))
+            .ToDictionary(pair => pair.tp, pair => pair.rh);
     }
 
     internal Route CurrentRoute { get; private set; }

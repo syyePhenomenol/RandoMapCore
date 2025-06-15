@@ -124,7 +124,7 @@
     "Destination": "GG_Atrium[door_dreamEnter]"
   },
   {
-    "Start": "RMC-Warp-Palace_Grounds",
+    "Start": "RMC-Warp_Palace_Grounds",
     "Destination": "Abyss_05[door_dreamReturn_reality]",
     "Text": "Warp-Palace_Grounds"
   },
@@ -133,12 +133,12 @@
     "Destination": "White_Palace_06[door_dreamReturn]"
   },
   {
-    "Start": "RMC-Warp-Glade_to_Backer_Shrine",
+    "Start": "RMC-Warp_Glade_to_Backer_Shrine",
     "Destination": "Dream_Backer_Shrine[door1]",
     "Text": "Warp-Glade_to_Backer_Shrine"
   },
   {
-    "name": "RMC-Warp-Spirits'_Glade",
+    "name": "RMC-Warp_Spirits'_Glade",
     "Destination": "RestingGrounds_08[door_dreamReturn]",
     "Text": "Warp-Spirits'_Glade"
   }

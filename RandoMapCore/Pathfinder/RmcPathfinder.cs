@@ -19,7 +19,20 @@ public class RmcPathfinder : HookModule
 
     public override void OnEnterGame()
     {
-        LE = new(RandoMapCoreMod.Data.PM.lm);
+        try
+        {
+            LE = new(RandoMapCoreMod.Data.PM.lm);
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(
+                $"Failed to inject custom pathfinder logic. Using default logic instead\n{e}"
+            );
+
+            // If custom logic fails, use default logic instead
+            LE = new DefaultLogicExtender(RandoMapCoreMod.Data.PM.lm);
+        }
+
         SD = new(LE.LocalLM);
         PS = new(LE, RandoMapCoreMod.Data.Context, true);
         PSNoSequenceBreak = new(LE, RandoMapCoreMod.Data.Context, false);

@@ -4,17 +4,19 @@ namespace RandoMapCore.Pathfinder;
 
 internal record RouteHint
 {
-    [JsonProperty]
-    internal string Start { get; init; }
+    [JsonConstructor]
+    internal RouteHint(string[][] termPairs, string[] pdBools, string text)
+    {
+        TermPairs = [.. termPairs.Select(p => (p[0], p[1]))];
+        PDBools = pdBools;
+        Text = text;
+    }
 
-    [JsonProperty]
-    internal string Destination { get; init; }
+    internal (string, string)[] TermPairs { get; }
 
-    [JsonProperty]
-    internal string[] PDBools { get; init; }
+    internal string[] PDBools { get; }
 
-    [JsonProperty]
-    internal string Text { get; init; }
+    internal string Text { get; }
 
     internal bool IsActive()
     {

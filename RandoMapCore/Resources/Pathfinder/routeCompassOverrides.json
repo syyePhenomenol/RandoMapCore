@@ -89,7 +89,7 @@
   "Warp-Palace_Grounds_to_White_Palace": {
     "Abyss_05": "Dusk Knight/Shield"
   },
-  "RMC-Warp-Palace_Grounds": {
+  "RMC-Warp_Palace_Grounds": {
     "White_Palace_03_hub": "doorWarp",
     "White_Palace_11": "doorWarp"
   },
@@ -105,10 +105,10 @@
   "Warp-Lifeblood_Core_to_Abyss": {
     "Abyss_08": "Dream Fall Catcher/Bottom"
   },
-  "RMC-Warp-Glade_to_Backer_Shrine": {
+  "RMC-Warp_Glade_to_Backer_Shrine": {
     "RestingGrounds_08": "Dream Enter"
   },
-  "RMC-Warp-Spirits'_Glade": {
+  "RMC-Warp_Spirits'_Glade": {
     "Dream_Backer_Shrine": "Dream Fall Catcher/Bottom",
     "Dream_Room_Believer_Shrine": "Dream Fall Catcher/Bottom"
   }

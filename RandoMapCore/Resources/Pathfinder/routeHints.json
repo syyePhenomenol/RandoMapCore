@@ -2,68 +2,137 @@
 // 1. Change the logic to prevent the path
 // 2. Give a hint to remind the player to go somewhere else first to unlock the path
 [
-  {
-    "Start": "Town",
-    "Destination": "Town[door_sly]",
-    "PDBools": [
-      "slyRescued" 
-    ],
-    "Text": "You need to rescue Sly first."
-  },
-  {
-    "Start": "Town",
-    "Destination": "Town[door_bretta]",
-    "PDBools": [
-      "brettaRescued" 
-    ],
-    "Text": "You need to rescue Bretta first."
-  },
-  {
-    "Start": "Town",
-    "Destination": "Town[room_grimm]",
-    "PDBools": [
-      "troupeInTown" 
-    ],
-    "Text": "You need to light the Nightmare Lantern first."
-  },
-  {
-    "Start": "Town",
-    "Destination": "Town[room_divine]",
-    "PDBools": [
-      "troupeInTown" 
-    ],
-    "Text": "You need to light the Nightmare Lantern first."
-  },
-  {
-    "Start": "RestingGrounds_05",
-    "Destination": "RestingGrounds_05[right1]",
-    "PDBools": [
-      "gladeDoorOpened" 
-    ],
-    "Text": "You need to talk to Seer first."
-  },
-  {
-    "Start": "Waterways_07",
-    "Destination": "Waterways_07[right1]",
-    "PDBools": [
-      "waterwaysAcidDrained" 
-    ],
-    "Text": "You need to drain the Waterways acid first."
-  },
-  {
-    "Start": "Waterways_07[door1]",
-    "Destination": "Waterways_07[right1]",
-    "PDBools": [
-      "waterwaysAcidDrained" 
-    ],
-    "Text": "You need to drain the Waterways acid first."
-  },
-  {
-    "Start": "Waterways_07[top1]",
-    "Destination": "Waterways_07[right1]",
-    "PDBools": [
-      "waterwaysAcidDrained" 
-    ],
-    "Text": "You need to drain the Waterways acid first."
-  }
+    {
+        "termPairs": [
+            [
+                "Abyss_09",
+                "Abyss_09[right1]"
+            ],
+            [
+                "Abyss_09[right1]",
+                "Abyss_09"
+            ]
+        ],
+        "pdBools": [
+            "abyssLighthouse"
+        ],
+        "text": "You need to light the Abyss Lighthouse first."
+    },
+    {
+        "termPairs": [
+            [
+                "RestingGrounds_05",
+                "RestingGrounds_05[right1]"
+            ]
+        ],
+        "pdBools": [
+            "gladeDoorOpened"
+        ],
+        "text": "You need to talk to Seer first."
+    },
+    {
+        "termPairs": [
+            [
+                "Town",
+                "Town[door_bretta]"
+            ]
+        ],
+        "pdBools": [
+            "brettaRescued"
+        ],
+        "text": "You need to rescue Bretta first."
+    },
+    {
+        "termPairs": [
+            [
+                "Town",
+                "Town[door_sly]"
+            ]
+        ],
+        "pdBools": [
+            "slyRescued"
+        ],
+        "text": "You need to rescue Sly first."
+    },
+    {
+        "termPairs": [
+            [
+                "Town",
+                "Town[room_divine]"
+            ],
+            [
+                "Town",
+                "Town[room_grimm]"
+            ]
+        ],
+        "pdBools": [
+            "troupeInTown"
+        ],
+        "text": "You need to light the Nightmare Lantern first."
+    },
+    {
+        "termPairs": [
+            [
+                "Waterways_07",
+                "Waterways_07[right1]"
+            ],
+            [
+                "Waterways_07[door1]",
+                "Waterways_07[right1]"
+            ],
+            [
+                "Waterways_07[top1]",
+                "Waterways_07[right1]"
+            ]
+        ],
+        "pdBools": [
+            "waterwaysAcidDrained"
+        ],
+        "text": "You need to drain the Waterways acid first."
+    },
+    {
+        "termPairs": [
+            [
+                "White_Palace_01",
+                "White_Palace_01[top1]"
+            ],
+            [
+                "White_Palace_01[top1]",
+                "White_Palace_01"
+            ],
+            [
+                "White_Palace_01[top1]",
+                "White_Palace_01[right1]"
+            ]
+        ],
+        "pdBools": [
+            "whitePalaceOrb_1"
+        ],
+        "text": "You need to light the Palace Entrance orb first."
+    },
+    {
+        "termPairs": [
+            [
+                "White_Palace_03_hub",
+                "White_Palace_03_hub[top1]"
+            ],
+            [
+                "White_Palace_03_hub[right1]",
+                "Warp-White_Palace_Atrium_to_Palace_Grounds"
+            ],
+            [
+                "White_Palace_03_hub[top1]",
+                "Warp-White_Palace_Atrium_to_Palace_Grounds"
+            ],
+            [
+                "White_Palace_03_hub[top1]",
+                "White_Palace_03_hub"
+            ]
+        ],
+        "pdBools": [
+            "whitePalaceOrb_2",
+            "whitePalaceOrb_3"
+        ],
+        "text": "You need to light both Palace Atrium orbs first."
+    }
 ]
