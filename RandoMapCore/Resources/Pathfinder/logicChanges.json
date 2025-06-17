@@ -562,6 +562,7 @@
             }
         ]
     },
+    // Changes that don't insert new transitions
     {
         "Description": "Ancient_Basin",
         "StatelessWaypoints": [
@@ -575,23 +576,17 @@
             },
             {
                 "name": "Abyss_19[left1]",
-                "logic": "ORIG | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut + (Defeated_Broken_Vessel | RMC-Defeated_Broken_Vessel)"
+                "logic": "ORIG | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut + COMBAT[Broken_Vessel]"
             },
             {
                 "name": "Abyss_19[right1]",
                 "logic": "ORIG | Abyss_19[left1] + RMC-Defeated_Broken_Vessel + (Plank-Broken_Vessel_Shortcut ? TRUE)"
-            },
-            {
-                "name": "Defeated_Broken_Vessel",
-                "logic": "ORIG | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut + COMBAT[Broken_Vessel]"
             }
         ]
     },
-    // Changes that don't insert new transitions
     {
         "Description": "City of Tears",
         "StatelessWaypoints": [
-            "RMC-Broke_City_Toll_Wall",
             "RMC-Broke_Sanctum_Glass_Floor",
             "RMC-City_Toll_Lift_Down",
             "RMC-City_Toll_Lift_Up",
@@ -621,9 +616,15 @@
             "RMC-Opened_Elegant_Door",
             "RMC-Opened_Love_Door",
             "RMC-Opened_Pleasure_House",
-            "RMC-Opened_Pleasure_House_Wall"
+            "RMC-Plank_Nailsmith",
+            "RMC-Wall_Pleasure_House",
+            "RMC-Wall_Shade_Soul_Shortcut"
         ],
         "Edits": [
+            {
+                "name": "Ruins1_04",
+                "logic": "ORIG | (Ruins1_04[door1] | Ruins1_04[right1]) + RMC-Plank_Nailsmith"
+            },
             {
                 "name": "Ruins1_05[bot1]",
                 "logic": "ORIG | Ruins1_05[bot2] + (LEFTCLAW + WINGS | RIGHTCLAW) + RMC-Lever_City_Above_Lemm_Upper"
@@ -670,11 +671,11 @@
             },
             {
                 "name": "Ruins1_30[left2]",
-                "logic": "ORIG  | Ruins1_30 + RMC-Dive_Floor_Sanctum_Escape_2 + RMC-Dive_Floor_Sanctum_Escape_1 + ANYCLAW"
+                "logic": "ORIG | Ruins1_30 + RMC-Dive_Floor_Sanctum_Escape_2 + RMC-Dive_Floor_Sanctum_Escape_1 + ANYCLAW"
             },
             {
                 "name": "Ruins1_31",
-                "logic": "ORIG | (Ruins1_31[left1] | Ruins1_31[bot1]) + RMC-Broke_City_Toll_Wall + (RMC-City_Toll_Lift_Down + (ANYCLAW | WINGS) | RMC-City_Toll_Lift_Up)"
+                "logic": "ORIG | (Ruins1_31[left1] | Ruins1_31[bot1]) + RMC-Wall_Shade_Soul_Shortcut + (RMC-City_Toll_Lift_Down + (ANYCLAW | WINGS) | RMC-City_Toll_Lift_Up)"
             },
             {
                 "name": "Ruins1_32[right1]",
@@ -727,7 +728,7 @@
             {
                 "name": "Ruins2_10b[left1]",
                 "old": "Opened_Pleasure_House_Wall",
-                "replacement": "RMC-Opened_Pleasure_House_Wall"
+                "replacement": "RMC-Wall_Pleasure_House"
             },
             {
                 "name": "Ruins2_11_b[left1]",
@@ -739,9 +740,10 @@
     {
         "Description": "Crossroads",
         "StatelessWaypoints": [
+            "RMC-Collapser_Glowing_Womb_Tunnel",
             "RMC-Defeated_Crossroads_Baldur",
             "RMC-Opened_False_Knight_Gate",
-            "RMC-Opened_Mawlek_Wall",
+            "RMC-Plank_Brooding_Mawlek",
             "RMC-Switch_Crossroads_East",
             "RMC-Switch_Outside_Ancestral_Mound"
         ],
@@ -753,6 +755,10 @@
             {
                 "name": "Crossroads_11_alt[right1]",
                 "logic": "ORIG | Crossroads_11_alt[left1] + RMC-Defeated_Crossroads_Baldur"
+            },
+            {
+                "name": "Crossroads_21[top1]",
+                "logic": "ORIG | Crossroads_21 + (ANYCLAW | WINGS | INFECTED) + RMC-Collapser_Glowing_Womb_Tunnel"
             }
         ],
         "Substitutions": [
@@ -764,7 +770,7 @@
             {
                 "name": "Crossroads_33[left1]",
                 "old": "Opened_Mawlek_Wall",
-                "replacement": "RMC-Opened_Mawlek_Wall"
+                "replacement": "RMC-Plank_Brooding_Mawlek"
             },
             {
                 "name": "Crossroads_33[right1]",
@@ -776,6 +782,7 @@
     {
         "Description": "Crystal Peak",
         "StatelessWaypoints": [
+            "RMC-Collapser_Deep_Focus",
             "RMC-Dive_Floor_Peak_Entrance",
             "RMC-Lever_Crystal_Peak_Below_Chest",
             "RMC-Lever_Crystal_Peak_Crushers_Chest",
@@ -787,6 +794,10 @@
             {
                 "name": "Mines_04[top1]",
                 "logic": "ORIG | Mines_04 + (LEFTCLAW | WINGS + ENEMYPOGOS) + RMC-Lever_Crystal_Peak_Below_Chest"
+            },
+            {
+                "name": "Mines_06[left1]",
+                "logic": "ORIG | Mines_06[right1] + RMC-Collapser_Deep_Focus + (BACKGROUNDPOGOS + (WINGS | RIGHTCLAW | $SHADESKIP + (LEFTCLAW | SPELLAIRSTALL + DAMAGEBOOSTS + $TAKEDAMAGE[2])) | WINGS + ANYCLAW)"
             },
             {
                 "name": "Mines_20",
@@ -816,10 +827,29 @@
     {
         "Description": "Deepnest",
         "StatelessWaypoints": [
+            "RMC-Collapser_Failed_Tramway_Bench",
+            "RMC-Collapser_Deepnest_By_Mantis_Lords_Path",
+            "RMC-Collapser_Deepnest_Zote",
             "RMC-Lever_Failed_Tramway_Left",
-            "RMC-Lever_Failed_Tramway_Right"
+            "RMC-Lever_Failed_Tramway_Right",
+            "RMC-Plank_Nosk_Exit",
+            "RMC-Plank_Upper_Deepnest",
+            "RMC-Plank_Village_Lower",
+            "RMC-Plank_Village_Upper"
         ],
         "Edits": [
+            {
+                "name": "Deepnest_01b[right1]",
+                "logic": "ORIG | ((Deepnest_01b[bot1] | Deepnest_01b[right2]) + LEFTCLAW + WINGS | Deepnest_01b[top1] + (RIGHTDASH | RIGHTCLAW | WINGS) | Deepnest_01b[top2]) + RMC-Plank_Upper_Deepnest"
+            },
+            {
+                "name": "Deepnest_14",
+                "logic": "ORIG | Deepnest_14[right1] + RMC-Collapser_Failed_Tramway_Bench + (ANYCLAW | WINGS)"
+            },
+            {
+                "name": "Deepnest_16[bot1]",
+                "logic": "ORIG | Deepnest_16[left1] + (LEFTCLAW + WINGS | RIGHTCLAW + (WINGS | $SHADESKIP)) + RMC-Collapser_Deepnest_By_Mantis_Lords_Path"
+            },
             {
                 "name": "Deepnest_26",
                 "logic": "ORIG | Deepnest_26[left2] + WINGS + RMC-Lever_Failed_Tramway_Right"
@@ -827,17 +857,29 @@
             {
                 "name": "Deepnest_26b[right2]",
                 "logic": "ORIG | Deepnest_26b[right1] + RMC-Lever_Failed_Tramway_Left"
+            },
+            {
+                "name": "Deepnest_31[right2]",
+                "logic": "ORIG | Deepnest_31[right1] + RMC-Plank_Nosk_Exit"
+            },
+            {
+                "name": "Deepnest_33[top1]",
+                "logic": "ORIG | Deepnest_33[bot1] + ANYCLAW + WINGS + RMC-Collapser_Deepnest_Zote"
+            },
+            {
+                "name": "Deepnest_41[left2]",
+                "logic": "ORIG | (Deepnest_41[left1] + (Plank-Village_Middle ? TRUE) | Deepnest_41[right1] + RMC-Plank_Village_Upper) + RMC-Plank_Village_Lower"
             }
         ],
         "Substitutions": [
             {
                 "name": "Deepnest_26",
-                "old": "Lever_Failed_Tramway_Left",
+                "old": "Opened_Tramway_Exit_Gate",
                 "replacement": "RMC-Lever_Failed_Tramway_Left"
             },
             {
                 "name": "Deepnest_26[left1]",
-                "old": "Lever_Failed_Tramway_Left",
+                "old": "Opened_Tramway_Exit_Gate",
                 "replacement": "RMC-Lever_Failed_Tramway_Left"
             }
         ]
@@ -901,34 +943,45 @@
         "Description": "Fog Canyon",
         "StatelessWaypoints": [
             "RMC-Lever_Below_Overgrown_Mound",
-            "RMC-Opened_Archives_Exit_Wall"
+            "RMC-Plank_Archives_Outer",
+            "RMC-Plank_Outside_Overgrown_Mound"
         ],
         "Edits": [
             {
                 "name": "Fungus3_44[bot1]",
                 "logic": "ORIG | Fungus3_44 + RMC-Lever_Below_Overgrown_Mound"
+            },
+            {
+                "name": "Fungus3_44[door1]",
+                "logic": "ORIG | Fungus3_44 + (LEFTCLAW | WINGS | LEFTDASH | LEFTSUPERDASH | ENEMYPOGOS | FIREBALLSKIPS + (RIGHTFIREBALL | SCREAM) + $CASTSPELL[2,before:ROOMSOUL,after:ROOMSOUL]) + RMC-Plank_Outside_Overgrown_Mound"
             }
         ],
         "Substitutions": [
             {
                 "name": "Fungus3_02[right1]",
                 "old": "Opened_Archives_Exit_Wall",
-                "replacement": "RMC-Opened_Archives_Exit_Wall"
+                "replacement": "RMC-Plank_Archives_Outer"
             }
         ]
     },
     {
         "Description": "Fungal Wastes",
         "StatelessWaypoints": [
-            "RMC-Broke_Pilgrim's_Way_Quake_Floor",
             "RMC-Defeated_Mantis_Lords",
+            "RMC-Dive_Floor_Pilgrim's_Way",
             "RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
             "RMC-Lever_Fungal_Wastes_Bouncy_Grub",
             "RMC-Lever_Mantis_Lords_Access",
             "RMC-Lever_Mantis_Lords_Middle_Right",
-            "RMC-Lever_Waterways_Hwurmp_Arena"
+            "RMC-Lever_Waterways_Hwurmp_Arena",
+            "RMC-Plank_Deepnest_Exit",
+            "RMC-Plank_Fungal_Core"
         ],
         "Edits": [
+            {
+                "name": "Deepnest_01[bot1]",
+                "logic": "ORIG | Deepnest_01 + RMC-Plank_Deepnest_Exit"
+            },
             {
                 "name": "Fungus2_04[top1",
                 "logic": "ORIG | Fungus2_04 + RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres"
@@ -947,7 +1000,11 @@
             },
             {
                 "name": "Fungus2_21[right1]",
-                "logic": "ORIG | Fungus2_21 + ((LEFTCLAW + WINGS) | RIGHTCLAW) + RMC-Broke_Pilgrim's_Way_Quake_Floor"
+                "logic": "ORIG | Fungus2_21 + ((LEFTCLAW + WINGS) | RIGHTCLAW) + RMC-Dive_Floor_Pilgrim's_Way"
+            },
+            {
+                "name": "Fungus2_29[bot1]",
+                "logic": "ORIG | Fungus2_29[right1] + RMC-Plank_Fungal_Core"
             }
         ],
         "Substitutions": [
@@ -964,11 +1021,16 @@
         ]
     },
     {
-        "Description": "Greeenpath",
+        "Description": "Greenpath",
         "StatelessWaypoints": [
+            "RMC-Plank_Hornet_Exit",
             "RMC-Switch_Greenpath_Stag"
         ],
         "Edits": [
+            {
+                "name": "Fungus1_04[left1]",
+                "logic": "ORIG | Fungus1_04[right1] + RMC-Plank_Hornet_Exit + (WINGS | LEFTDASH | ACID | SPELLAIRSTALL + $CASTSPELL[1,1])"
+            },
             {
                 "name": "Fungus1_22[top1]",
                 "logic": "ORIG | Fungus1_22[bot1] + RMC-Switch_Greenpath_Stag"
@@ -982,13 +1044,13 @@
     {
         "Description": "Howling Cliffs",
         "StatelessWaypoints": [
-            // "RMC-Plank_Cliff's_Pass"
+            "RMC-Plank_Cliff's_Pass"
         ],
         "Edits": [
-            // {
-            //     "name" : "Cliffs_02[bot1]",
-            //     "logic": "ORIG | Cliffs_02 + RMC-Plank_Cliff's_Pass"
-            // }
+            {
+                "name": "Cliffs_02[bot1]",
+                "logic": "ORIG | Cliffs_02 + RMC-Plank_Cliff's_Pass"
+            }
         ]
     },
     {
@@ -998,12 +1060,32 @@
             "RMC-Dive_Floor_Lower_Edge",
             "RMC-Dive_Floor_Oro_2",
             "RMC-Dive_Floor_Oro_3",
-            "RMC-Opened_Lower_Kingdom's_Edge_Wall"
+            "RMC-Plank_Colo_Shortcut",
+            "RMC-Plank_Edge_Tram_Exit",
+            "RMC-Plank_Hive_Exit",
+            "RMC-Plank_Hive_Mask",
+            "RMC-Plank_Quickslash_Exit"
         ],
         "Edits": [
             {
+                "name": "Deepnest_East_01[right1]",
+                "logic": "ORIG | Deepnest_East_01[top1] + RMC-Plank_Hive_Exit | Deepnest_East_01[bot1] + (LEFTCLAW | WINGS | ENEMYPOGOS | RIGHTCLAW + OBSCURESKIPS) + RMC-Plank_Hive_Exit"
+            },
+            {
                 "name": "Deepnest_East_02",
                 "logic": "ORIG | Deepnest_East_02[bot2] + (LEFTCLAW | RIGHTCLAW + ENEMYPOGOS | WINGS) + (ACID | LEFTCLAW + RIGHTSUPERDASH + (RIGHTCLAW | WINGS) + ACIDSKIPS) + RMC-Dive_Floor_Lower_Edge"
+            },
+            {
+                "name": "Deepnest_East_04[bot1]",
+                "logic": "ORIG | ((Deepnest_East_06[door1] + LEFTCLAW) | (Deepnest_East_06[left1] + RIGHTCLAW) | Deepnest_East_06[top1]) + RMC-Plank_Quickslash_Exit"
+            },
+            {
+                "name": "Deepnest_East_09[bot1]",
+                "logic": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut"
+            },
+            {
+                "name": "Deepnest_East_09[right1]",
+                "logic": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut"
             },
             {
                 "name": "Deepnest_East_14[top2]",
@@ -1012,13 +1094,17 @@
             {
                 "name": "Deepnest_East_Hornet[left1]",
                 "logic": "ORIG | Deepnest_East_Hornet[left2] + ((LEFTCLAW + RIGHTCLAW) | WINGS) + RMC-Defeated_Hornet_2"
+            },
+            {
+                "name": "Hive_03_c[right2]",
+                "logic": "ORIG | (Hive_03_c + RMC-Plank_Hive_Mask + WINGS)"
             }
         ],
         "Substitutions": [
             {
                 "name": "Deepnest_East_03[left2]",
                 "old": "Opened_Lower_Kingdom's_Edge_Wall",
-                "replacement": "RMC-Opened_Lower_Kingdom's_Edge_Wall"
+                "replacement": "RMC-Plank_Edge_Tram_Exit"
             }
         ]
     },
@@ -1026,6 +1112,7 @@
         "Description": "Queen's Gardens",
         "StatelessWaypoints": [
             "RMC-Lever_Queen's_Gardens_Ground_Block",
+            "RMC-Plank_Moss_Prophet",
             "RMC-Switch_Petra_Arena",
             "RMC-Switch_Queen's_Gardens_Stag"
         ],
@@ -1045,6 +1132,10 @@
             {
                 "name": "Fungus3_05[right1]",
                 "logic": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)"
+            },
+            {
+                "name": "Fungus3_39[left1]",
+                "logic": "ORIG | Fungus3_39[right1] + RMC-Plank_Moss_Prophet + (ANYCLAW | WINGS)"
             }
         ],
         "Substitutions": [
@@ -1058,9 +1149,9 @@
     {
         "Description": "Resting Grounds",
         "StatelessWaypoints": [
-            "RMC-Broke_Crypts_One_Way_Floor",
+            "RMC-Collapser_Catacombs_Entrance",
             "RMC-Opened_Glade_Door",
-            "RMC-Opened_Resting_Grounds_Catacombs_Wall",
+            "RMC-Plank_Catacombs_Elevator",
             "RMC-Switch_Lower_Resting_Grounds"
         ],
         "Substitutions": [
@@ -1077,12 +1168,12 @@
             {
                 "name": "RestingGrounds_10[top1]",
                 "old": "Broke_Crypts_One_Way_Floor",
-                "replacement": "RMC-Broke_Crypts_One_Way_Floor"
+                "replacement": "RMC-Collapser_Catacombs_Entrance"
             },
             {
                 "name": "Ruins2_10[right1]",
                 "old": "Opened_Resting_Grounds_Catacombs_Wall",
-                "replacement": "RMC-Opened_Resting_Grounds_Catacombs_Wall"
+                "replacement": "RMC-Plank_Catacombs_Elevator"
             }
         ]
     },
@@ -1095,14 +1186,16 @@
             "RMC-Dive_Floor_Waterways_Bench_1",
             "RMC-Dive_Floor_Waterways_Bench_2",
             "RMC-Lever_Dung_Defender",
-            "RMC-Opened_Dung_Defender_Wall",
+            "RMC-Plank_Dung_Defender",
+            "RMC-Plank_Isma's_Grove",
+            "RMC-Plank_Junk_Pit_Exit",
             "RMC-Opened_Waterways_Manhole"
         ],
         "Edits": [
             // Substitution doesn't work here because the bot1 transition is also used as a state provider
             {
                 "name": "Broke_Flukemarm_Quake_Floor",
-                "logic": "Waterways_02[bot1] + RMC-Dive_Floor_Flukemarm | (Waterways_02[top1] | Waterways_02[top2] + (ANYCLAW | WINGS | SWIM) | Waterways_02[top3] + Broke_Waterways_Bench_Quake_Floor_3 | Waterways_02[bot2] + (ANYCLAW | WINGS | SWIM)) + QUAKE + $CASTSPELL[before:ROOMSOUL]"
+                "logic": "Waterways_02[bot1] + RMC-Dive_Floor_Flukemarm | (Waterways_02[top1] | Waterways_02[top2] + (ANYCLAW | WINGS | SWIM) | Waterways_02[top3] + (Dive_Floor-Above_Waterways_Bench ? Broke_Waterways_Bench_Quake_Floor_3) | Waterways_02[bot2] + (ANYCLAW | WINGS | SWIM)) + QUAKE + $CASTSPELL[before:ROOMSOUL]"
             },
             {
                 "name": "Waterways_02[top3]",
@@ -1111,13 +1204,21 @@
             {
                 "name": "Waterways_04",
                 "logic": "ORIG | Waterways_04[bot1] + (RIGHTCLAW | WINGS + LEFTCLAW) + RMC-Dive_Floor_Waterways_Bench_1"
+            },
+            {
+                "name": "Waterways_07[top1]",
+                "logic": "ORIG | Waterways_07 + RMC-Plank_Isma's_Grove + ANYCLAW"
+            },
+            {
+                "name": "Waterways_08[left1]",
+                "logic": "ORIG | Waterways_08[top1] + RMC-Plank_Junk_Pit_Exit"
             }
         ],
         "Substitutions": [
             {
                 "name": "Abyss_01[left1]",
                 "old": "Opened_Dung_Defender_Wall",
-                "replacement": "RMC-Opened_Dung_Defender_Wall"
+                "replacement": "RMC-Plank_Dung_Defender"
             },
             {
                 "name": "Broke_Dung_Defender_Quake_Floor",
