@@ -1,1271 +1,1227 @@
 [
     {
         "Description": "Unlink Start and Bench Warps",
-        "Edits": [
-            {
-                "name": "Start_State",
-                "logic": "FALSE"
-            },
-            {
-                "name": "Can_Bench",
-                "logic": "FALSE"
-            },
-            {
-                "name": "Can_Warp_To_DG_Bench",
-                "logic": "FALSE"
-            },
-            {
-                "name": "Can_Warp_To_Bench",
-                "logic": "FALSE"
-            }
-        ]
+        "Edits": {
+            "Start_State": "FALSE",
+            "Can_Bench": "FALSE",
+            "Can_Warp_To_DG_Bench": "FALSE",
+            "Can_Warp_To_Bench": "FALSE"
+        }
     },
     // Changes that insert new transitions
     {
         "Description": "Stags",
-        "Transitions": [
-            {
-                "name": "Room_Town_Stag_Station[door_stagExit]",
-                "logic": "Can_Stag"
+        "Transitions": {
+            "Room_Town_Stag_Station[door_stagExit]": "Can_Stag",
+            "Crossroads_47[door_stagExit]": "Can_Stag + Crossroads_Stag",
+            "Fungus1_16_alt[door_stagExit]": "Can_Stag + Greenpath_Stag",
+            "Fungus2_02[door_stagExit]": "Can_Stag + Queen's_Station_Stag",
+            "Deepnest_09[door_stagExit]": "Can_Stag + Distant_Village_Stag",
+            "Abyss_22[door_stagExit]": "Can_Stag + Hidden_Station_Stag",
+            "Ruins1_29[door_stagExit]": "Can_Stag + City_Storerooms_Stag",
+            "Ruins2_08[door_stagExit]": "Can_Stag + King's_Station_Stag",
+            "RestingGrounds_09[door_stagExit]": "Can_Stag + Resting_Grounds_Stag",
+            "Fungus3_40[door_stagExit]": "Can_Stag + Queen's_Gardens_Stag",
+            "Cliffs_03[door_stagExit]": "Can_Stag + Stag_Nest_Stag"
+        },
+        "Edits": {
+            "Can_Stag": "ORIG | (Room_Town_Stag_Station[door_stagExit] | Crossroads_47[door_stagExit] | Fungus1_16_alt[door_stagExit] | Fungus2_02[door_stagExit] | Deepnest_09[door_stagExit] | Abyss_22[door_stagExit] | Ruins1_29[door_stagExit] | Ruins2_08[door_stagExit] | RestingGrounds_09[door_stagExit] | Fungus3_40[door_stagExit]) + $STAGSTATEMODIFIER"
+        },
+        "Substitutions": {
+            "Room_Town_Stag_Station[left1]": {
+                "Can_Stag": "Room_Town_Stag_Station[door_stagExit]"
             },
-            {
-                "name": "Crossroads_47[door_stagExit]",
-                "logic": "Can_Stag + Crossroads_Stag"
+            "Crossroads_47[right1]": {
+                "Can_Stag": "Crossroads_47[door_stagExit]"
             },
-            {
-                "name": "Fungus1_16_alt[door_stagExit]",
-                "logic": "Can_Stag + Greenpath_Stag"
+            "Fungus1_16_alt[right1]": {
+                "Can_Stag": "Fungus1_16_alt[door_stagExit]"
             },
-            {
-                "name": "Fungus2_02[door_stagExit]",
-                "logic": "Can_Stag + Queen's_Station_Stag"
+            "Fungus2_02[right1]": {
+                "Can_Stag": "Fungus2_02[door_stagExit]"
             },
-            {
-                "name": "Deepnest_09[door_stagExit]",
-                "logic": "Can_Stag + Distant_Village_Stag"
+            "Deepnest_09[left1]": {
+                "Can_Stag": "Deepnest_09[door_stagExit]"
             },
-            {
-                "name": "Abyss_22[door_stagExit]",
-                "logic": "Can_Stag + Hidden_Station_Stag"
+            "Abyss_22[left1]": {
+                "Can_Stag": "Abyss_22[door_stagExit]"
             },
-            {
-                "name": "Ruins1_29[door_stagExit]",
-                "logic": "Can_Stag + City_Storerooms_Stag"
+            "Ruins1_29[left1]": {
+                "Can_Stag": "Ruins1_29[door_stagExit]"
             },
-            {
-                "name": "Ruins2_08[door_stagExit]",
-                "logic": "Can_Stag + King's_Station_Stag"
+            "Ruins2_08[left1]": {
+                "Can_Stag": "Ruins2_08[door_stagExit]"
             },
-            {
-                "name": "RestingGrounds_09[door_stagExit]",
-                "logic": "Can_Stag + Resting_Grounds_Stag"
+            "RestingGrounds_09[left1]": {
+                "Can_Stag": "RestingGrounds_09[door_stagExit]"
             },
-            {
-                "name": "Fungus3_40[door_stagExit]",
-                "logic": "Can_Stag + Queen's_Gardens_Stag"
+            "Bench-Gardens_Stag": {
+                "Can_Stag": "Fungus3_40[door_stagExit]"
             },
-            {
-                "name": "Cliffs_03[door_stagExit]",
-                "logic": "Can_Stag + Stag_Nest_Stag"
+            "Fungus3_40[right1]": {
+                "Can_Stag": "Fungus3_40[door_stagExit]"
+            },
+            "Fungus3_40[top1]": {
+                "Can_Stag": "Fungus3_40[door_stagExit]"
+            },
+            "Cliffs_03[right1]": {
+                "Can_Stag": "Cliffs_03[door_stagExit]"
             }
-        ],
-        "Edits": [
-            {
-                "name": "Can_Stag",
-                "logic": "ORIG | (Room_Town_Stag_Station[door_stagExit] | Crossroads_47[door_stagExit] | Fungus1_16_alt[door_stagExit] | Fungus2_02[door_stagExit] | Deepnest_09[door_stagExit] | Abyss_22[door_stagExit] | Ruins1_29[door_stagExit] | Ruins2_08[door_stagExit] | RestingGrounds_09[door_stagExit] | Fungus3_40[door_stagExit]) + $STAGSTATEMODIFIER"
-            }
-        ],
-        "Substitutions": [
-            {
-                "name": "Room_Town_Stag_Station[left1]",
-                "old": "Can_Stag",
-                "replacement": "Room_Town_Stag_Station[door_stagExit]"
-            },
-            {
-                "name": "Crossroads_47[right1]",
-                "old": "Can_Stag",
-                "replacement": "Crossroads_47[door_stagExit]"
-            },
-            {
-                "name": "Fungus1_16_alt[right1]",
-                "old": "Can_Stag",
-                "replacement": "Fungus1_16_alt[door_stagExit]"
-            },
-            {
-                "name": "Fungus2_02[right1]",
-                "old": "Can_Stag",
-                "replacement": "Fungus2_02[door_stagExit]"
-            },
-            {
-                "name": "Deepnest_09[left1]",
-                "old": "Can_Stag",
-                "replacement": "Deepnest_09[door_stagExit]"
-            },
-            {
-                "name": "Abyss_22[left1]",
-                "old": "Can_Stag",
-                "replacement": "Abyss_22[door_stagExit]"
-            },
-            {
-                "name": "Ruins1_29[left1]",
-                "old": "Can_Stag",
-                "replacement": "Ruins1_29[door_stagExit]"
-            },
-            {
-                "name": "Ruins2_08[left1]",
-                "old": "Can_Stag",
-                "replacement": "Ruins2_08[door_stagExit]"
-            },
-            {
-                "name": "RestingGrounds_09[left1]",
-                "old": "Can_Stag",
-                "replacement": "RestingGrounds_09[door_stagExit]"
-            },
-            {
-                "name": "Bench-Gardens_Stag",
-                "old": "Can_Stag",
-                "replacement": "Fungus3_40[door_stagExit]"
-            },
-            {
-                "name": "Fungus3_40[right1]",
-                "old": "Can_Stag",
-                "replacement": "Fungus3_40[door_stagExit]"
-            },
-            {
-                "name": "Fungus3_40[top1]",
-                "old": "Can_Stag",
-                "replacement": "Fungus3_40[door_stagExit]"
-            },
-            {
-                "name": "Cliffs_03[right1]",
-                "old": "Can_Stag",
-                "replacement": "Cliffs_03[door_stagExit]"
-            }
-        ]
+        }
     },
     {
         "Description": "Elevators",
-        "StateWaypoints": [
-            {
-                "name": "RMC-Left_Elevator_Down",
-                "logic": "(Crossroads_49[left1] | Crossroads_49[right1]) + RMC-Activated_Left_Elevator"
-            },
-            {
-                "name": "RMC-Left_Elevator_Up",
-                "logic": "Crossroads_49b[right1] + (NONRANDOMELEVATORS | RMC-Activated_Left_Elevator)"
-            },
-            {
-                "name": "RMC-Right_Elevator_Down",
-                "logic": "(Ruins2_10[right1] | Ruins2_10[left1]) + (NONRANDOMELEVATORS | Elevator_Pass)"
-            },
-            {
-                "name": "RMC-Right_Elevator_Up",
-                "logic": "(Ruins2_10b[right1] | Ruins2_10b[right2] | Ruins2_10b[left1]) + (NONRANDOMELEVATORS | Elevator_Pass)"
-            }
-        ],
+        "StateWaypoints": {
+            "RMC-Left_Elevator_Down": "(Crossroads_49[left1] | Crossroads_49[right1]) + RMC-Activated_Left_Elevator",
+            "RMC-Left_Elevator_Up": "Crossroads_49b[right1] + (NONRANDOMELEVATORS | RMC-Activated_Left_Elevator)",
+            "RMC-Right_Elevator_Down": "(Ruins2_10[right1] | Ruins2_10[left1]) + (NONRANDOMELEVATORS | Elevator_Pass)",
+            "RMC-Right_Elevator_Up": "(Ruins2_10b[right1] | Ruins2_10b[right2] | Ruins2_10b[left1]) + (NONRANDOMELEVATORS | Elevator_Pass)"
+        },
         "StatelessWaypoints": [
-            "RMC-Activated_Left_Elevator"
-        ],
-        "Transitions": [
             {
-                "name": "Crossroads_49[elev_entrance]",
-                "logic": "RMC-Left_Elevator_Up"
-            },
-            {
-                "name": "Crossroads_49b[elev_entrance]",
-                "logic": "RMC-Left_Elevator_Down"
-            },
-            {
-                "name": "Ruins2_10[elev_entrance]",
-                "logic": "RMC-Right_Elevator_Up"
-            },
-            {
-                "name": "Ruins2_10b[elev_entrance]",
-                "logic": "RMC-Right_Elevator_Down"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Activated_Left_Elevator",
+                "PlayerDataBool": "cityLift1"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Crossroads_49[right1]",
-                "old": "Left_Elevator",
-                "replacement": "Crossroads_49[elev_entrance]"
+        "Transitions": {
+            "Crossroads_49[elev_entrance]": "RMC-Left_Elevator_Up",
+            "Crossroads_49b[elev_entrance]": "RMC-Left_Elevator_Down",
+            "Ruins2_10[elev_entrance]": "RMC-Right_Elevator_Up",
+            "Ruins2_10b[elev_entrance]": "RMC-Right_Elevator_Down"
+        },
+        "Substitutions": {
+            "Crossroads_49[right1]": {
+                "Left_Elevator": "Crossroads_49[elev_entrance]"
             },
-            {
-                "name": "Crossroads_49[left1]",
-                "old": "Left_Elevator",
-                "replacement": "Crossroads_49[elev_entrance]"
+            "Crossroads_49[left1]": {
+                "Left_Elevator": "Crossroads_49[elev_entrance]"
             },
-            {
-                "name": "Crossroads_49b[right1]",
-                "old": "Left_Elevator",
-                "replacement": "Crossroads_49b[elev_entrance]"
+            "Crossroads_49b[right1]": {
+                "Left_Elevator": "Crossroads_49b[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10[elev_entrance]"
+            "Ruins2_10": {
+                "Right_Elevator": "Ruins2_10[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10[right1]",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10[elev_entrance]"
+            "Ruins2_10[right1]": {
+                "Right_Elevator": "Ruins2_10[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10[left1]",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10[elev_entrance]"
+            "Ruins2_10[left1]": {
+                "Right_Elevator": "Ruins2_10[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10b[right1]",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10b[elev_entrance]"
+            "Ruins2_10b[right1]": {
+                "Right_Elevator": "Ruins2_10b[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10b[right2]",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10b[elev_entrance]"
+            "Ruins2_10b[right2]": {
+                "Right_Elevator": "Ruins2_10b[elev_entrance]"
             },
-            {
-                "name": "Ruins2_10b[left1]",
-                "old": "Right_Elevator",
-                "replacement": "Ruins2_10b[elev_entrance]"
+            "Ruins2_10b[left1]": {
+                "Right_Elevator": "Ruins2_10b[elev_entrance]"
             }
-        ]
+        }
     },
     {
         "Description": "Trams",
-        "StateWaypoints": [
-            {
-                "name": "RMC-Lower_Tram_Left",
-                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+        "StateWaypoints": {
+            "RMC-Lower_Tram_Left": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)",
+            "RMC-Lower_Tram_Middle": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)",
+            "RMC-Lower_Tram_Right": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)",
+            "RMC-Upper_Tram_Left": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)",
+            "RMC-Upper_Tram_Right": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
+        },
+        "Transitions": {
+            "Abyss_03[door_tram]": "RMC-Lower_Tram_Middle",
+            "Abyss_03_b[door_tram]": "RMC-Lower_Tram_Left",
+            "Abyss_03_c[door_tram]": "RMC-Lower_Tram_Right",
+            "Crossroads_46[door_tram]": "RMC-Upper_Tram_Left",
+            "Crossroads_46b[door_tram]": "RMC-Upper_Tram_Right",
+            "Room_Tram[door1]": "Lower_Tram",
+            "Room_Tram_RG[door1]": "Upper_Tram"
+        },
+        "Substitutions": {
+            "Abyss_03[bot1]": {
+                "Lower_Tram": "Abyss_03[door_tram]"
             },
-            {
-                "name": "RMC-Lower_Tram_Middle",
-                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+            "Abyss_03[bot2]": {
+                "Lower_Tram": "Abyss_03[door_tram]"
             },
-            {
-                "name": "RMC-Lower_Tram_Right",
-                "logic": "Room_Tram[door1] | (Bench-Lower_Tram ? FALSE)"
+            "Abyss_03[top1]": {
+                "Lower_Tram": "Abyss_03[door_tram]"
             },
-            {
-                "name": "RMC-Upper_Tram_Left",
-                "logic": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
+            "Abyss_03_b[left1]": {
+                "Lower_Tram": "Abyss_03_b[door_tram]"
             },
-            {
-                "name": "RMC-Upper_Tram_Right",
-                "logic": "Room_Tram_RG[door1] | (Bench-Upper_Tram ? FALSE)"
+            "Abyss_03_c[right1]": {
+                "Lower_Tram": "Abyss_03_c[door_tram]"
+            },
+            "Abyss_03_c[top1]": {
+                "Lower_Tram": "Abyss_03_c[door_tram]"
+            },
+            "Bench-Lower_Tram": {
+                "Lower_Tram": "Room_Tram[door1]"
+            },
+            "Bench-Upper_Tram": {
+                "Upper_Tram": "Room_Tram_RG[door1]"
+            },
+            "Crossroads_46[left1]": {
+                "Upper_Tram": "Crossroads_46[door_tram]"
+            },
+            "Crossroads_46b[right1]": {
+                "Upper_Tram": "Crossroads_46b[door_tram]"
+            },
+            "Lower_Tram": {
+                "Bench-Lower_Tram": "FALSE"
+            },
+            "Upper_Tram": {
+                "Bench-Upper_Tram": "FALSE"
             }
-        ],
-        "Transitions": [
-            {
-                "name": "Abyss_03[door_tram]",
-                "logic": "RMC-Lower_Tram_Middle"
-            },
-            {
-                "name": "Abyss_03_b[door_tram]",
-                "logic": "RMC-Lower_Tram_Left"
-            },
-            {
-                "name": "Abyss_03_c[door_tram]",
-                "logic": "RMC-Lower_Tram_Right"
-            },
-            {
-                "name": "Crossroads_46[door_tram]",
-                "logic": "RMC-Upper_Tram_Left"
-            },
-            {
-                "name": "Crossroads_46b[door_tram]",
-                "logic": "RMC-Upper_Tram_Right"
-            },
-            {
-                "name": "Room_Tram[door1]",
-                "logic": "Lower_Tram"
-            },
-            {
-                "name": "Room_Tram_RG[door1]",
-                "logic": "Upper_Tram"
-            }
-        ],
-        "Substitutions": [
-            {
-                "name": "Abyss_03[bot1]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03[door_tram]"
-            },
-            {
-                "name": "Abyss_03[bot2]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03[door_tram]"
-            },
-            {
-                "name": "Abyss_03[top1]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03[door_tram]"
-            },
-            {
-                "name": "Abyss_03_b[left1]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03_b[door_tram]"
-            },
-            {
-                "name": "Abyss_03_c[right1]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03_c[door_tram]"
-            },
-            {
-                "name": "Abyss_03_c[top1]",
-                "old": "Lower_Tram",
-                "replacement": "Abyss_03_c[door_tram]"
-            },
-            {
-                "name": "Bench-Lower_Tram",
-                "old": "Lower_Tram",
-                "replacement": "Room_Tram[door1]"
-            },
-            {
-                "name": "Bench-Upper_Tram",
-                "old": "Upper_Tram",
-                "replacement": "Room_Tram_RG[door1]"
-            },
-            {
-                "name": "Crossroads_46[left1]",
-                "old": "Upper_Tram",
-                "replacement": "Crossroads_46[door_tram]"
-            },
-            {
-                "name": "Crossroads_46b[right1]",
-                "old": "Upper_Tram",
-                "replacement": "Crossroads_46b[door_tram]"
-            },
-            {
-                "name": "Lower_Tram",
-                "old": "Bench-Lower_Tram",
-                "replacement": "FALSE"
-            },
-            {
-                "name": "Upper_Tram",
-                "old": "Bench-Upper_Tram",
-                "replacement": "FALSE"
-            }
-        ]
+        }
     },
     {
         "Description": "Warps",
-        "StateWaypoints": [
-            {
-                "name": "RMC-Warp_Palace_Grounds",
-                "logic": "Warp-White_Palace_Entrance_to_Palace_Grounds | Warp-White_Palace_Atrium_to_Palace_Grounds"
+        "StateWaypoints": {
+            "RMC-Warp_Palace_Grounds": "Warp-White_Palace_Entrance_to_Palace_Grounds | Warp-White_Palace_Atrium_to_Palace_Grounds"
+        },
+        "Transitions": {
+            "Abyss_05[door_dreamReturn_reality]": "RMC-Warp_Palace_Grounds",
+            "Abyss_06_Core[door_dreamReturn]": "Warp-Lifeblood_Core_to_Abyss",
+            "GG_Atrium[door_dreamEnter]": "Warp-Junk_Pit_to_Godhome",
+            "GG_Waterways[door_dreamReturn]": "Warp-Godhome_to_Junk_Pit",
+            "White_Palace_06[door_dreamReturn]": "Warp-Path_of_Pain_Complete",
+            "White_Palace_11[door1]": "Warp-Palace_Grounds_to_White_Palace"
+        },
+        "Substitutions": {
+            "Abyss_05": {
+                "Warp-White_Palace_Atrium_to_Palace_Grounds": "Abyss_05[door_dreamReturn_reality]",
+                "Warp-White_Palace_Entrance_to_Palace_Grounds": "Abyss_05[door_dreamReturn_reality]"
+            },
+            "Abyss_06_Core[left1]": {
+                "Warp-Lifeblood_Core_to_Abyss": "Abyss_06_Core[door_dreamReturn]"
+            },
+            "GG_Atrium": {
+                "Warp-Junk_Pit_to_Godhome": "GG_Atrium[door_dreamEnter]"
+            },
+            "GG_Waterways": {
+                "Warp-Godhome_to_Junk_Pit": "GG_Waterways[door_dreamReturn]"
+            },
+            "Warp-Godhome_to_Junk_Pit": {
+                "Warp-Junk_Pit_to_Godhome": "GG_Atrium[door_dreamEnter]"
+            },
+            "White_Palace_06[bot1]": {
+                "Warp-Path_of_Pain_Complete": "White_Palace_06[door_dreamReturn]"
+            },
+            "White_Palace_06[left1]": {
+                "Warp-Path_of_Pain_Complete": "White_Palace_06[door_dreamReturn]"
+            },
+            "White_Palace_06[top1]": {
+                "Warp-Path_of_Pain_Complete": "White_Palace_06[door_dreamReturn]"
+            },
+            "White_Palace_11[door2]": {
+                "Warp-Palace_Grounds_to_White_Palace": "White_Palace_11[door1]"
             }
-        ],
-        "Transitions": [
-            {
-                "name": "Abyss_05[door_dreamReturn_reality]",
-                "logic": "RMC-Warp_Palace_Grounds"
-            },
-            {
-                "name": "Abyss_06_Core[door_dreamReturn]",
-                "logic": "Warp-Lifeblood_Core_to_Abyss"
-            },
-            {
-                "name": "GG_Atrium[door_dreamEnter]",
-                "logic": "Warp-Junk_Pit_to_Godhome"
-            },
-            {
-                "name": "GG_Waterways[door_dreamReturn]",
-                "logic": "Warp-Godhome_to_Junk_Pit"
-            },
-            {
-                "name": "White_Palace_06[door_dreamReturn]",
-                "logic": "Warp-Path_of_Pain_Complete"
-            },
-            {
-                "name": "White_Palace_11[door1]",
-                "logic": "Warp-Palace_Grounds_to_White_Palace"
-            }
-        ],
-        "Substitutions": [
-            {
-                "name": "Abyss_05",
-                "old": "Warp-White_Palace_Atrium_to_Palace_Grounds",
-                "replacement": "Abyss_05[door_dreamReturn_reality]"
-            },
-            {
-                "name": "Abyss_05",
-                "old": "Warp-White_Palace_Entrance_to_Palace_Grounds",
-                "replacement": "Abyss_05[door_dreamReturn_reality]"
-            },
-            {
-                "name": "Abyss_06_Core[left1]",
-                "old": "Warp-Lifeblood_Core_to_Abyss",
-                "replacement": "Abyss_06_Core[door_dreamReturn]"
-            },
-            {
-                "name": "GG_Atrium",
-                "old": "Warp-Junk_Pit_to_Godhome",
-                "replacement": "GG_Atrium[door_dreamEnter]"
-            },
-            {
-                "name": "GG_Waterways",
-                "old": "Warp-Godhome_to_Junk_Pit",
-                "replacement": "GG_Waterways[door_dreamReturn]"
-            },
-            {
-                "name": "Warp-Godhome_to_Junk_Pit",
-                "old": "Warp-Junk_Pit_to_Godhome",
-                "replacement": "GG_Atrium[door_dreamEnter]"
-            },
-            {
-                "name": "White_Palace_06[bot1]",
-                "old": "Warp-Path_of_Pain_Complete",
-                "replacement": "White_Palace_06[door_dreamReturn]"
-            },
-            {
-                "name": "White_Palace_06[left1]",
-                "old": "Warp-Path_of_Pain_Complete",
-                "replacement": "White_Palace_06[door_dreamReturn]"
-            },
-            {
-                "name": "White_Palace_06[top1]",
-                "old": "Warp-Path_of_Pain_Complete",
-                "replacement": "White_Palace_06[door_dreamReturn]"
-            },
-            {
-                "name": "White_Palace_11[door2]",
-                "old": "Warp-Palace_Grounds_to_White_Palace",
-                "replacement": "White_Palace_11[door1]"
-            }
-        ]
+        }
     },
     {
         "Description": "Black Temple",
-        "Transitions": [
-            {
-                "name": "Room_Final_Boss_Atrium[left1]",
-                "logic": "Room_Final_Boss_Atrium[left1] | (Bench-Black_Egg_Temple ? NONE)"
+        "Transitions": {
+            "Room_Final_Boss_Atrium[left1]": "Room_Final_Boss_Atrium[left1] | (Bench-Black_Egg_Temple ? NONE)",
+            "Room_temple[door1]": "Room_temple[door1] | Room_temple[left1] + Opened_Black_Egg_Temple"
+        },
+        "Substitutions": {
+            "Bench-Black_Egg_Temple": {
+                "Opened_Black_Egg_Temple": "TRUE",
+                "Room_temple[left1]": "Room_Final_Boss_Atrium[left1]"
             },
-            {
-                "name": "Room_temple[door1]",
-                "logic": "Room_temple[door1] | Room_temple[left1] + Opened_Black_Egg_Temple"
+            "Room_temple[left1]": {
+                "Bench-Black_Egg_Temple": "Room_temple[door1]"
             }
-        ],
-        "Substitutions": [
-            {
-                "name": "Bench-Black_Egg_Temple",
-                "old": "Opened_Black_Egg_Temple",
-                "replacement": "TRUE"
-            },
-            {
-                "name": "Bench-Black_Egg_Temple",
-                "old": "Room_temple[left1]",
-                "replacement": "Room_Final_Boss_Atrium[left1]"
-            },
-            {
-                "name": "Room_temple[left1]",
-                "old": "Bench-Black_Egg_Temple",
-                "replacement": "Room_temple[door1]"
-            }
-        ]
+        }
     },
     {
         "Description": "Godhome",
         "StatelessWaypoints": [
-            "RMC-Opened_Blue_Room_Door",
-            "RMC-Opened_Godhome_Roof"
-        ],
-        "Transitions": [
             {
-                "name": "GG_Atrium[Door_Workshop]",
-                "logic": "GG_Atrium[Door_Workshop] | GG_Atrium[door1_blueRoom] | GG_Atrium"
+                "Name": "RMC-Opened_Blue_Room_Door"
             },
             {
-                "name": "GG_Atrium[door1_blueRoom]",
-                "logic": "GG_Atrium[door1_blueRoom] | GG_Atrium + RMC-Opened_Blue_Room_Door"
-            },
-            {
-                "name": "GG_Atrium[top1]",
-                "logic": "FALSE"
-            },
-            {
-                "name": "GG_Atrium[top2]",
-                "logic": "GG_Atrium[top2] + LEFTCLAW | (GG_Atrium + LEFTCLAW + RIGHTCLAW + (RIGHTDASH | RIGHTSUPERDASH | WINGS) | (Bench-Godhome_Atrium ? NONE) + LEFTCLAW) + RMC-Opened_Godhome_Roof"
-            },
-            {
-                "name": "GG_Atrium_Roof[bot1]",
-                "logic": "GG_Atrium_Roof[bot2] + ANYCLAW + WINGS | (Bench-Godhome_Roof ? NONE) + LEFTCLAW"
-            },
-            {
-                "name": "GG_Atrium_Roof[bot2]",
-                "logic": "GG_Atrium_Roof[bot2] | (Bench-Godhome_Roof ? NONE)"
-            },
-            {
-                "name": "GG_Blue_Room[left1]",
-                "logic": "GG_Blue_Room[left1]"
-            },
-            {
-                "name": "GG_Workshop[left1]",
-                "logic": "GG_Workshop[left1] | GG_Workshop"
+                "Name": "RMC-Opened_Godhome_Roof"
             }
         ],
-        "Edits": [
-            {
-                "name": "GG_Atrium",
-                "logic": "ORIG | GG_Atrium[top1] | GG_Atrium[top2] | (Bench-Godhome_Atrium ? NONE)"
-            }
-        ],
-        "Substitutions": [
-            {
-                "name": "GG_Atrium",
-                "old": "GG_Workshop",
-                "replacement": "GG_Atrium[Door_Workshop]"
+        "Transitions": {
+            "GG_Atrium[Door_Workshop]": "GG_Atrium[Door_Workshop] | GG_Atrium[door1_blueRoom] | GG_Atrium",
+            "GG_Atrium[door1_blueRoom]": "GG_Atrium[door1_blueRoom] | GG_Atrium + RMC-Opened_Blue_Room_Door",
+            "GG_Atrium[top1]": "FALSE",
+            "GG_Atrium[top2]": "GG_Atrium[top2] + LEFTCLAW | (GG_Atrium + LEFTCLAW + RIGHTCLAW + (RIGHTDASH | RIGHTSUPERDASH | WINGS) | (Bench-Godhome_Atrium ? NONE) + LEFTCLAW) + RMC-Opened_Godhome_Roof",
+            "GG_Atrium_Roof[bot1]": "GG_Atrium_Roof[bot2] + ANYCLAW + WINGS | (Bench-Godhome_Roof ? NONE) + LEFTCLAW",
+            "GG_Atrium_Roof[bot2]": "GG_Atrium_Roof[bot2] | (Bench-Godhome_Roof ? NONE)",
+            "GG_Blue_Room[left1]": "GG_Blue_Room[left1]",
+            "GG_Workshop[left1]": "GG_Workshop[left1] | GG_Workshop"
+        },
+        "Edits": {
+            "GG_Atrium": "ORIG | GG_Atrium[top1] | GG_Atrium[top2] | (Bench-Godhome_Atrium ? NONE)"
+        },
+        "Substitutions": {
+            "GG_Atrium": {
+                "GG_Workshop": "GG_Atrium[Door_Workshop]"
             },
-            {
-                "name": "GG_Workshop",
-                "old": "GG_Atrium",
-                "replacement": "GG_Workshop[left1]"
+            "GG_Workshop": {
+                "GG_Atrium": "GG_Workshop[left1]"
             }
-        ]
+        }
     },
     {
         "Description": "Shrine of Believers",
-        "StateWaypoints": [
-            {
-                "name": "RMC-Warp_Glade_to_Backer_Shrine",
-                "logic": "*King's_Idol-Glade_of_Hope + (WINGS | RIGHTCLAW + LEFTSUPERDASH) + DREAMNAIL"
-            },
-            {
-                "name": "RMC-Warp_Spirits'_Glade",
-                "logic": "Dream_Backer_Shrine[door1] | Dream_Backer_Shrine[door2] | Dream_Room_Believer_Shrine[left1]"
-            }
-        ],
-        "Transitions": [
-            {
-                "name": "Dream_Backer_Shrine[door1]",
-                "logic": "RMC-Warp_Glade_to_Backer_Shrine"
-            },
-            {
-                "name": "Dream_Backer_Shrine[door2]",
-                "logic": "Dream_Backer_Shrine[door2] | Dream_Backer_Shrine[door1]"
-            },
-            {
-                "name": "Dream_Room_Believer_Shrine[left1]",
-                "logic": "Dream_Room_Believer_Shrine[left1]"
-            },
-            {
-                "name": "RestingGrounds_08[door_dreamReturn]",
-                "logic": "RMC-Warp_Spirits'_Glade"
-            }
-        ],
-        "Edits": [
-            {
-                "name": "RestingGrounds_08[left1]",
-                "logic": "ORIG | RestingGrounds_08[door_dreamReturn] + (SWIM | LEFTSUPERDASH)"
-            }
-        ]
+        "StateWaypoints": {
+            "RMC-Warp_Glade_to_Backer_Shrine": "*King's_Idol-Glade_of_Hope + (WINGS | RIGHTCLAW + LEFTSUPERDASH) + DREAMNAIL",
+            "RMC-Warp_Spirits'_Glade": "Dream_Backer_Shrine[door1] | Dream_Backer_Shrine[door2] | Dream_Room_Believer_Shrine[left1]"
+        },
+        "Transitions": {
+            "Dream_Backer_Shrine[door1]": "RMC-Warp_Glade_to_Backer_Shrine",
+            "Dream_Backer_Shrine[door2]": "Dream_Backer_Shrine[door2] | Dream_Backer_Shrine[door1]",
+            "Dream_Room_Believer_Shrine[left1]": "Dream_Room_Believer_Shrine[left1]",
+            "RestingGrounds_08[door_dreamReturn]": "RMC-Warp_Spirits'_Glade"
+        },
+        "Edits": {
+            "RestingGrounds_08[left1]": "ORIG | RestingGrounds_08[door_dreamReturn] + (SWIM | LEFTSUPERDASH)"
+        }
     },
     // Changes that don't insert new transitions
     {
         "Description": "Ancient_Basin",
         "StatelessWaypoints": [
-            "RMC-Defeated_Broken_Vessel",
-            "RMC-Plank_Broken_Vessel_Shortcut"
-        ],
-        "Edits": [
             {
-                "name": "Abyss_19[bot1]",
-                "logic": "ORIG | Abyss_19[left1] + RMC-Defeated_Broken_Vessel | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Broken_Vessel",
+                "PlayerDataBool": "killedInfectedKnight"
             },
             {
-                "name": "Abyss_19[left1]",
-                "logic": "ORIG | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut + COMBAT[Broken_Vessel]"
-            },
-            {
-                "name": "Abyss_19[right1]",
-                "logic": "ORIG | Abyss_19[left1] + RMC-Defeated_Broken_Vessel + (Plank-Broken_Vessel_Shortcut ? TRUE)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Broken_Vessel_Shortcut",
+                "Scene": "Abyss_19",
+                "Id": "One Way Wall"
             }
-        ]
+        ],
+        "Edits": {
+            "Abyss_19[bot1]": "ORIG | Abyss_19[left1] + RMC-Defeated_Broken_Vessel | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut",
+            "Abyss_19[left1]": "ORIG | Abyss_19[right1] + RMC-Plank_Broken_Vessel_Shortcut + COMBAT[Broken_Vessel]",
+            "Abyss_19[right1]": "ORIG | Abyss_19[left1] + RMC-Defeated_Broken_Vessel + (Plank-Broken_Vessel_Shortcut ? TRUE)"
+        }
     },
     {
         "Description": "City of Tears",
         "StatelessWaypoints": [
-            "RMC-Broke_Sanctum_Glass_Floor",
-            "RMC-City_Toll_Lift_Down",
-            "RMC-City_Toll_Lift_Up",
-            "RMC-Defeated_Sanctum_Warrior",
-            "RMC-Dive_Floor_Inner_Sanctum_1",
-            "RMC-Dive_Floor_Inner_Sanctum_2",
-            "RMC-Dive_Floor_Inner_Sanctum_Lever",
-            "RMC-Dive_Floor_Inner_Sanctum_Seal",
-            "RMC-Dive_Floor_Sanctum_Escape_1",
-            "RMC-Dive_Floor_Sanctum_Escape_2",
-            "RMC-Lever_Below_Spell_Twister",
-            "RMC-Lever_City_Above_Lemm_Left",
-            "RMC-Lever_City_Above_Lemm_Right",
-            "RMC-Lever_City_Above_Lemm_Upper",
-            "RMC-Lever_City_Bridge_Above_Fountain",
-            "RMC-Lever_City_Fountain",
-            "RMC-Lever_City_Lemm",
-            "RMC-Lever_City_Spire_Sentry_Lower",
-            "RMC-Lever_City_Spire_Sentry_Upper",
-            "RMC-Lever_City_Storerooms",
-            "RMC-Lever_Emilitia",
-            "RMC-Lever_Sanctum_Bottom",
-            "RMC-Lever_Sanctum_East",
-            "RMC-Lever_Sanctum_Soul_Warrior",
-            "RMC-Lever_Shade_Soul_Exit",
-            "RMC-Lever_Tower_of_Love",
-            "RMC-Opened_Elegant_Door",
-            "RMC-Opened_Love_Door",
-            "RMC-Opened_Pleasure_House",
-            "RMC-Plank_Nailsmith",
-            "RMC-Wall_Pleasure_House",
-            "RMC-Wall_Shade_Soul_Shortcut"
-        ],
-        "Edits": [
             {
-                "name": "Ruins1_04",
-                "logic": "ORIG | (Ruins1_04[door1] | Ruins1_04[right1]) + RMC-Plank_Nailsmith"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Broke_Sanctum_Glass_Floor",
+                "PlayerDataBool": "brokenMageWindow"
             },
             {
-                "name": "Ruins1_05[bot1]",
-                "logic": "ORIG | Ruins1_05[bot2] + (LEFTCLAW + WINGS | RIGHTCLAW) + RMC-Lever_City_Above_Lemm_Upper"
+                "Name": "RMC-City_Toll_Lift_Down",
             },
             {
-                "name": "Ruins1_05b[top1]",
-                "logic": "ORIG | Ruins1_05b + ANYCLAW + RMC-Lever_City_Lemm"
+                "Name": "RMC-City_Toll_Lift_Up",
             },
             {
-                "name": "Ruins1_05c[top2]",
-                "logic": "ORIG | (Ruins1_05c[bot1] | Ruins1_05c[top1] | Ruins1_05c[top3]) + (ANYCLAW | WINGS) + RMC-Lever_City_Above_Lemm_Left"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Sanctum_Warrior",
+                "Scene": "Ruins1_23",
+                "Id": "Battle Scene v2"
             },
             {
-                "name": "Ruins1_05c[top3]",
-                "logic": "ORIG | (Ruins1_05c[bot1] | Ruins1_05c[top1]) + (RIGHTCLAW | WINGS) + RMC-Lever_City_Above_Lemm_Left | Ruins1_05c[bot1] + (ANYCLAW + WINGS | FULLCLAW | (ANYCLAW | WINGS) + ENEMYPOGOS) + RMC-Lever_City_Above_Lemm_Right"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Inner_Sanctum_1",
+                "Scene": "Ruins1_32",
+                "Id": "Quake Floor Glass"
             },
             {
-                "name": "Ruins1_17[right1]",
-                "logic": "ORIG | Ruins1_17[bot1] + RMC-Lever_City_Storerooms"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Inner_Sanctum_2",
+                "Scene": "Ruins1_32",
+                "Id": "Quake Floor Glass (1)"
             },
             {
-                "name": "Ruins1_17[top1]",
-                "logic": "ORIG | Ruins1_17[bot1] + RMC-Lever_City_Storerooms"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Inner_Sanctum_Lever",
+                "Scene": "Ruins1_32",
+                "Id": "Quake Floor Glass (3)"
             },
             {
-                "name": "Ruins1_18[right1]",
-                "logic": "ORIG | Ruins1_18[left1] + RMC-Lever_City_Bridge_Above_Fountain"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Inner_Sanctum_Seal",
+                "Scene": "Ruins1_32",
+                "Id": "Quake Floor Glass (2)"
             },
             {
-                "name": "Ruins1_23",
-                "logic": "ORIG | (Ruins1_23[right1] + RMC-Defeated_Sanctum_Warrior | Ruins1_23[top1]) + RMC-Lever_Sanctum_Soul_Warrior"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Sanctum_Escape_1",
+                "Scene": "Ruins1_30",
+                "Id": "Quake Floor Glass"
             },
             {
-                "name": "Ruins1_23[right2]",
-                "logic": "ORIG | (Ruins1_23 + (ANYCLAW | WINGS) | (Ruins1_23[right1] + RMC-Defeated_Sanctum_Warrior | Ruins1_23[top1]) + RMC-Lever_Sanctum_Soul_Warrior) + RMC-Lever_Sanctum_Bottom"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Sanctum_Escape_2",
+                "Scene": "Ruins1_30",
+                "Id": "Quake Floor Glass (1)"
             },
             {
-                "name": "Ruins1_25[left2]",
-                "logic": "ORIG | Ruins1_25[left1] + RMC-Lever_Sanctum_East"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Below_Spell_Twister",
+                "Scene": "Ruins1_30",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Ruins1_30[left1]",
-                "logic": "ORIG | Ruins1_30[right1] + RMC-Lever_Below_Spell_Twister"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Above_Lemm_Left",
+                "PlayerDataBool": "ruins1_5_tripleDoor"
             },
             {
-                "name": "Ruins1_30[left2]",
-                "logic": "ORIG | Ruins1_30 + RMC-Dive_Floor_Sanctum_Escape_2 + RMC-Dive_Floor_Sanctum_Escape_1 + ANYCLAW"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Above_Lemm_Right",
+                "Scene": "Ruins1_05c",
+                "Id": "Ruins Lever 2"
             },
             {
-                "name": "Ruins1_31",
-                "logic": "ORIG | (Ruins1_31[left1] | Ruins1_31[bot1]) + RMC-Wall_Shade_Soul_Shortcut + (RMC-City_Toll_Lift_Down + (ANYCLAW | WINGS) | RMC-City_Toll_Lift_Up)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Above_Lemm_Upper",
+                "Scene": "Ruins1_05",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Ruins1_32[right1]",
-                "logic": "ORIG | Ruins1_32[right2] + (Lever-Sanctum_West_Lower ? TRUE) + RMC-Dive_Floor_Inner_Sanctum_Lever + RMC-Dive_Floor_Inner_Sanctum_Seal + RMC-Dive_Floor_Inner_Sanctum_2 + (Lever_Sanctum_West_Upper ? TRUE | RMC-Dive_Floor_Inner_Sanctum_1) + ANYCLAW + WINGS"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Bridge_Above_Fountain",
+                "Scene": "Ruins1_18",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Ruins2_01[top1]",
-                "logic": "ORIG | Ruins2_01 + ((LEFTCLAW + ENEMYPOGOS) | RIGHTCLAW | WINGS) + RMC-Lever_City_Spire_Sentry_Lower |  Ruins2_01[left2] + RMC-Lever_City_Spire_Sentry_Upper"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Fountain",
+                "Scene": "Ruins1_27",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Ruins2_11_b[left1]",
-                "logic": "ORIG | Ruins2_11_b[bot1] + ANYCLAW + RMC-Lever_Tower_of_Love + RMC-Opened_Love_Door"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Lemm",
+                "Scene": "Ruins1_05b",
+                "Id": "Ruins Lever 1"
             },
             {
-                "name": "Ruins2_11_b[right1]",
-                "logic": "ORIG | Ruins2_11_b[bot1] + ANYCLAW + RMC-Lever_Tower_of_Love"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Spire_Sentry_Lower",
+                "Scene": "Ruins2_01",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Spire_Sentry_Upper",
+                "Scene": "Ruins2_01",
+                "Id": "Ruins Lever (1)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_City_Storerooms",
+                "Scene": "Ruins1_17",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Emilitia",
+                "PlayerDataBool": "city2_sewerDoor"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Sanctum_Bottom",
+                "Scene": "Ruins1_23",
+                "Id": "Ruins Lever (1)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Sanctum_East",
+                "Scene": "Ruins1_25",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Sanctum_Soul_Warrior",
+                "Scene": "Ruins1_23",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Shade_Soul_Exit",
+                "Scene": "Ruins1_31",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Tower_of_Love",
+                "Scene": "Ruins2_11_b",
+                "Id": "Ruins Lever"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Elegant_Door",
+                "PlayerDataBool": "openedMageDoor_v2"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Love_Door",
+                "PlayerDataBool": "openedLoveDoor"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Pleasure_House",
+                "PlayerDataBool": "bathHouseOpened"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Nailsmith",
+                "Scene": "Ruins1_04",
+                "Id": "One Way Wall"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Wall_Pleasure_House",
+                "PlayerDataBool": "bathHouseWall"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Wall_Shade_Soul_Shortcut",
+                "Scene": "Ruins1_31",
+                "Id": "Breakable Wall Ruin Lift"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Lever-City_Fountain",
-                "old": "Ruins1_27[right1]",
-                "replacement": "Ruins1_27[right1] + RMC-Lever_City_Fountain"
+        "Edits": {
+            "Ruins1_04[bot1]": "ORIG | (Ruins1_04[door1] | Ruins1_04[right1]) + RMC-Plank_Nailsmith",
+            "Ruins1_05[bot1]": "ORIG | Ruins1_05[bot2] + (LEFTCLAW + WINGS | RIGHTCLAW) + RMC-Lever_City_Above_Lemm_Upper",
+            "Ruins1_05b[top1]": "ORIG | Ruins1_05b + ANYCLAW + RMC-Lever_City_Lemm",
+            "Ruins1_05c[top2]": "ORIG | (Ruins1_05c[bot1] | Ruins1_05c[top1] | Ruins1_05c[top3]) + (ANYCLAW | WINGS) + RMC-Lever_City_Above_Lemm_Left",
+            "Ruins1_05c[top3]": "ORIG | (Ruins1_05c[bot1] | Ruins1_05c[top1]) + (RIGHTCLAW | WINGS) + RMC-Lever_City_Above_Lemm_Left | Ruins1_05c[bot1] + (ANYCLAW + WINGS | FULLCLAW | (ANYCLAW | WINGS) + ENEMYPOGOS) + RMC-Lever_City_Above_Lemm_Right",
+            "Ruins1_17[right1]": "ORIG | Ruins1_17[bot1] + RMC-Lever_City_Storerooms",
+            "Ruins1_17[top1]": "ORIG | Ruins1_17[bot1] + RMC-Lever_City_Storerooms",
+            "Ruins1_18[right1]": "ORIG | Ruins1_18[left1] + RMC-Lever_City_Bridge_Above_Fountain",
+            "Ruins1_23": "ORIG | (Ruins1_23[right1] + RMC-Defeated_Sanctum_Warrior | Ruins1_23[top1]) + RMC-Lever_Sanctum_Soul_Warrior",
+            "Ruins1_23[right2]": "ORIG | (Ruins1_23 + (ANYCLAW | WINGS) | (Ruins1_23[right1] + RMC-Defeated_Sanctum_Warrior | Ruins1_23[top1]) + RMC-Lever_Sanctum_Soul_Warrior) + RMC-Lever_Sanctum_Bottom",
+            "Ruins1_25[left2]": "ORIG | Ruins1_25[left1] + RMC-Lever_Sanctum_East",
+            "Ruins1_30[left1]": "ORIG | Ruins1_30[right1] + RMC-Lever_Below_Spell_Twister",
+            "Ruins1_30[left2]": "ORIG | Ruins1_30 + RMC-Dive_Floor_Sanctum_Escape_2 + RMC-Dive_Floor_Sanctum_Escape_1 + ANYCLAW",
+            "Ruins1_31": "ORIG | (Ruins1_31[left1] | Ruins1_31[bot1]) + RMC-Wall_Shade_Soul_Shortcut + (RMC-City_Toll_Lift_Down + (ANYCLAW | WINGS) | RMC-City_Toll_Lift_Up)",
+            "Ruins1_32[right1]": "ORIG | Ruins1_32[right2] + (Lever-Sanctum_West_Lower ? TRUE) + RMC-Dive_Floor_Inner_Sanctum_Lever + RMC-Dive_Floor_Inner_Sanctum_Seal + RMC-Dive_Floor_Inner_Sanctum_2 + (Lever_Sanctum_West_Upper ? TRUE | RMC-Dive_Floor_Inner_Sanctum_1) + ANYCLAW + WINGS",
+            "Ruins2_01[top1]": "ORIG | Ruins2_01 + ((LEFTCLAW + ENEMYPOGOS) | RIGHTCLAW | WINGS) + RMC-Lever_City_Spire_Sentry_Lower |  Ruins2_01[left2] + RMC-Lever_City_Spire_Sentry_Upper",
+            "Ruins2_11_b[left1]": "ORIG | Ruins2_11_b[bot1] + ANYCLAW + RMC-Lever_Tower_of_Love + RMC-Opened_Love_Door",
+            "Ruins2_11_b[right1]": "ORIG | Ruins2_11_b[bot1] + ANYCLAW + RMC-Lever_Tower_of_Love"
+        },
+        "Substitutions": {
+            "Lever-City_Fountain": {
+                "Ruins1_27[right1]": "Ruins1_27[right1] + RMC-Lever_City_Fountain"
             },
-            {
-                "name": "Ruins1_23[top1]",
-                "old": "Broke_Sanctum_Glass_Floor",
-                "replacement": "RMC-Broke_Sanctum_Glass_Floor"
+            "Ruins1_23[top1]": {
+                "Broke_Sanctum_Glass_Floor": "RMC-Broke_Sanctum_Glass_Floor"
             },
-            {
-                "name": "Ruins1_31[left2]",
-                "old": "Lever-Shade_Soul",
-                "replacement": "RMC-Lever_Shade_Soul_Exit"
+            "Ruins1_31[left2]": {
+                "Lever-Shade_Soul": "RMC-Lever_Shade_Soul_Exit"
             },
-            {
-                "name": "Ruins1_31[left3]",
-                "old": "ELEGANT",
-                "replacement": "ELEGANT | RMC-Opened_Elegant_Door"
+            "Ruins1_31[left3]": {
+                "ELEGANT": "ELEGANT | RMC-Opened_Elegant_Door"
             },
-            {
-                "name": "Ruins2_04[door_Ruin_Elevator]",
-                "old": "PLEASUREHOUSEUNLOCK",
-                "replacement": "PLEASUREHOUSEUNLOCK | RMC-Opened_Pleasure_House"
+            "Ruins2_04[door_Ruin_Elevator]": {
+                "PLEASUREHOUSEUNLOCK": "PLEASUREHOUSEUNLOCK | RMC-Opened_Pleasure_House"
             },
-            {
-                "name": "Ruins2_04[door_Ruin_House_03]",
-                "old": "Lever_Emilitia",
-                "replacement": "RMC-Lever_Emilitia"
+            "Ruins2_04[door_Ruin_House_03]": {
+                "Lever_Emilitia": "RMC-Lever_Emilitia"
             },
-            {
-                "name": "Ruins2_10b[left1]",
-                "old": "Opened_Pleasure_House_Wall",
-                "replacement": "RMC-Wall_Pleasure_House"
+            "Ruins2_10b[left1]": {
+                "Opened_Pleasure_House_Wall": "RMC-Wall_Pleasure_House"
             },
-            {
-                "name": "Ruins2_11_b[left1]",
-                "old": "LOVE",
-                "replacement": "LOVE | RMC-Opened_Love_Door"
+            "Ruins2_11_b[left1]": {
+                "LOVE": "LOVE | RMC-Opened_Love_Door"
             }
-        ]
+        }
     },
     {
         "Description": "Crossroads",
         "StatelessWaypoints": [
-            "RMC-Collapser_Glowing_Womb_Tunnel",
-            "RMC-Defeated_Crossroads_Baldur",
-            "RMC-Opened_False_Knight_Gate",
-            "RMC-Plank_Brooding_Mawlek",
-            "RMC-Switch_Crossroads_East",
-            "RMC-Switch_Outside_Ancestral_Mound"
-        ],
-        "Edits": [
             {
-                "name": "Crossroads_03",
-                "logic": "ORIG | Crossroads_03[top1] + RMC-Switch_Crossroads_East"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Glowing_Womb_Tunnel",
+                "Scene": "Crossroads_21",
+                "Id": "Collapser Small"
             },
             {
-                "name": "Crossroads_11_alt[right1]",
-                "logic": "ORIG | Crossroads_11_alt[left1] + RMC-Defeated_Crossroads_Baldur"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Crossroads_Baldur",
+                "Scene": "Crossroads_11_alt",
+                "Id": "Blocker"
             },
             {
-                "name": "Crossroads_21[top1]",
-                "logic": "ORIG | Crossroads_21 + (ANYCLAW | WINGS | INFECTED) + RMC-Collapser_Glowing_Womb_Tunnel"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_False_Knight_Gate",
+                "Scene": "Crossroads_10",
+                "Id": "Battle Scene"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Brooding_Mawlek",
+                "PlayerDataBool": "crossroadsMawlekWall"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Crossroads_East",
+                "Scene": "Crossroads_03",
+                "Id": "Toll Gate Switch"
+            },
+            {
+                "Name": "RMC-Switch_Outside_Ancestral_Mound"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Crossroads_10[right1]",
-                "old": "Defeated_False_Knight",
-                "replacement": "RMC-Opened_False_Knight_Gate"
+        "Edits": {
+            "Crossroads_03": "ORIG | Crossroads_03[top1] + RMC-Switch_Crossroads_East",
+            "Crossroads_11_alt[right1]": "ORIG | Crossroads_11_alt[left1] + RMC-Defeated_Crossroads_Baldur",
+            "Crossroads_21[top1]": "ORIG | Crossroads_21 + (ANYCLAW | WINGS | INFECTED) + RMC-Collapser_Glowing_Womb_Tunnel"
+        },
+        "Substitutions": {
+            "Crossroads_10[right1]": {
+                "Defeated_False_Knight": "RMC-Opened_False_Knight_Gate"
             },
-            {
-                "name": "Crossroads_33[left1]",
-                "old": "Opened_Mawlek_Wall",
-                "replacement": "RMC-Plank_Brooding_Mawlek"
+            "Crossroads_33[left1]": {
+                "Opened_Mawlek_Wall": "RMC-Plank_Brooding_Mawlek"
             },
-            {
-                "name": "Crossroads_33[right1]",
-                "old": "Opened_Shaman_Pillar",
-                "replacement": "RMC-Switch_Outside_Ancestral_Mound"
+            "Crossroads_33[right1]": {
+                "Opened_Shaman_Pillar": "RMC-Switch_Outside_Ancestral_Mound"
             }
-        ]
+        }
     },
     {
         "Description": "Crystal Peak",
         "StatelessWaypoints": [
-            "RMC-Collapser_Deep_Focus",
-            "RMC-Dive_Floor_Peak_Entrance",
-            "RMC-Lever_Crystal_Peak_Below_Chest",
-            "RMC-Lever_Crystal_Peak_Crushers_Chest",
-            "RMC-Lever_Crystal_Peak_Tall_Room_Lower",
-            "RMC-Lever_Crystal_Peak_Tall_Room_Middle",
-            "RMC-Lever_Crystal_Peak_Tall_Room_Upper"
-        ],
-        "Edits": [
             {
-                "name": "Mines_04[top1]",
-                "logic": "ORIG | Mines_04 + (LEFTCLAW | WINGS + ENEMYPOGOS) + RMC-Lever_Crystal_Peak_Below_Chest"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Deep_Focus",
+                "Scene": "Mines_06",
+                "Id": "Collapser Small"
             },
             {
-                "name": "Mines_06[left1]",
-                "logic": "ORIG | Mines_06[right1] + RMC-Collapser_Deep_Focus + (BACKGROUNDPOGOS + (WINGS | RIGHTCLAW | $SHADESKIP + (LEFTCLAW | SPELLAIRSTALL + DAMAGEBOOSTS + $TAKEDAMAGE[2])) | WINGS + ANYCLAW)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Peak_Entrance",
+                "Scene": "Mines_01",
+                "Id": "mine_1_quake_floor"
             },
             {
-                "name": "Mines_20",
-                "logic": "ORIG | Mines_20[left2] + (LEFTCLAW + (WINGS | ENEMYPOGOS) | RIGHTCLAW) + RMC-Lever_Crystal_Peak_Tall_Room_Upper"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Crystal_Peak_Below_Chest",
+                "Scene": "Mines_04",
+                "Id": "Mines Lever"
             },
             {
-                "name": "Mines_20[left2]",
-                "logic": "ORIG | (Mines_20[bot1] | Mines_20[left3]) + ANYCLAW + RMC-Lever_Crystal_Peak_Tall_Room_Middle"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Crystal_Peak_Crushers_Chest",
+                "Scene": "Mines_37",
+                "Id": "Mines Lever New"
             },
             {
-                "name": "Mines_20[right2]",
-                "logic": "ORIG | (Mines_20[bot1] | Mines_20[left3]) + RMC-Lever_Crystal_Peak_Tall_Room_Lower"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Crystal_Peak_Tall_Room_Lower",
+                "Scene": "Mines_20",
+                "Id": "Mines Lever"
             },
             {
-                "name": "Mines_37[bot1]",
-                "logic": "ORIG | Mines_37[top1] + RMC-Lever_Crystal_Peak_Crushers_Chest"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Crystal_Peak_Tall_Room_Middle",
+                "Scene": "Mines_20",
+                "Id": "Mines Lever (2)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Crystal_Peak_Tall_Room_Upper",
+                "Scene": "Mines_20",
+                "Id": "Mines Lever (1)"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Mines_01[left1]",
-                "old": "Broke_Crystal_Peak_Entrance_Quake_Floor",
-                "replacement": "RMC-Dive_Floor_Peak_Entrance"
+        "Edits": {
+            "Mines_04[top1]": "ORIG | Mines_04 + (LEFTCLAW | WINGS + ENEMYPOGOS) + RMC-Lever_Crystal_Peak_Below_Chest",
+            "Mines_06[left1]": "ORIG | Mines_06[right1] + RMC-Collapser_Deep_Focus + (BACKGROUNDPOGOS + (WINGS | RIGHTCLAW | $SHADESKIP + (LEFTCLAW | SPELLAIRSTALL + DAMAGEBOOSTS + $TAKEDAMAGE[2])) | WINGS + ANYCLAW)",
+            "Mines_20": "ORIG | Mines_20[left2] + (LEFTCLAW + (WINGS | ENEMYPOGOS) | RIGHTCLAW) + RMC-Lever_Crystal_Peak_Tall_Room_Upper",
+            "Mines_20[left2]": "ORIG | (Mines_20[bot1] | Mines_20[left3]) + ANYCLAW + RMC-Lever_Crystal_Peak_Tall_Room_Middle",
+            "Mines_20[right2]": "ORIG | (Mines_20[bot1] | Mines_20[left3]) + RMC-Lever_Crystal_Peak_Tall_Room_Lower",
+            "Mines_37[bot1]": "ORIG | Mines_37[top1] + RMC-Lever_Crystal_Peak_Crushers_Chest"
+        },
+        "Substitutions": {
+            "Mines_01[left1]": {
+                "Broke_Crystal_Peak_Entrance_Quake_Floor": "RMC-Dive_Floor_Peak_Entrance"
             }
-        ]
+        }
     },
     {
         "Description": "Deepnest",
         "StatelessWaypoints": [
-            "RMC-Collapser_Failed_Tramway_Bench",
-            "RMC-Collapser_Deepnest_By_Mantis_Lords_Path",
-            "RMC-Collapser_Deepnest_Zote",
-            "RMC-Lever_Failed_Tramway_Left",
-            "RMC-Lever_Failed_Tramway_Right",
-            "RMC-Plank_Nosk_Exit",
-            "RMC-Plank_Upper_Deepnest",
-            "RMC-Plank_Village_Lower",
-            "RMC-Plank_Village_Upper"
-        ],
-        "Edits": [
             {
-                "name": "Deepnest_01b[right1]",
-                "logic": "ORIG | ((Deepnest_01b[bot1] | Deepnest_01b[right2]) + LEFTCLAW + WINGS | Deepnest_01b[top1] + (RIGHTDASH | RIGHTCLAW | WINGS) | Deepnest_01b[top2]) + RMC-Plank_Upper_Deepnest"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Failed_Tramway_Bench",
+                "Scene": "Deepnest_14",
+                "Id": "Collapser Small"
             },
             {
-                "name": "Deepnest_14",
-                "logic": "ORIG | Deepnest_14[right1] + RMC-Collapser_Failed_Tramway_Bench + (ANYCLAW | WINGS)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Deepnest_By_Mantis_Lords_Path",
+                "Scene": "Deepnest_16",
+                "Id": "Collapser Small (1)"
             },
             {
-                "name": "Deepnest_16[bot1]",
-                "logic": "ORIG | Deepnest_16[left1] + (LEFTCLAW + WINGS | RIGHTCLAW + (WINGS | $SHADESKIP)) + RMC-Collapser_Deepnest_By_Mantis_Lords_Path"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Deepnest_Zote",
+                "Scene": "Deepnest_33",
+                "Id": "Collapser Small"
             },
             {
-                "name": "Deepnest_26",
-                "logic": "ORIG | Deepnest_26[left2] + WINGS + RMC-Lever_Failed_Tramway_Right"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Failed_Tramway_Left",
+                "PlayerDataBool": "deepnest26b_switch"
             },
             {
-                "name": "Deepnest_26b[right2]",
-                "logic": "ORIG | Deepnest_26b[right1] + RMC-Lever_Failed_Tramway_Left"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Failed_Tramway_Right",
+                "Scene": "Deepnest_26",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Deepnest_31[right2]",
-                "logic": "ORIG | Deepnest_31[right1] + RMC-Plank_Nosk_Exit"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Nosk_Exit",
+                "Scene": "Deepnest_31",
+                "Id": "One Way Wall"
             },
             {
-                "name": "Deepnest_33[top1]",
-                "logic": "ORIG | Deepnest_33[bot1] + ANYCLAW + WINGS + RMC-Collapser_Deepnest_Zote"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Upper_Deepnest",
+                "Scene": "Deepnest_01b",
+                "Id": "One Way Wall"
             },
             {
-                "name": "Deepnest_41[left2]",
-                "logic": "ORIG | (Deepnest_41[left1] + (Plank-Village_Middle ? TRUE) | Deepnest_41[right1] + RMC-Plank_Village_Upper) + RMC-Plank_Village_Lower"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Village_Lower",
+                "Scene": "Deepnest_41",
+                "Id": "One Way Wall (2)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Village_Upper",
+                "Scene": "Deepnest_41",
+                "Id": "One Way Wall (1)"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Deepnest_26",
-                "old": "Opened_Tramway_Exit_Gate",
-                "replacement": "RMC-Lever_Failed_Tramway_Left"
+        "Edits": {
+            "Deepnest_01b[right1]": "ORIG | ((Deepnest_01b[bot1] | Deepnest_01b[right2]) + LEFTCLAW + WINGS | Deepnest_01b[top1] + (RIGHTDASH | RIGHTCLAW | WINGS) | Deepnest_01b[top2]) + RMC-Plank_Upper_Deepnest",
+            "Deepnest_14": "ORIG | Deepnest_14[right1] + RMC-Collapser_Failed_Tramway_Bench + (ANYCLAW | WINGS)",
+            "Deepnest_16[bot1]": "ORIG | Deepnest_16[left1] + (LEFTCLAW + WINGS | RIGHTCLAW + (WINGS | $SHADESKIP)) + RMC-Collapser_Deepnest_By_Mantis_Lords_Path",
+            "Deepnest_26": "ORIG | Deepnest_26[left2] + WINGS + RMC-Lever_Failed_Tramway_Right",
+            "Deepnest_26b[right2]": "ORIG | Deepnest_26b[right1] + RMC-Lever_Failed_Tramway_Left",
+            "Deepnest_31[right2]": "ORIG | Deepnest_31[right1] + RMC-Plank_Nosk_Exit",
+            "Deepnest_33[top1]": "ORIG | Deepnest_33[bot1] + ANYCLAW + WINGS + RMC-Collapser_Deepnest_Zote",
+            "Deepnest_41[left2]": "ORIG | (Deepnest_41[left1] + (Plank-Village_Middle ? TRUE) | Deepnest_41[right1] + RMC-Plank_Village_Upper) + RMC-Plank_Village_Lower"
+        },
+        "Substitutions": {
+            "Deepnest_26": {
+                "Opened_Tramway_Exit_Gate": "RMC-Lever_Failed_Tramway_Left"
             },
-            {
-                "name": "Deepnest_26[left1]",
-                "old": "Opened_Tramway_Exit_Gate",
-                "replacement": "RMC-Lever_Failed_Tramway_Left"
+            "Deepnest_26[left1]": {
+                "Opened_Tramway_Exit_Gate": "RMC-Lever_Failed_Tramway_Left"
             }
-        ]
+        }
     },
     {
         "Description": "Dirtmouth",
         "StatelessWaypoints": [
-            "RMC-Lever_Dirtmouth_Elevator",
-            "RMC-Opened_Divine_Door",
-            "RMC-Opened_Grimm_Door",
-            "RMC-Opened_Jiji_Door",
-            "RMC-Rescued_Bretta",
-            "RMC-Rescued_Sly",
-            "RMC-Switch_Dirtmouth_Stag"
-        ],
-        "Edits": [
             {
-                "name": "Town[right1]",
-                "logic": "ORIG | Town + RMC-Lever_Dirtmouth_Elevator"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Dirtmouth_Elevator",
+                "PlayerDataBool": "mineLiftOpened"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Divine_Door",
+                "PlayerDataBool": "divineInTown"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Grimm_Door",
+                "PlayerDataBool": "troupeInTown"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Jiji_Door",
+                "PlayerDataBool": "jijiDoorUnlocked"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Rescued_Bretta",
+                "PlayerDataBool": "brettaRescued"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Rescued_Sly",
+                "PlayerDataBool": "slyRescued"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Dirtmouth_Stag",
+                "PlayerDataBool": "openedTownBuilding"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Room_Town_Stag_Station[left1]",
-                "old": "Dirtmouth_Stag",
-                "replacement": "Dirtmouth_Stag | RMC-Switch_Dirtmouth_Stag"
+        "Edits": {
+            "Town[right1]": "ORIG | Town + RMC-Lever_Dirtmouth_Elevator"
+        },
+        "Substitutions": {
+            "Room_Town_Stag_Station[left1]": {
+                "Dirtmouth_Stag": "Dirtmouth_Stag | RMC-Switch_Dirtmouth_Stag"
             },
-            {
-                "name": "Town[door_bretta]",
-                "old": "Rescued_Bretta",
-                "replacement": "Rescued_Bretta | RMC-Rescued_Bretta"
+            "Town[door_bretta]": {
+                "Rescued_Bretta": "Rescued_Bretta | RMC-Rescued_Bretta"
             },
-            {
-                "name": "Town[door_jiji]",
-                "old": "JIJIUNLOCK",
-                "replacement": "JIJIUNLOCK | RMC-Opened_Jiji_Door"
+            "Town[door_jiji]": {
+                "JIJIUNLOCK": "JIJIUNLOCK | RMC-Opened_Jiji_Door"
             },
-            {
-                "name": "Town[door_sly]",
-                "old": "Rescued_Sly",
-                "replacement": "Rescued_Sly | RMC-Rescued_Sly"
+            "Town[door_sly]": {
+                "Rescued_Sly": "Rescued_Sly | RMC-Rescued_Sly"
             },
-            {
-                "name": "Town[door_station]",
-                "old": "Dirtmouth_Stag",
-                "replacement": "Dirtmouth_Stag | RMC-Switch_Dirtmouth_Stag"
+            "Town[door_station]": {
+                "Dirtmouth_Stag": "Dirtmouth_Stag | RMC-Switch_Dirtmouth_Stag"
             },
-            {
-                "name": "Town[room_divine]",
-                "old": "Nightmare_Lantern_Lit",
-                "replacement": "Nightmare_Lantern_Lit | RMC-Opened_Divine_Door"
+            "Town[room_divine]": {
+                "Nightmare_Lantern_Lit": "Nightmare_Lantern_Lit | RMC-Opened_Divine_Door"
             },
-            {
-                "name": "Town[room_grimm]",
-                "old": "Nightmare_Lantern_Lit",
-                "replacement": "Nightmare_Lantern_Lit | RMC-Opened_Grimm_Door"
+            "Town[room_grimm]": {
+                "Nightmare_Lantern_Lit": "Nightmare_Lantern_Lit | RMC-Opened_Grimm_Door"
             }
-        ]
+        }
     },
     {
         "Description": "Fog Canyon",
         "StatelessWaypoints": [
-            "RMC-Lever_Below_Overgrown_Mound",
-            "RMC-Plank_Archives_Outer",
-            "RMC-Plank_Outside_Overgrown_Mound"
-        ],
-        "Edits": [
             {
-                "name": "Fungus3_44[bot1]",
-                "logic": "ORIG | Fungus3_44 + RMC-Lever_Below_Overgrown_Mound"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Below_Overgrown_Mound",
+                "Scene": "Fungus3_44",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Fungus3_44[door1]",
-                "logic": "ORIG | Fungus3_44 + (LEFTCLAW | WINGS | LEFTDASH | LEFTSUPERDASH | ENEMYPOGOS | FIREBALLSKIPS + (RIGHTFIREBALL | SCREAM) + $CASTSPELL[2,before:ROOMSOUL,after:ROOMSOUL]) + RMC-Plank_Outside_Overgrown_Mound"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Archives_Outer",
+                "PlayerDataBool": "oneWayArchive"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Outside_Overgrown_Mound",
+                "Scene": "Fungus3_44",
+                "Id": "One Way Wall"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Fungus3_02[right1]",
-                "old": "Opened_Archives_Exit_Wall",
-                "replacement": "RMC-Plank_Archives_Outer"
+        "Edits": {
+            "Fungus3_44[bot1]": "ORIG | Fungus3_44 + RMC-Lever_Below_Overgrown_Mound",
+            "Fungus3_44[door1]": "ORIG | Fungus3_44 + (LEFTCLAW | WINGS | LEFTDASH | LEFTSUPERDASH | ENEMYPOGOS | FIREBALLSKIPS + (RIGHTFIREBALL | SCREAM) + $CASTSPELL[2,before:ROOMSOUL,after:ROOMSOUL]) + RMC-Plank_Outside_Overgrown_Mound"
+        },
+        "Substitutions": {
+            "Fungus3_02[right1]": {
+                "Opened_Archives_Exit_Wall": "RMC-Plank_Archives_Outer"
             }
-        ]
+        }
     },
     {
         "Description": "Fungal Wastes",
         "StatelessWaypoints": [
-            "RMC-Defeated_Mantis_Lords",
-            "RMC-Dive_Floor_Pilgrim's_Way",
-            "RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
-            "RMC-Lever_Fungal_Wastes_Bouncy_Grub",
-            "RMC-Lever_Mantis_Lords_Access",
-            "RMC-Lever_Mantis_Lords_Middle_Right",
-            "RMC-Lever_Waterways_Hwurmp_Arena",
-            "RMC-Plank_Deepnest_Exit",
-            "RMC-Plank_Fungal_Core"
-        ],
-        "Edits": [
             {
-                "name": "Deepnest_01[bot1]",
-                "logic": "ORIG | Deepnest_01 + RMC-Plank_Deepnest_Exit"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Mantis_Lords",
+                "PlayerDataBool": "defeatedMantisLords"
             },
             {
-                "name": "Fungus2_04[top1",
-                "logic": "ORIG | Fungus2_04 + RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Pilgrim's_Way",
+                "Scene": "Fungus2_21",
+                "Id": "Quake Floor"
             },
             {
-                "name": "Fungus2_14[bot3]",
-                "logic": "ORIG | Fungus2_14 + RMC-Lever_Mantis_Lords_Access"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
+                "Scene": "Fungus2_04",
+                "Id": "Mantis Lever (1)"
             },
             {
-                "name": "Fungus2_15[right1]",
-                "logic": "ORIG | Fungus2_15[top3] + RMC-Lever_Mantis_Lords_Middle_Right"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Fungal_Wastes_Bouncy_Grub",
+                "Scene": "Fungus2_18",
+                "Id": "Mantis Lever"
             },
             {
-                "name": "Fungus2_18[right1]",
-                "logic": "ORIG | Fungus2_18 + RMC-Lever_Fungal_Wastes_Bouncy_Grub"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Mantis_Lords_Access",
+                "Scene": "Fungus2_14",
+                "Id": "Mantis Lever (1)"
             },
             {
-                "name": "Fungus2_21[right1]",
-                "logic": "ORIG | Fungus2_21 + ((LEFTCLAW + WINGS) | RIGHTCLAW) + RMC-Dive_Floor_Pilgrim's_Way"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Mantis_Lords_Middle_Right",
+                "Scene": "Ruins2_15",
+                "Id": "Mantis Lever (4)"
             },
             {
-                "name": "Fungus2_29[bot1]",
-                "logic": "ORIG | Fungus2_29[right1] + RMC-Plank_Fungal_Core"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Waterways_Hwurmp_Arena",
+                "PlayerDataBool": "waterwaysGate"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Deepnest_Exit",
+                "Scene": "Deepnest_01",
+                "Id": "One Way Wall"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Fungal_Core",
+                "Scene": "Fungus2_29",
+                "Id": "Break Floor 1"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Fungus2_23[right2]",
-                "old": "Opened_Waterways_Exit",
-                "replacement": "RMC-Lever_Waterways_Hwurmp_Arena"
+        "Edits": {
+            "Deepnest_01[bot1]": "ORIG | Deepnest_01 + RMC-Plank_Deepnest_Exit",
+            "Fungus2_04[top1": "ORIG | Fungus2_04 + RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
+            "Fungus2_14[bot3]": "ORIG | Fungus2_14 + RMC-Lever_Mantis_Lords_Access",
+            "Fungus2_15[right1]": "ORIG | Fungus2_15[top3] + RMC-Lever_Mantis_Lords_Middle_Right",
+            "Fungus2_18[right1]": "ORIG | Fungus2_18 + RMC-Lever_Fungal_Wastes_Bouncy_Grub",
+            "Fungus2_21[right1]": "ORIG | Fungus2_21 + ((LEFTCLAW + WINGS) | RIGHTCLAW) + RMC-Dive_Floor_Pilgrim's_Way",
+            "Fungus2_29[bot1]": "ORIG | Fungus2_29[right1] + RMC-Plank_Fungal_Core"
+        },
+        "Substitutions": {
+            "Fungus2_23[right2]": {
+                "Opened_Waterways_Exit": "RMC-Lever_Waterways_Hwurmp_Arena"
             },
-            {
-                "name": "Fungus2_25[right1]",
-                "old": "Defeated_Mantis_Lords",
-                "replacement": "RMC-Defeated_Mantis_Lords"
+            "Fungus2_25[right1]": {
+                "Defeated_Mantis_Lords": "RMC-Defeated_Mantis_Lords"
             }
-        ]
+        }
     },
     {
         "Description": "Greenpath",
         "StatelessWaypoints": [
-            "RMC-Plank_Hornet_Exit",
-            "RMC-Switch_Greenpath_Stag"
-        ],
-        "Edits": [
             {
-                "name": "Fungus1_04[left1]",
-                "logic": "ORIG | Fungus1_04[right1] + RMC-Plank_Hornet_Exit + (WINGS | LEFTDASH | ACID | SPELLAIRSTALL + $CASTSPELL[1,1])"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Hornet_Exit",
+                "Scene": "Fungus1_04",
+                "Id": "Break Floor 1"
             },
             {
-                "name": "Fungus1_22[top1]",
-                "logic": "ORIG | Fungus1_22[bot1] + RMC-Switch_Greenpath_Stag"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Greenpath_Stag",
+                "Scene": "Fungus1_22",
+                "Id": "Gate Switch"
             },
             {
-                "name": "Fungus1_22[left1]",
-                "logic": "ORIG | Fungus1_22[bot1] + RMC-Switch_Greenpath_Stag"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Vine_Lore_Tablet_Greenpath_QG_Left",
+                "Scene": "Fungus1_13",
+                "Id": "Vine Platform (2)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC_Vine_Lore_Tablet_Greenpath_QG_Right",
+                "Scene": "Fungus1_13",
+                "Id": "Vine Platform (1)"
             }
-        ]
+        ],
+        "Edits": {
+            "Fungus1_04[left1]": "ORIG | Fungus1_04[right1] + RMC-Plank_Hornet_Exit + (WINGS | LEFTDASH | ACID | SPELLAIRSTALL + $CASTSPELL[1,1])",
+            "Fungus1_13[left1]": "ORIG | Fungus1_13[right1] + FULLCLAW + RMC-Vine_Lore_Tablet_Greenpath_QG_Left + RMC_Vine_Lore_Tablet_Greenpath_QG_Right",
+            "Fungus1_13[right1]": "ORIG | Fungus1_13[left1] + FULLCLAW + RMC-Vine_Lore_Tablet_Greenpath_QG_Left + RMC_Vine_Lore_Tablet_Greenpath_QG_Right",
+            "Fungus1_22[top1]": "ORIG | Fungus1_22[bot1] + RMC-Switch_Greenpath_Stag",
+            "Fungus1_22[left1]": "ORIG | Fungus1_22[bot1] + RMC-Switch_Greenpath_Stag"
+        }
     },
     {
         "Description": "Howling Cliffs",
         "StatelessWaypoints": [
-            "RMC-Plank_Cliff's_Pass"
-        ],
-        "Edits": [
             {
-                "name": "Cliffs_02[bot1]",
-                "logic": "ORIG | Cliffs_02 + RMC-Plank_Cliff's_Pass"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Cliff's_Pass",
+                "Scene": "Cliffs_02",
+                "Id": "One Way Wall"
             }
-        ]
+        ],
+        "Edits": {
+            "Cliffs_02[bot1]": "ORIG | Cliffs_02 + RMC-Plank_Cliff's_Pass"
+        }
     },
     {
         "Description": "Kingdom's Edge",
         "StatelessWaypoints": [
-            "RMC-Defeated_Hornet_2",
-            "RMC-Dive_Floor_Lower_Edge",
-            "RMC-Dive_Floor_Oro_2",
-            "RMC-Dive_Floor_Oro_3",
-            "RMC-Plank_Colo_Shortcut",
-            "RMC-Plank_Edge_Tram_Exit",
-            "RMC-Plank_Hive_Exit",
-            "RMC-Plank_Hive_Mask",
-            "RMC-Plank_Quickslash_Exit"
-        ],
-        "Edits": [
             {
-                "name": "Deepnest_East_01[right1]",
-                "logic": "ORIG | Deepnest_East_01[top1] + RMC-Plank_Hive_Exit | Deepnest_East_01[bot1] + (LEFTCLAW | WINGS | ENEMYPOGOS | RIGHTCLAW + OBSCURESKIPS) + RMC-Plank_Hive_Exit"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Hornet_2",
+                "PlayerDataBool": "hornetOutskirtsDefeated"
             },
             {
-                "name": "Deepnest_East_02",
-                "logic": "ORIG | Deepnest_East_02[bot2] + (LEFTCLAW | RIGHTCLAW + ENEMYPOGOS | WINGS) + (ACID | LEFTCLAW + RIGHTSUPERDASH + (RIGHTCLAW | WINGS) + ACIDSKIPS) + RMC-Dive_Floor_Lower_Edge"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Lower_Edge",
+                "Scene": "Deepnest_East_02",
+                "Id": "Quake Floor"
             },
             {
-                "name": "Deepnest_East_04[bot1]",
-                "logic": "ORIG | ((Deepnest_East_06[door1] + LEFTCLAW) | (Deepnest_East_06[left1] + RIGHTCLAW) | Deepnest_East_06[top1]) + RMC-Plank_Quickslash_Exit"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Oro_2",
+                "Scene": "Deepnest_East_14",
+                "Id": "Quake Floor (1)"
             },
             {
-                "name": "Deepnest_East_09[bot1]",
-                "logic": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Oro_3",
+                "Scene": "Deepnest_East_14",
+                "Id": "Quake Floor (2)"
             },
             {
-                "name": "Deepnest_East_09[right1]",
-                "logic": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Colo_Shortcut",
+                "Scene": "Deepnest_East_09",
+                "Id": "One Way Wall"
             },
             {
-                "name": "Deepnest_East_14[top2]",
-                "logic": "ORIG | (Deepnest_East_14[left1] + (RIGHTDASH | SPIKETUNNELS) | Deepnest_East_14[door1] + (Wall-420_Geo_Rock ? TRUE) + (LEFTDASH | PRECISEMOVEMENT)) + WINGS + (RIGHTCLAW + (LEFTDASH | ENEMYPOGOS) | LEFTCLAW + PRECISEMOVEMENT) + (LEFTCLAW | RIGHTCLAW + (WINGS | ENEMYPOGOS)) + RMC-Dive_Floor_Oro_2 + RMC-Dive_Floor_Oro_3"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Edge_Tram_Exit",
+                "PlayerDataBool": "outskirtsWall"
             },
             {
-                "name": "Deepnest_East_Hornet[left1]",
-                "logic": "ORIG | Deepnest_East_Hornet[left2] + ((LEFTCLAW + RIGHTCLAW) | WINGS) + RMC-Defeated_Hornet_2"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Hive_Exit",
+                "Scene": "Deepnest_East_01",
+                "Id": "One Way Wall"
             },
             {
-                "name": "Hive_03_c[right2]",
-                "logic": "ORIG | (Hive_03_c + RMC-Plank_Hive_Mask + WINGS)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Hive_Mask",
+                "Scene": "Hive_03_c",
+                "Id": "Break Floor 1"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Quickslash_Exit",
+                "Scene": "Deepnest_East_06",
+                "Id": "One Way Wall"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Deepnest_East_03[left2]",
-                "old": "Opened_Lower_Kingdom's_Edge_Wall",
-                "replacement": "RMC-Plank_Edge_Tram_Exit"
+        "Edits": {
+            "Deepnest_East_01[right1]": "ORIG | Deepnest_East_01[top1] + RMC-Plank_Hive_Exit | Deepnest_East_01[bot1] + (LEFTCLAW | WINGS | ENEMYPOGOS | RIGHTCLAW + OBSCURESKIPS) + RMC-Plank_Hive_Exit",
+            "Deepnest_East_02": "ORIG | Deepnest_East_02[bot2] + (LEFTCLAW | RIGHTCLAW + ENEMYPOGOS | WINGS) + (ACID | LEFTCLAW + RIGHTSUPERDASH + (RIGHTCLAW | WINGS) + ACIDSKIPS) + RMC-Dive_Floor_Lower_Edge",
+            "Deepnest_East_06[bot1]": "ORIG | ((Deepnest_East_06[door1] + LEFTCLAW) | (Deepnest_East_06[left1] + RIGHTCLAW) | Deepnest_East_06[top1]) + RMC-Plank_Quickslash_Exit",
+            "Deepnest_East_09[bot1]": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut",
+            "Deepnest_East_09[right1]": "ORIG | Deepnest_East_09[left1] + RMC-Plank_Colo_Shortcut",
+            "Deepnest_East_14[top2]": "ORIG | (Deepnest_East_14[left1] + (RIGHTDASH | SPIKETUNNELS) | Deepnest_East_14[door1] + (Wall-420_Geo_Rock ? TRUE) + (LEFTDASH | PRECISEMOVEMENT)) + WINGS + (RIGHTCLAW + (LEFTDASH | ENEMYPOGOS) | LEFTCLAW + PRECISEMOVEMENT) + (LEFTCLAW | RIGHTCLAW + (WINGS | ENEMYPOGOS)) + RMC-Dive_Floor_Oro_2 + RMC-Dive_Floor_Oro_3",
+            "Deepnest_East_Hornet[left1]": "ORIG | Deepnest_East_Hornet[left2] + ((LEFTCLAW + RIGHTCLAW) | WINGS) + RMC-Defeated_Hornet_2",
+            "Hive_03_c[right2]": "ORIG | (Hive_03_c + RMC-Plank_Hive_Mask + WINGS)"
+        },
+        "Substitutions": {
+            "Deepnest_East_03[left2]": {
+                "Opened_Lower_Kingdom's_Edge_Wall": "RMC-Plank_Edge_Tram_Exit"
             }
-        ]
+        }
     },
     {
         "Description": "Queen's Gardens",
         "StatelessWaypoints": [
-            "RMC-Lever_Queen's_Gardens_Ground_Block",
-            "RMC-Plank_Moss_Prophet",
-            "RMC-Switch_Petra_Arena",
-            "RMC-Switch_Queen's_Gardens_Stag"
-        ],
-        "Edits": [
             {
-                "name": "Fungus3_04[left1]",
-                "logic": "ORIG | Fungus3_04 + (ANYCLAW | WINGS) + RMC-Lever_Queen's_Gardens_Ground_Block"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Queen's_Gardens_Ground_Block",
+                "Scene": "Fungus3_04",
+                "Id": "Ruins Lever"
             },
             {
-                "name": "Fungus3_04[left2]",
-                "logic": "ORIG | Fungus3_04 + (ANYCLAW | WINGS) + RMC-Lever_Queen's_Gardens_Ground_Block"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Moss_Prophet",
+                "Scene": "Fungus3_39",
+                "Id": "One Way Wall"
             },
             {
-                "name": "Fungus3_05[left1]",
-                "logic": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Petra_Arena",
+                "Scene": "Fungus3_05",
+                "Id": "Gate Switch"
             },
             {
-                "name": "Fungus3_05[right1]",
-                "logic": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)"
-            },
-            {
-                "name": "Fungus3_39[left1]",
-                "logic": "ORIG | Fungus3_39[right1] + RMC-Plank_Moss_Prophet + (ANYCLAW | WINGS)"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Queen's_Gardens_Stag",
+                "PlayerDataBool": "openedGardensStagStation"
             }
         ],
-        "Substitutions": [
-            {
-                "name": "Fungus3_13[left2]",
-                "old": "Opened_Gardens_Stag_Exit",
-                "replacement": "RMC-Switch_Queen's_Gardens_Stag"
+        "Edits": {
+            "Fungus3_04[left1]": "ORIG | Fungus3_04 + (ANYCLAW | WINGS) + RMC-Lever_Queen's_Gardens_Ground_Block",
+            "Fungus3_04[left2]": "ORIG | Fungus3_04 + (ANYCLAW | WINGS) + RMC-Lever_Queen's_Gardens_Ground_Block",
+            "Fungus3_05[left1]": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)",
+            "Fungus3_05[right1]": "ORIG | Fungus3_05[right2] + RMC-Switch_Petra_Arena + (LEFTCLAW | WINGS)",
+            "Fungus3_39[left1]": "ORIG | Fungus3_39[right1] + RMC-Plank_Moss_Prophet + (ANYCLAW | WINGS)"
+        },
+        "Substitutions": {
+            "Fungus3_13[left2]": {
+                "Opened_Gardens_Stag_Exit": "RMC-Switch_Queen's_Gardens_Stag"
             }
-        ]
+        }
     },
     {
         "Description": "Resting Grounds",
         "StatelessWaypoints": [
-            "RMC-Collapser_Catacombs_Entrance",
-            "RMC-Opened_Glade_Door",
-            "RMC-Plank_Catacombs_Elevator",
-            "RMC-Switch_Lower_Resting_Grounds"
-        ],
-        "Substitutions": [
             {
-                "name": "RestingGrounds_02[bot1]",
-                "old": "Opened_Resting_Grounds_Floor",
-                "replacement": "RMC-Switch_Lower_Resting_Grounds"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Collapser_Catacombs_Entrance",
+                "Scene": "RestingGrounds_10",
+                "Id": "Collapser Small (5)"
             },
             {
-                "name": "RestingGrounds_05[right1]",
-                "old": "Opened_Glade_Door",
-                "replacement": "Opened_Glade_Door | RMC-Opened_Glade_Door"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Glade_Door",
+                "PlayerDataBool": "gladeDoorOpened"
             },
             {
-                "name": "RestingGrounds_10[top1]",
-                "old": "Broke_Crypts_One_Way_Floor",
-                "replacement": "RMC-Collapser_Catacombs_Entrance"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Catacombs_Elevator",
+                "PlayerDataBool": "restingGroundsCryptWall"
             },
             {
-                "name": "Ruins2_10[right1]",
-                "old": "Opened_Resting_Grounds_Catacombs_Wall",
-                "replacement": "RMC-Plank_Catacombs_Elevator"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Switch_Lower_Resting_Grounds",
+                "PlayerDataBool": "openedRestingGrounds02"
             }
-        ]
+        ],
+        "Substitutions": {
+            "RestingGrounds_02[bot1]": {
+                "Opened_Resting_Grounds_Floor": "RMC-Switch_Lower_Resting_Grounds"
+            },
+            "RestingGrounds_05[right1]": {
+                "Opened_Glade_Door": "Opened_Glade_Door | RMC-Opened_Glade_Door"
+            },
+            "RestingGrounds_10[top1]": {
+                "Broke_Crypts_One_Way_Floor": "RMC-Collapser_Catacombs_Entrance"
+            },
+            "Ruins2_10[right1]": {
+                "Opened_Resting_Grounds_Catacombs_Wall": "RMC-Plank_Catacombs_Elevator"
+            }
+        }
     },
     {
         "Description": "Waterways",
         "StatelessWaypoints": [
-            "RMC-Dive_Floor_Above_Waterways_Bench",
-            "RMC-Dive_Floor_Dung_Defender",
-            "RMC-Dive_Floor_Flukemarm",
-            "RMC-Dive_Floor_Waterways_Bench_1",
-            "RMC-Dive_Floor_Waterways_Bench_2",
-            "RMC-Lever_Dung_Defender",
-            "RMC-Plank_Dung_Defender",
-            "RMC-Plank_Isma's_Grove",
-            "RMC-Plank_Junk_Pit_Exit",
-            "RMC-Opened_Waterways_Manhole"
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Defeated_Dung_Defender",
+                "PlayerDataBool": "defeatedDungDefender"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Above_Waterways_Bench",
+                "Scene": "Waterways_02",
+                "Id": "Quake Floor (1)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Dung_Defender",
+                "Scene": "Waterways_05",
+                "Id": "Quake Floor"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Flukemarm",
+                "Scene": "Waterways_02",
+                "Id": "Quake Floor"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Waterways_Bench_1",
+                "Scene": "Waterways_04",
+                "Id": "Quake Floor"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Dive_Floor_Waterways_Bench_2",
+                "Scene": "Waterways_04",
+                "Id": "Quake Floor (1)"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Dung_Defender",
+                "PlayerDataBool": "waterwaysAcidDrained"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Dung_Defender",
+                "PlayerDataBool": "dungDefenderWallBroken"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Isma's_Grove",
+                "Scene": "Waterways_07",
+                "Id": "One Way Wall"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Plank_Junk_Pit_Exit",
+                "Scene": "Waterways_08",
+                "Id": "Break Floor 1"
+            },
+            {
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Opened_Waterways_Manhole",
+                "PlayerDataBool": "openedWaterwaysManhole"
+            }
         ],
-        "Edits": [
+        "Edits": {
             // Substitution doesn't work here because the bot1 transition is also used as a state provider
-            {
-                "name": "Broke_Flukemarm_Quake_Floor",
-                "logic": "Waterways_02[bot1] + RMC-Dive_Floor_Flukemarm | (Waterways_02[top1] | Waterways_02[top2] + (ANYCLAW | WINGS | SWIM) | Waterways_02[top3] + (Dive_Floor-Above_Waterways_Bench ? Broke_Waterways_Bench_Quake_Floor_3) | Waterways_02[bot2] + (ANYCLAW | WINGS | SWIM)) + QUAKE + $CASTSPELL[before:ROOMSOUL]"
+            "Broke_Flukemarm_Quake_Floor": "Waterways_02[bot1] + RMC-Dive_Floor_Flukemarm | (Waterways_02[top1] | Waterways_02[top2] + (ANYCLAW | WINGS | SWIM) | Waterways_02[top3] + (Dive_Floor-Above_Waterways_Bench ? Broke_Waterways_Bench_Quake_Floor_3) | Waterways_02[bot2] + (ANYCLAW | WINGS | SWIM)) + QUAKE + $CASTSPELL[before:ROOMSOUL]",
+            "Waterways_02[top3]": "ORIG | Waterways_02 + (LEFTCLAW | RIGHTCLAW + WINGS) + RMC-Dive_Floor_Above_Waterways_Bench",
+            "Waterways_04": "ORIG | Waterways_04[bot1] + (RIGHTCLAW | WINGS + LEFTCLAW) + RMC-Dive_Floor_Waterways_Bench_1",
+            "Waterways_05[bot1]": "ORIG | (Waterways_05[bot2] | Waterways_05[right1]) + ANYCLAW + RMC-Defeated_Dung_Defender",
+            "Waterways_07[top1]": "ORIG | Waterways_07 + RMC-Plank_Isma's_Grove + ANYCLAW",
+            "Waterways_08[left1]": "ORIG | Waterways_08[top1] + RMC-Plank_Junk_Pit_Exit"
+        },
+        "Substitutions": {
+            "Abyss_01[left1]": {
+                "Opened_Dung_Defender_Wall": "RMC-Plank_Dung_Defender"
             },
-            {
-                "name": "Waterways_02[top3]",
-                "logic": "ORIG | Waterways_02 + (LEFTCLAW | RIGHTCLAW + WINGS) + RMC-Dive_Floor_Above_Waterways_Bench"
+            "Broke_Dung_Defender_Quake_Floor": {
+                "Waterways_05[bot2]": "Waterways_05[bot2] + RMC-Dive_Floor_Dung_Defender"
             },
-            {
-                "name": "Waterways_04",
-                "logic": "ORIG | Waterways_04[bot1] + (RIGHTCLAW | WINGS + LEFTCLAW) + RMC-Dive_Floor_Waterways_Bench_1"
+            "Waterways_01[top1]": {
+                "Opened_Waterways_Manhole": "RMC-Opened_Waterways_Manhole"
             },
-            {
-                "name": "Waterways_07[top1]",
-                "logic": "ORIG | Waterways_07 + RMC-Plank_Isma's_Grove + ANYCLAW"
-            },
-            {
-                "name": "Waterways_08[left1]",
-                "logic": "ORIG | Waterways_08[top1] + RMC-Plank_Junk_Pit_Exit"
+            "Waterways_07[right1]": {
+                "Lever-Dung_Defender": "Lever-Dung_Defender | RMC-Lever_Dung_Defender"
             }
-        ],
-        "Substitutions": [
-            {
-                "name": "Abyss_01[left1]",
-                "old": "Opened_Dung_Defender_Wall",
-                "replacement": "RMC-Plank_Dung_Defender"
-            },
-            {
-                "name": "Broke_Dung_Defender_Quake_Floor",
-                "old": "Waterways_05[bot2]",
-                "replacement": "Waterways_05[bot2] + RMC-Dive_Floor_Dung_Defender"
-            },
-            {
-                "name": "Waterways_01[top1]",
-                "old": "Opened_Waterways_Manhole",
-                "replacement": "RMC-Opened_Waterways_Manhole"
-            },
-            {
-                "name": "Waterways_07[right1]",
-                "old": "Lever-Dung_Defender",
-                "replacement": "Lever-Dung_Defender | RMC-Lever_Dung_Defender"
-            }
-        ]
+        }
     },
     {
         "Description": "White Palace",
         "StatelessWaypoints": [
-            "RMC-Lever_Palace_Atrium",
-            "RMC-Lever_Palace_Final",
-            "RMC-Lever_Palace_Right",
-            "RMC-Lever_Path_of_Pain"
-        ],
-        "Edits": [
             {
-                "name": "White_Palace_03_hub[left1]",
-                "logic": "ORIG | White_Palace_03_hub + RMC-Lever_Palace_Atrium + (LEFTCLAW + WINGS | RIGHTCLAW + LEFTSUPERDASH)"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Palace_Atrium",
+                "Scene": "White_Palace_03_hub",
+                "Id": "WP Lever"
             },
             {
-                "name": "White_Palace_12[bot1]",
-                "logic": "ORIG | White_Palace_12[right1] + RMC-Lever_Palace_Final"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Palace_Final",
+                "Scene": "White_Palace_12",
+                "Id": "WP Lever"
             },
             {
-                "name": "White_Palace_15[left1]",
-                "logic": "ORIG | White_Palace_15[right2] + RMC-Lever_Palace_Right"
+                "$type": "RandoMapCore.Pathfinder.PlayerDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Palace_Right",
+                "PlayerDataBool": "whitePalace05_lever"
             },
             {
-                "name": "White_Palace_15[right2]",
-                "logic": "ORIG | White_Palace_15[left1] + RMC-Lever_Palace_Right"
-            },
-            {
-                "name": "White_Palace_17[bot1]",
-                "logic": "ORIG | White_Palace_17[right1] + RMC-Lever_Path_of_Pain"
+                "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
+                "Name": "RMC-Lever_Path_of_Pain",
+                "Scene": "White_Palace_17",
+                "Id": "WP Lever"
             }
-        ]
+        ],
+        "Edits": {
+            "White_Palace_03_hub[left1]": "ORIG | White_Palace_03_hub + RMC-Lever_Palace_Atrium + (LEFTCLAW + WINGS | RIGHTCLAW + LEFTSUPERDASH)",
+            "White_Palace_12[bot1]": "ORIG | White_Palace_12[right1] + RMC-Lever_Palace_Final",
+            "White_Palace_15[left1]": "ORIG | White_Palace_15[right2] + RMC-Lever_Palace_Right",
+            "White_Palace_15[right2]": "ORIG | White_Palace_15[left1] + RMC-Lever_Palace_Right",
+            "White_Palace_17[bot1]": "ORIG | White_Palace_17[right1] + RMC-Lever_Path_of_Pain"
+        }
     }
 ]

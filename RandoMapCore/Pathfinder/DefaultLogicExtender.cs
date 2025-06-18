@@ -6,6 +6,8 @@ internal class DefaultLogicExtender(LogicManager referenceLM) : RmcLogicExtender
 {
     protected override LogicManagerBuilder ModifyReferenceLM(LogicManagerBuilder lmb)
     {
+        PdBoolWaypoints = new(new Dictionary<string, string>());
+        SceneBoolWaypoints = new(new Dictionary<(string, string), string>());
         return lmb;
     }
 }

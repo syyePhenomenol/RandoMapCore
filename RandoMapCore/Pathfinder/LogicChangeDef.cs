@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using RandomizerCore.Logic;
 
 namespace RandoMapCore.Pathfinder;
 
@@ -9,17 +8,38 @@ internal record LogicChangeDef
     internal string Description { get; init; }
 
     [JsonProperty]
-    internal RawWaypointDef[] StateWaypoints { get; init; }
+    internal Dictionary<string, string> StateWaypoints { get; init; }
 
     [JsonProperty]
-    internal string[] StatelessWaypoints { get; init; }
+    internal StatelessWaypointDef[] StatelessWaypoints { get; init; }
 
     [JsonProperty]
-    internal RawLogicDef[] Transitions { get; init; }
+    internal Dictionary<string, string> Transitions { get; init; }
 
     [JsonProperty]
-    internal RawLogicDef[] Edits { get; init; }
+    internal Dictionary<string, string> Edits { get; init; }
 
     [JsonProperty]
-    internal RawSubstDef[] Substitutions { get; init; }
+    internal Dictionary<string, Dictionary<string, string>> Substitutions { get; init; }
+}
+
+internal record StatelessWaypointDef
+{
+    [JsonProperty]
+    internal string Name { get; init; }
+}
+
+internal record PlayerDataBoolWaypointDef : StatelessWaypointDef
+{
+    [JsonProperty]
+    internal string PlayerDataBool { get; init; }
+}
+
+internal record SceneDataBoolWaypointDef : StatelessWaypointDef
+{
+    [JsonProperty]
+    internal string Scene { get; init; }
+
+    [JsonProperty]
+    internal string Id { get; init; }
 }

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using RandoMapCore.Transition;
 using RandomizerCore;
 using RandomizerCore.Logic;
@@ -8,8 +9,15 @@ namespace RandoMapCore.Pathfinder;
 
 internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(referenceLM)
 {
+    internal ReadOnlyDictionary<string, string> PdBoolWaypoints { get; private protected set; }
+
+    internal ReadOnlyDictionary<(string, string), string> SceneBoolWaypoints { get; private protected set; }
+
     protected override LogicManagerBuilder ModifyReferenceLM(LogicManagerBuilder lmb)
     {
+        Dictionary<string, string> pdBoolWaypoints = [];
+        Dictionary<(string, string), string> sceneBoolWaypoints = [];
+
         // Inject new terms and custom logic
         var logicChanges = JU.DeserializeFromEmbeddedResource<LogicChangeDef[]>(
             RandoMapCoreMod.Assembly,
@@ -18,9 +26,18 @@ internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(refere
 
         foreach (var statelessWaypoint in logicChanges.SelectMany(lc => lc.StatelessWaypoints ?? []))
         {
-            if (!lmb.Waypoints.Contains(statelessWaypoint))
+            if (!lmb.Waypoints.Contains(statelessWaypoint.Name))
             {
-                lmb.AddWaypoint(new(statelessWaypoint, "FALSE", true));
+                lmb.AddWaypoint(new(statelessWaypoint.Name, "FALSE", true));
+
+                if (statelessWaypoint is PlayerDataBoolWaypointDef pdbwd)
+                {
+                    pdBoolWaypoints[pdbwd.Name] = pdbwd.PlayerDataBool;
+                }
+                else if (statelessWaypoint is SceneDataBoolWaypointDef sdbwd)
+                {
+                    sceneBoolWaypoints[(sdbwd.Scene, sdbwd.Id)] = sdbwd.Name;
+                }
             }
             else
             {
@@ -28,51 +45,63 @@ internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(refere
             }
         }
 
+        PdBoolWaypoints = new(pdBoolWaypoints);
+        SceneBoolWaypoints = new(sceneBoolWaypoints);
+
         foreach (var stateWaypoint in logicChanges.SelectMany(lc => lc.StateWaypoints ?? []))
         {
-            if (!lmb.Waypoints.Contains(stateWaypoint.name))
+            if (!lmb.Waypoints.Contains(stateWaypoint.Key))
             {
-                lmb.AddWaypoint(stateWaypoint);
+                lmb.AddWaypoint(new(stateWaypoint.Key, stateWaypoint.Value));
             }
             else
             {
-                RandoMapCoreMod.Instance.LogFine($"Could not add waypoint {stateWaypoint.name}");
+                RandoMapCoreMod.Instance.LogFine($"Could not add waypoint {stateWaypoint.Key}");
             }
         }
 
         foreach (var transition in logicChanges.SelectMany(lc => lc.Transitions ?? []))
         {
-            if (!lmb.Waypoints.Contains(transition.name))
+            if (!lmb.Waypoints.Contains(transition.Key))
             {
-                lmb.AddTransition(transition);
+                lmb.AddTransition(new(transition.Key, transition.Value));
             }
             else
             {
-                RandoMapCoreMod.Instance.LogFine($"Could not add transition {transition.name}");
+                RandoMapCoreMod.Instance.LogFine($"Could not add transition {transition.Key}");
             }
         }
 
         foreach (var edit in logicChanges.SelectMany(lc => lc.Edits ?? []))
         {
-            if (lmb.LogicLookup.ContainsKey(edit.name))
+            if (lmb.LogicLookup.ContainsKey(edit.Key))
             {
-                lmb.DoLogicEdit(edit);
+                lmb.DoLogicEdit(new(edit.Key, edit.Value));
             }
             else
             {
-                RandoMapCoreMod.Instance.LogFine($"Could not edit logic of {edit.name}");
+                RandoMapCoreMod.Instance.LogFine($"Could not edit logic of {edit.Key}");
             }
         }
 
-        foreach (var substitution in logicChanges.SelectMany(lc => lc.Substitutions ?? []))
+        foreach (var substitutionGroup in logicChanges.SelectMany(lc => lc.Substitutions ?? []))
         {
-            if (lmb.LogicLookup.ContainsKey(substitution.name))
+            if (lmb.LogicLookup.ContainsKey(substitutionGroup.Key))
             {
-                lmb.DoSubst(substitution);
+                foreach (
+                    var substitution in substitutionGroup.Value.Select(s => new RawSubstDef(
+                        substitutionGroup.Key,
+                        s.Key,
+                        s.Value
+                    ))
+                )
+                {
+                    lmb.DoSubst(substitution);
+                }
             }
             else
             {
-                RandoMapCoreMod.Instance.LogFine($"Could not substitute logic of {substitution.name}");
+                RandoMapCoreMod.Instance.LogFine($"Could not substitute logic of {substitutionGroup.Key}");
             }
         }
 
