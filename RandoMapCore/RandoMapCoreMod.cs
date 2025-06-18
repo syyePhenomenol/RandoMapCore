@@ -49,7 +49,7 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
     public override string GetVersion()
     {
-        return "1.0.13";
+        return "1.0.14";
     }
 
     public override int LoadPriority()
@@ -164,8 +164,6 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
             ModeManager.AddModes(_modes);
         }
 
-        Events.OnSetGameMap += OnSetGameMap;
-
         if (Interop.HasBenchwarp)
         {
             _hookModules.Add(new BenchwarpInterop());
@@ -190,8 +188,17 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
 
         foreach (var hookModule in _hookModules)
         {
-            hookModule.OnEnterGame();
+            try
+            {
+                hookModule.OnEnterGame();
+            }
+            catch (Exception e)
+            {
+                Instance.LogError(e);
+            }
         }
+
+        Events.OnSetGameMap += OnSetGameMap;
     }
 
     private static void OnQuitToMenu()

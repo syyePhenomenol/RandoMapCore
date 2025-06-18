@@ -316,10 +316,10 @@
                 "PlayerDataBool": "brokenMageWindow"
             },
             {
-                "Name": "RMC-City_Toll_Lift_Down",
+                "Name": "RMC-City_Toll_Lift_Down"
             },
             {
-                "Name": "RMC-City_Toll_Lift_Up",
+                "Name": "RMC-City_Toll_Lift_Up"
             },
             {
                 "$type": "RandoMapCore.Pathfinder.SceneDataBoolWaypointDef, RandoMapCore",
@@ -881,7 +881,7 @@
         ],
         "Edits": {
             "Deepnest_01[bot1]": "ORIG | Deepnest_01 + RMC-Plank_Deepnest_Exit",
-            "Fungus2_04[top1": "ORIG | Fungus2_04 + RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
+            "Fungus2_04[top1]": "ORIG | Fungus2_04 + RMC-Lever_Fungal_Wastes_Below_Shrumal_Ogres",
             "Fungus2_14[bot3]": "ORIG | Fungus2_14 + RMC-Lever_Mantis_Lords_Access",
             "Fungus2_15[right1]": "ORIG | Fungus2_15[top3] + RMC-Lever_Mantis_Lords_Middle_Right",
             "Fungus2_18[right1]": "ORIG | Fungus2_18 + RMC-Lever_Fungal_Wastes_Bouncy_Grub",
