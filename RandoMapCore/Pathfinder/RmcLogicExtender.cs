@@ -107,7 +107,9 @@ internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(refere
 
         var startTerm = RandoMapCoreMod.Data.StartTerm;
 
-        // Remove Start_State from existing logic
+        // Remove start term from existing logic
+        lmb.DoLogicEdit(new(startTerm.Name, "NONE"));
+
         foreach (var term in lmb.Terms)
         {
             if (lmb.LogicLookup.ContainsKey(term.Name))
@@ -116,7 +118,7 @@ internal class RmcLogicExtender(LogicManager referenceLM) : LogicExtender(refere
             }
         }
 
-        // Link Start_State with start terms
+        // Link start term to logical descendents
         foreach (var term in RandoMapCoreMod.Data.StartStateLinkedTerms)
         {
             if (lmb.LogicLookup.ContainsKey(term.Name))

@@ -1,8 +1,7 @@
 [
     {
-        "Description": "Unlink Start and Bench Warps",
+        "Description": "Unlink Bench Warps",
         "Edits": {
-            "Start_State": "FALSE",
             "Can_Bench": "FALSE",
             "Can_Warp_To_DG_Bench": "FALSE",
             "Can_Warp_To_Bench": "FALSE"

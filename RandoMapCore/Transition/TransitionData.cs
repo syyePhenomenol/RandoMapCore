@@ -127,10 +127,19 @@ internal class TransitionData : HookModule
             return true;
         }
 
-        if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.TryGetValue(name, out var benchKey))
+        if (Interop.HasBenchwarp)
         {
-            scene = benchKey.SceneName;
-            return true;
+            if (BenchwarpInterop.BenchKeys.TryGetValue(name, out var benchKey))
+            {
+                scene = benchKey.SceneName;
+                return true;
+            }
+
+            if (name == RandoMapCoreMod.Data.StartTerm.ToString())
+            {
+                scene = BenchwarpInterop.StartKey.SceneName;
+                return true;
+            }
         }
 
         scene = default;
