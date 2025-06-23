@@ -1,4 +1,5 @@
 using RandoMapCore.Pathfinder.Actions;
+using RandoMapCore.Transition;
 using RandomizerCore.Logic;
 using RCPathfinder;
 using RCPathfinder.Actions;
@@ -111,6 +112,16 @@ internal class InstructionTracker
     {
         try
         {
+            // Avoid sequence breaks across different scenes (ie. door warps, disconnections caused by mid-save placement changes)
+            if (
+                TransitionData.TryGetScene(lastSceneTerm.ToString(), out var lastScene)
+                && TransitionData.TryGetScene(action.Source.ToString(), out var sourceScene)
+                && lastScene != sourceScene
+            )
+            {
+                return false;
+            }
+
             SearchParams sp =
                 new()
                 {
