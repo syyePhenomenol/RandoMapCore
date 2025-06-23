@@ -17,31 +17,6 @@ public class RmcPathfinder : HookModule
     internal static SceneLogicTracker Slt { get; private set; }
     internal static RouteManager RM { get; private set; }
 
-    internal static void Rebuild()
-    {
-        try
-        {
-            LE = new(RandoMapCoreMod.Data.PM.lm);
-        }
-        catch (Exception e)
-        {
-            RandoMapCoreMod.Instance.LogError(
-                $"Failed to inject custom pathfinder logic. Using default logic instead\n{e}"
-            );
-
-            // If custom logic fails, use default logic instead
-            LE = new DefaultLogicExtender(RandoMapCoreMod.Data.PM.lm);
-        }
-
-        SD = new(LE.LocalLM);
-        PS = new(LE, RandoMapCoreMod.Data.Context, true);
-        PSNoSequenceBreak = new(LE, RandoMapCoreMod.Data.Context, false);
-        StateSync = new(LE.LocalLM.StateManager);
-        IT = new(SD);
-        Slt = new(SD, PS.LocalPM, PSNoSequenceBreak.LocalPM);
-        RM?.ResetRoute();
-    }
-
     public override void OnEnterGame()
     {
         Rebuild();
@@ -87,6 +62,31 @@ public class RmcPathfinder : HookModule
         IT = null;
         Slt = null;
         RM = null;
+    }
+
+    public override void Rebuild()
+    {
+        try
+        {
+            LE = new(RandoMapCoreMod.Data.PM.lm);
+        }
+        catch (Exception e)
+        {
+            RandoMapCoreMod.Instance.LogError(
+                $"Failed to inject custom pathfinder logic. Using default logic instead\n{e}"
+            );
+
+            // If custom logic fails, use default logic instead
+            LE = new DefaultLogicExtender(RandoMapCoreMod.Data.PM.lm);
+        }
+
+        SD = new(LE.LocalLM);
+        PS = new(LE, RandoMapCoreMod.Data.Context, true);
+        PSNoSequenceBreak = new(LE, RandoMapCoreMod.Data.Context, false);
+        StateSync = new(LE.LocalLM.StateManager);
+        IT = new(SD);
+        Slt = new(SD, PS.LocalPM, PSNoSequenceBreak.LocalPM);
+        RM?.ResetRoute();
     }
 
     internal static ProgressionManager GetLocalPM()
