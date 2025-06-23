@@ -133,6 +133,10 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
         _dataModules.Add(dataModule);
     }
 
+    // Public API to rebuild internal indices of randomized map data.
+    // Must be invoked by mods that change randomized map data in active save files after they make changes.
+    public static void RebuildModules() => RmcPathfinder.Rebuild();
+
     internal static IEnumerable<string> GetRegisteredModNames()
     {
         return _dataModules.Select(d => d.ModName);

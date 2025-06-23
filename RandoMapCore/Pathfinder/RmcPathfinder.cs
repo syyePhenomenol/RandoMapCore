@@ -17,7 +17,7 @@ public class RmcPathfinder : HookModule
     internal static SceneLogicTracker Slt { get; private set; }
     internal static RouteManager RM { get; private set; }
 
-    public override void OnEnterGame()
+    internal static void Rebuild()
     {
         try
         {
@@ -39,6 +39,12 @@ public class RmcPathfinder : HookModule
         StateSync = new(LE.LocalLM.StateManager);
         IT = new(SD);
         Slt = new(SD, PS.LocalPM, PSNoSequenceBreak.LocalPM);
+        RM?.ResetRoute();
+    }
+
+    public override void OnEnterGame()
+    {
+        Rebuild();
 
         Events.OnWorldMap += OnWorldMap;
         Events.OnQuickMap += OnQuickMap;
