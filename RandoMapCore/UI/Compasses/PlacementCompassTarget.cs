@@ -62,13 +62,15 @@ internal class PlacementCompassTarget : CompassTarget
 
         _placementActive = !Placement.AllEverObtained();
 
-        _settingActive = RandoMapCoreMod.GS.ItemCompassMode switch
-        {
-            ItemCompassMode.Reachable => _logic.CanGet(RandoMapCoreMod.Data.PMNoSequenceBreak),
-            ItemCompassMode.ReachableOutOfLogic => _logic.CanGet(RandoMapCoreMod.Data.PM),
-            ItemCompassMode.All => true,
-            _ => true,
-        };
+        _settingActive =
+            _logic is null
+            || RandoMapCoreMod.GS.ItemCompassMode switch
+            {
+                ItemCompassMode.Reachable => _logic.CanGet(RandoMapCoreMod.Data.PMNoSequenceBreak),
+                ItemCompassMode.ReachableOutOfLogic => _logic.CanGet(RandoMapCoreMod.Data.PM),
+                ItemCompassMode.All => true,
+                _ => true,
+            };
     }
 }
 
