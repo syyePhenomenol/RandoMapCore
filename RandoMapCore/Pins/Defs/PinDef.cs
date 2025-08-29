@@ -42,15 +42,9 @@ internal abstract class PinDef
             || (
                 ModeManager.CurrentMode() is PinsOverRoomMode
                 && Utils.HasMapSetting(MapZone)
-                && (
-                    (
-                        Tracker.HasVisitedScene(Finder.GetMappedScene(SceneName))
-                        && (
-                            PlayerData.instance.GetBool(nameof(PlayerData.hasQuill))
-                            || RandoMapCoreMod.GS.AlwaysHaveQuill
-                        )
-                    ) || Finder.IsMinimalMapScene(Finder.GetMappedScene(SceneName))
-                )
+                && PlayerData
+                    .instance.GetVariable<List<string>>("scenesMapped")
+                    .Contains(Finder.GetMappedScene(SceneName))
             )
             || (Conditions.TransitionRandoModeEnabled() && RmcPathfinder.Slt.GetRoomActive(SceneName));
     }
