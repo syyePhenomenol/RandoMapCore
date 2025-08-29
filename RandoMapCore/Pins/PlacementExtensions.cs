@@ -46,15 +46,21 @@ internal static class PlacementExtensions
     internal static IEnumerable<Cost> GetCosts(this AbstractPlacement placement)
     {
         List<Cost> costs = [];
+        var hasExplicitCost = false;
 
-        if (placement is ISingleCostPlacement iscp && iscp.Cost?.GetInnerCosts() is IEnumerable<Cost> iscpCosts)
+        if (placement is ISingleCostPlacement iscp && iscp.Cost is Cost explicitCost)
         {
-            costs.AddRange(iscpCosts);
+            hasExplicitCost = true;
+            if (explicitCost.GetInnerCosts() is IEnumerable<Cost> iscpCosts)
+            {
+                costs.AddRange(iscpCosts);
+            }
         }
 
         if (
-            placement.GetAbstractLocation()?.GetTag<ImplicitCostTag>()?.Cost?.GetInnerCosts()
-            is IEnumerable<Cost> locationCosts
+            placement.GetAbstractLocation()?.GetTag<ImplicitCostTag>() is ImplicitCostTag ict
+            && (!hasExplicitCost || ict.Inherent)
+            && ict.Cost?.GetInnerCosts() is IEnumerable<Cost> locationCosts
         )
         {
             costs.AddRange(locationCosts);
