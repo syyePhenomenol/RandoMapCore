@@ -28,10 +28,10 @@ public class RouteCompassInfo : CompassInfo
     internal void UpdateCompassTarget()
     {
         CompassTargets.Clear();
-
+    
         if (
-            RmcPathfinder.RM.CurrentRoute is Route route
-            && route.CurrentInstruction.GetCompassObjectPath(Utils.CurrentScene()) is string goPath
+            RmcPathfinder.RM?.CurrentRoute is Route route
+            && route.CurrentInstruction?.GetCompassObjectPath(Utils.CurrentScene()) is string goPath
         )
         {
             CompassTargets.Add(new TransitionCompassTarget(goPath, RmcColors.GetColor(RmcColorSetting.UI_Compass)));

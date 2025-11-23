@@ -105,6 +105,8 @@ internal class RmcSearchData : SearchData
             StandardActionLookup
                 .Values.SelectMany(list => list)
                 .Where(a => a is TransitionAction)
+                .GroupBy(a => a.Source.Name)
+                .Select(a => a.First())
                 .ToDictionary(a => a.Source.Name, a => (TransitionAction)a)
         );
 
@@ -112,6 +114,8 @@ internal class RmcSearchData : SearchData
             StandardActionLookup
                 .Values.SelectMany(list => list)
                 .Where(a => a is IInstruction)
+                .GroupBy(a => a.Target.Name)
+                .Select(a => a.First())
                 .ToDictionary(a => a.Target.Name, a => (IInstruction)a)
         );
 
