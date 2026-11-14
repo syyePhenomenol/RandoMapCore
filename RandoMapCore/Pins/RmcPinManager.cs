@@ -191,6 +191,10 @@ internal class RmcPinManager : HookModule
             {
                 return new RandomizedBenchPinDef(placement);
             }
+            else if (Interop.HasMoreStags && MoreStagsInterop.StagNames.Contains(placement.Name))
+            {
+                return new RandomizedStagPinDef(placement);
+            }
             else
             {
                 return new RandomizedPinDef(placement);

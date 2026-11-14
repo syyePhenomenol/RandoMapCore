@@ -52,6 +52,9 @@ public class GlobalSettings
     [JsonProperty]
     public QMarkSetting QMarks { get; private set; } = QMarkSetting.Off;
 
+    [JsonProperty]
+    public StagSpriteSetting StagSprite { get; private set; } = StagSpriteSetting.Default;
+
     // Pathfinder options
     [JsonProperty]
     public SequenceBreakSetting PathfinderSequenceBreaks { get; private set; } =
@@ -175,6 +178,11 @@ public class GlobalSettings
     internal void ToggleQMarkSetting()
     {
         QMarks = (QMarkSetting)(((int)QMarks + 1) % Enum.GetNames(typeof(QMarkSetting)).Length);
+    }
+
+    internal void ToggleStagSpriteSetting()
+    {
+        StagSprite = (StagSpriteSetting)(((int)StagSprite + 1) % Enum.GetNames(typeof(StagSpriteSetting)).Length);
     }
 
     internal void TogglePathfinderSequenceBreaks()

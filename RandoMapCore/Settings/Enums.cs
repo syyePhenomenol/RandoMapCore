@@ -58,6 +58,12 @@ public enum QMarkSetting
     Mixed,
 }
 
+public enum StagSpriteSetting
+{
+    Default,
+    AlwaysStag
+}
+
 public enum SequenceBreakSetting
 {
     Off,

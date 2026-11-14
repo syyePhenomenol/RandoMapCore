@@ -186,6 +186,11 @@ public class RandoMapCoreMod : Mod, ILocalSettings<LocalSettings>, IGlobalSettin
             _hookModules.Add(new BenchwarpInterop());
         }
 
+        if (Interop.HasMoreStags)
+        {
+            _hookModules.Add(new MoreStagsInterop());
+        }
+
         if (Data.EnableVisualCustomization)
         {
             _hookModules.Add(new RmcColors());

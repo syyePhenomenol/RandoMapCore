@@ -17,3 +17,4 @@ The majority of the functionality of mods like RandoMapMod and ArchipelagoMapMod
 # Optional and compatible:
 - [AdditionalMaps](https://github.com/SFGrenade/AdditionalMaps). Adds pins to white palace and godhome maps
 - [Benchwarp](https://github.com/homothetyhk/HollowKnight.BenchwarpMod). Adds support for bench pins and pathfinder benchwarp
+- [MoreStags](https://github.com/TheMathGeek314/MoreStags). Adds support for persistent stag pins
