@@ -16,7 +16,7 @@ internal sealed class RandomizedStagPinDef(AbstractPlacement placement, PoolsCol
         base.Update();
 
         IsOpenedStag = RandoMapCoreMod.Data.IsOpenedCustomStag(Placement.Name);
-        IsActiveStag = RandoMapCoreMod.GS.ShowCustomStags && IsOpenedStag;
+        IsActiveStag = RandoMapCoreMod.GS.ShowCustomStags;
     }
 
     internal override bool ActiveByCurrentMode()
