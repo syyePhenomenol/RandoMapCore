@@ -6,7 +6,7 @@ using RandoMapCore.Settings;
 
 namespace RandoMapCore.Pins;
 
-internal sealed class RandomizedStagPinDef(AbstractPlacement placement, PoolsCollection poolsCollection) : ICLogicPinDef(placement, poolsCollection)
+internal sealed class ICStagPinDef(AbstractPlacement placement, PoolsCollection poolsCollection) : ICLogicPinDef(placement, poolsCollection)
 {
     internal bool IsActiveStag { get; private set; }
     internal bool IsOpenedStag { get; private set; }

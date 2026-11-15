@@ -191,11 +191,11 @@ internal class RmcPinManager : HookModule
 
         if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
         {
-            return new RandomizedBenchPinDef(placement, poolsCollection);
+            return new ICBenchPinDef(placement, poolsCollection);
         }
         else if (RandoMapCoreMod.Data.GetCustomStags()?.Contains(placement.Name) ?? false)
         {
-            return new RandomizedStagPinDef(placement, poolsCollection);
+            return new ICStagPinDef(placement, poolsCollection);
         }
 
         return new ICLogicPinDef(placement, poolsCollection);

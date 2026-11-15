@@ -6,9 +6,9 @@ using RandoMapCore.Settings;
 
 namespace RandoMapCore.Pins;
 
-internal sealed class RandomizedBenchPinDef : ICLogicPinDef
+internal sealed class ICBenchPinDef : ICLogicPinDef
 {
-    public RandomizedBenchPinDef(AbstractPlacement placement, PoolsCollection poolsCollection)
+    public ICBenchPinDef(AbstractPlacement placement, PoolsCollection poolsCollection)
         : base(placement, poolsCollection)
     {
         Bench = new(placement.Name);
