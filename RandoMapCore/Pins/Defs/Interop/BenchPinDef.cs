@@ -42,12 +42,7 @@ internal class BenchPinDef : PinDef
 
     internal override bool ActiveByCurrentMode()
     {
-        if (Bench.IsActiveBench)
-        {
-            return true;
-        }
-
-        return base.ActiveByCurrentMode();
+        return Bench.IsActiveBench || base.ActiveByCurrentMode();
     }
 
     internal override bool ActiveBySettings()
@@ -82,12 +77,7 @@ internal class BenchPinDef : PinDef
 
     internal override float GetZPriority()
     {
-        if (Bench.IsActiveBench)
-        {
-            return -1f;
-        }
-
-        return base.GetZPriority();
+        return Bench.IsActiveBench ? -1f : base.GetZPriority();
     }
 
     private protected override RunCollection GetStatusText()

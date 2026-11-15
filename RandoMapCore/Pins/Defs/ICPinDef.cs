@@ -3,6 +3,7 @@ using ItemChanger;
 using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
+using RandoMapCore.Pins.Defs;
 using RandoMapCore.Settings;
 using UnityEngine;
 using SM = ConnectionMetadataInjector.SupplementalMetadata;
@@ -11,7 +12,7 @@ namespace RandoMapCore.Pins;
 
 internal abstract class ICPinDef : PinDef
 {
-    internal ICPinDef(AbstractPlacement placement, string poolsCollection)
+    internal ICPinDef(AbstractPlacement placement, PoolsCollection poolsCollection)
         : base()
     {
         Placement = placement;
@@ -93,7 +94,7 @@ internal abstract class ICPinDef : PinDef
     internal int GridIndex { get; }
     internal IReadOnlyCollection<string> HighlightScenes { get; }
 
-    internal string PoolsCollection { get; }
+    internal PoolsCollection PoolsCollection { get; }
 
     internal AbstractPlacement Placement { get; }
     internal ICPlacementTracker ICPlacementTracker { get; }
@@ -197,7 +198,7 @@ internal abstract class ICPinDef : PinDef
                 _ => "unknown".L(),
             }
         );
-        return [new Run($"{"Status".L()}: "), new Run(PoolsCollection), new Run(", "), stateText];
+        return [new Run($"{"Status".L()}: "), new Run(PoolsCollection.ToString()), new Run(", "), stateText];
     }
 
     private protected virtual RunCollection GetNeverObtainedText()

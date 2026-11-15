@@ -1,14 +1,15 @@
 using ItemChanger;
 using MagicUI.Elements;
 using MapChanger;
+using RandoMapCore.Pins.Defs;
 using RandoMapCore.Settings;
 
 namespace RandoMapCore.Pins;
 
-internal sealed class RandomizedBenchPinDef : RandomizedPinDef
+internal sealed class ICBenchPinDef : ICLogicPinDef
 {
-    public RandomizedBenchPinDef(AbstractPlacement placement)
-        : base(placement)
+    public ICBenchPinDef(AbstractPlacement placement, PoolsCollection poolsCollection)
+        : base(placement, poolsCollection)
     {
         Bench = new(placement.Name);
 
@@ -28,62 +29,32 @@ internal sealed class RandomizedBenchPinDef : RandomizedPinDef
 
     internal override bool ActiveByCurrentMode()
     {
-        if (Bench.IsActiveBench)
-        {
-            return true;
-        }
-
-        return base.ActiveByCurrentMode();
+        return Bench.IsActiveBench || base.ActiveByCurrentMode();
     }
 
     internal override bool ActiveBySettings()
     {
-        if (Bench.IsActiveBench)
-        {
-            return true;
-        }
-
-        return base.ActiveBySettings();
+        return Bench.IsActiveBench || base.ActiveBySettings();
     }
 
     internal override bool ActiveByProgress()
     {
-        if (Bench.IsActiveBench)
-        {
-            return true;
-        }
-
-        return base.ActiveByProgress();
+        return Bench.IsActiveBench || base.ActiveByProgress();
     }
 
     internal override IEnumerable<ScaledPinSprite> GetPinSprites()
     {
-        if (Bench.IsActiveBench)
-        {
-            return [RmcPinManager.Psm.GetSprite("Benches")];
-        }
-
-        return base.GetPinSprites();
+        return Bench.IsActiveBench ? [RmcPinManager.Psm.GetSprite("Benches")] : base.GetPinSprites();
     }
 
     internal override PinShape GetMixedPinShape()
     {
-        if (Bench.IsActiveBench)
-        {
-            return PinShape.Square;
-        }
-
-        return base.GetMixedPinShape();
+        return Bench.IsActiveBench ? PinShape.Square : base.GetMixedPinShape();
     }
 
     internal override float GetZPriority()
     {
-        if (Bench.IsActiveBench)
-        {
-            return -1f;
-        }
-
-        return base.GetZPriority();
+        return Bench.IsActiveBench ? -1f : base.GetZPriority();
     }
 
     private protected override RunCollection GetStatusText()

@@ -1,6 +1,7 @@
 using ItemChanger;
 using MagicUI.Elements;
 using MapChanger;
+using RandoMapCore.Pins.Defs;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 using UnityEngine;
@@ -8,9 +9,9 @@ using SM = ConnectionMetadataInjector.SupplementalMetadata;
 
 namespace RandoMapCore.Pins;
 
-internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
+internal class ICLogicPinDef : ICPinDef, ILogicPinDef
 {
-    internal ICLogicPinDef(AbstractPlacement placement, string poolsCollection)
+    internal ICLogicPinDef(AbstractPlacement placement, PoolsCollection poolsCollection)
         : base(placement, poolsCollection)
     {
         if (SM.Of(placement).Get(InteropProperties.LogicInfix) is string logicInfix)
@@ -91,7 +92,7 @@ internal abstract class ICLogicPinDef : ICPinDef, ILogicPinDef
 
     internal override float GetZPriority()
     {
-        return base.GetZPriority() + (10f * (int)(Logic?.State ?? LogicState.Unreachable));
+        return base.GetZPriority() + (10f * (int)(Logic?.State ?? LogicState.Unreachable)) + (PoolsCollection == PoolsCollection.Vanilla ? 50f : 0f);
     }
 
     private protected override RunCollection GetStatusText()

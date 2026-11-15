@@ -6,6 +6,6 @@ internal class PinOptionsGrid : RmcOptionsGrid
 {
     protected override IEnumerable<ExtraButton> GetButtons()
     {
-        return [new ClearedButton(), new ReachablePinsButton(), new QMarkSettingButton()];
+        return [new ClearedButton(), new ReachablePinsButton(), new QMarkSettingButton(), new StagSpriteButton()];
     }
 }

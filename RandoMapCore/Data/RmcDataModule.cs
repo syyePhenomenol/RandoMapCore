@@ -162,9 +162,19 @@ public abstract class RmcDataModule : HookModule
 
     /// <summary>
     /// If the randomizer overrides benches from the default benches, provide the new RmcBenchKeys/bench names.
-    /// Otherwise, return null.
+    /// Visited benches are checked via Benchwarp LS.
     /// </summary>
-    public abstract IReadOnlyDictionary<RmcBenchKey, string> GetCustomBenches();
+    public virtual IReadOnlyDictionary<RmcBenchKey, string> GetCustomBenches() => null;
+
+    /// <summary>
+    /// If the randomizer overrides stags from the default stags, provide the new stag names.
+    /// </summary>
+    public virtual IReadOnlyCollection<string> GetCustomStags() => null;
+
+    /// <summary>
+    /// Whether or not a custom stag station is opened.
+    /// </summary>
+    public virtual bool IsOpenedCustomStag(string stagName) => false;
 
     /// <summary>
     /// Add extra buttons to the main pause menu.

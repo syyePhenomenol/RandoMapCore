@@ -3,6 +3,7 @@ using ItemChanger;
 using MapChanger;
 using MapChanger.MonoBehaviours;
 using RandoMapCore.Modes;
+using RandoMapCore.Pins.Defs;
 using UnityEngine;
 using SM = ConnectionMetadataInjector.SupplementalMetadata;
 
@@ -185,19 +186,19 @@ internal class RmcPinManager : HookModule
 
     private static ICPinDef GetICPinDef(AbstractPlacement placement)
     {
-        if (placement.IsRandomizedPlacement() && !SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
+        PoolsCollection poolsCollection = (placement.IsRandomizedPlacement() && !SM.Of(placement).Get(InteropProperties.MakeVanillaPin))
+            ? PoolsCollection.Randomized : PoolsCollection.Vanilla;
+
+        if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
         {
-            if (Interop.HasBenchwarp && BenchwarpInterop.BenchKeys.ContainsKey(placement.Name))
-            {
-                return new RandomizedBenchPinDef(placement);
-            }
-            else
-            {
-                return new RandomizedPinDef(placement);
-            }
+            return new ICBenchPinDef(placement, poolsCollection);
+        }
+        else if (RandoMapCoreMod.Data.GetCustomStags()?.Contains(placement.Name) ?? false)
+        {
+            return new ICStagPinDef(placement, poolsCollection);
         }
 
-        return new ICVanillaPinDef(placement);
+        return new ICLogicPinDef(placement, poolsCollection);
     }
 
     private static void TryAddPin(PinDef def)

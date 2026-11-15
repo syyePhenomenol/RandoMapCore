@@ -3,6 +3,7 @@ using MagicUI.Elements;
 using MapChanger;
 using MapChanger.Defs;
 using RandoMapCore.Data;
+using RandoMapCore.Pins.Defs;
 using RandoMapCore.Settings;
 using RandomizerCore.Logic;
 using UnityEngine;
@@ -63,7 +64,7 @@ internal sealed class VanillaPinDef : PinDef, ILogicPinDef
 
     internal override bool ActiveByProgress()
     {
-        return RandoMapCoreMod.LS.IsActivePoolGroup(_locationPoolGroup, "Vanilla");
+        return RandoMapCoreMod.LS.IsActivePoolGroup(_locationPoolGroup, PoolsCollection.Vanilla);
     }
 
     internal override bool ActiveBySettings()

@@ -52,6 +52,9 @@ public class GlobalSettings
     [JsonProperty]
     public QMarkSetting QMarks { get; private set; } = QMarkSetting.Off;
 
+    [JsonProperty]
+    public bool ShowCustomStags { get; private set; } = true;
+
     // Pathfinder options
     [JsonProperty]
     public SequenceBreakSetting PathfinderSequenceBreaks { get; private set; } =
@@ -126,6 +129,11 @@ public class GlobalSettings
     internal void ToggleBenchwarpPins()
     {
         ShowBenchwarpPins = !ShowBenchwarpPins;
+    }
+
+    internal void ToggleCustomStags()
+    {
+        ShowCustomStags = !ShowCustomStags;
     }
 
     internal void ToggleRoomSelection()

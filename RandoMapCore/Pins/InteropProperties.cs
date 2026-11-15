@@ -32,7 +32,6 @@ internal static class InteropProperties
 
     // If you do not provide a valid MapLocation-type property, and the placement doesn't have a valid scene name,
     // it will appear in the miscellaneous grid.
-    // Sorting of these grid pins is done by the following values in decreasing order of priority:
 
     // HighlightScenes and PinGridIndex are only used if the pin is placed in the grid.
 

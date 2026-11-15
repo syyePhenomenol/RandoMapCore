@@ -1,6 +1,7 @@
 ﻿using ConnectionMetadataInjector.Util;
 using Newtonsoft.Json;
 using RandoMapCore.Pins;
+using RandoMapCore.Pins.Defs;
 using RandomizerCore.Logic;
 
 namespace RandoMapCore.Settings;
@@ -73,12 +74,20 @@ public class LocalSettings
         {
             switch (pin.Def)
             {
-                case RandomizedPinDef:
-                    RandoLocationPoolGroups.UnionWith(pin.Def.LocationPoolGroups);
-                    RandoItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
+                case ICLogicPinDef iclpd:
+                    switch (iclpd.PoolsCollection)
+                    {
+                        case PoolsCollection.Randomized:
+                            RandoLocationPoolGroups.UnionWith(pin.Def.LocationPoolGroups);
+                            RandoItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
+                            break;
+                        case PoolsCollection.Vanilla:
+                            VanillaLocationPoolGroups.UnionWith(pin.Def.LocationPoolGroups);
+                            VanillaItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
+                            break;
+                    }
                     break;
                 case VanillaPinDef:
-                case ICVanillaPinDef:
                     VanillaLocationPoolGroups.UnionWith(pin.Def.LocationPoolGroups);
                     VanillaItemPoolGroups.UnionWith(pin.Def.ItemPoolGroups);
                     break;
@@ -144,7 +153,7 @@ public class LocalSettings
         ResetPoolSettings();
     }
 
-    internal bool IsActivePoolGroup(string poolGroup, string poolsCollection)
+    internal bool IsActivePoolGroup(string poolGroup, PoolsCollection poolsCollection)
     {
         return GetPoolGroupSetting(poolGroup) switch
         {
@@ -152,8 +161,8 @@ public class LocalSettings
             PoolState.Off => false,
             PoolState.Mixed => poolsCollection switch
             {
-                "Randomized" => RandomizedOn,
-                "Vanilla" => VanillaOn,
+                PoolsCollection.Randomized => RandomizedOn,
+                PoolsCollection.Vanilla => VanillaOn,
                 _ => true,
             },
             _ => true,
